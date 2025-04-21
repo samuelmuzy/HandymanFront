@@ -1,19 +1,34 @@
 import { useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook, FaApple, FaEye, FaEyeSlash } from 'react-icons/fa';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [senha, setSenha] = useState('');
+
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    axios.post('http://localhost:3003/usuarios/login', {
+      email,
+      senha,
+    })
+    .then((response) => {
+      console.log('Login bem-sucedido:', response.data);
+      navigate('/'); // Redireciona para a página inicial após o login
+    })
+    .catch((error) => {
+      console.error('Erro ao fazer login:', error.response.data);
+    })
     // Implementar lógica de login
   };
 
   return (
-    <div className="w-full max-w-[320px] mx-auto my-8">
+    <div className="w-full max-w-[370px] mx-auto my-8 shadow-lg p-6 rounded-md">
       {/* Seção Superior */}
       <div className="text-left mb-4 px-2">
         <h1 className="text-xl font-bold text-text-brown">HANDYMAN</h1>
@@ -24,6 +39,7 @@ export const Login = () => {
 
       {/* Seção do Formulário */}
       <div className="bg-[#EEB16C] rounded-lg p-3">
+        
         <form onSubmit={handleSubmit} className="space-y-2.5">
           <div className="space-y-1">
             <div className="text-left w-full">
@@ -51,8 +67,8 @@ export const Login = () => {
               <input
                 id="password"
                 type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
                 className="w-full p-2 rounded-lg bg-[#AD5700]/50 text-sm text-white"
                 required
               />
