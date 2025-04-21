@@ -3,32 +3,48 @@ import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook, FaApple, FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Loading } from './Loading';
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [error, setError] = useState('');
 
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Aciona o loading
+    setIsLoading(true);
+    
     axios.post('http://localhost:3003/usuarios/login', {
       email,
       senha,
     })
     .then((response) => {
       console.log('Login bem-sucedido:', response.data);
+      setIsLoading(false);
+      // Aqui você pode armazenar o token de autenticação ou qualquer outra informação necessária
+      localStorage.setItem('token', response.data.token); // Armazenando o token no localStorage
       navigate('/'); // Redireciona para a página inicial após o login
     })
     .catch((error) => {
-      console.error('Erro ao fazer login:', error.response.data);
+      console.error('Erro ao fazer login:', error.response.data.error);
+      setIsLoading(false);
+      setError(error.response.data.error);
+      
     })
-    // Implementar lógica de login
   };
 
   return (
+    
     <div className="w-full max-w-[370px] mx-auto my-8 shadow-lg p-6 rounded-md">
+      
+      {/* Loading Spinner */}
+      {isLoading && (<Loading />)}
+      
       {/* Seção Superior */}
       <div className="text-left mb-4 px-2">
         <h1 className="text-xl font-bold text-text-brown">HANDYMAN</h1>
@@ -102,6 +118,7 @@ export const Login = () => {
                 Cadastre-se
               </a>
             </p>
+            <p className='text-red-600 pt-1'>{error}</p>
           </div>
 
           <div className="relative py-2">
