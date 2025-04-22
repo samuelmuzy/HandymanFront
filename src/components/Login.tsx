@@ -8,6 +8,7 @@ import { Loading } from './Loading';
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [error, setError] = useState('');
@@ -28,7 +29,7 @@ export const Login = () => {
       setIsLoading(false);
       // Aqui você pode armazenar o token de autenticação ou qualquer outra informação necessária
       localStorage.setItem('token', response.data.token); // Armazenando o token no localStorage
-      navigate('/'); // Redireciona para a página inicial após o login
+      navigate('/seguro'); // Redireciona para a página inicial após o login
     })
     .catch((error) => {
       console.error('Erro ao fazer login:', error.response.data.error);
