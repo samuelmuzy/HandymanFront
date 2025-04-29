@@ -1,7 +1,9 @@
+import { CadastroFornecedor } from "../components/cadastro/CadastroFornecedor"
+
 export const CadastroFornecedorScreen = () => {
     return(
         <div>
-            <p>olá</p>
+            <CadastroFornecedor/>
         </div>
     )
 }

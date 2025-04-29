@@ -1,4 +1,4 @@
-import { Cadastro } from "../components/Cadastro"
+import { Cadastro } from "../components/cadastro/Cadastro"
 
 export const CadastroScreen = () =>{
     return(
