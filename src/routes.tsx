@@ -7,6 +7,7 @@ import { Servicos } from "./screens/Servicos";
 import { AjudaScenn } from "./screens/AjudaSceen";
 import { Cadastro } from "./screens/Cadastro";
 import { SobreSceen } from "./screens/SobreSceen";
+import FAQScreen from "./screens/FAQScreen";
 
 export const Router = () =>{
     return(
@@ -19,6 +20,7 @@ export const Router = () =>{
                 <Route path="/ajuda" element={<AjudaScenn/>}/>
                 <Route path="/cadastro" element={<Cadastro/>}/>
                 <Route path="/sobre-nos" element={<SobreSceen/>}/>
+                <Route path="/faq" element={<FAQScreen/>}/>
                 <Route path="*" element={<PaginaErro/>}/>
             </Routes>
         </BrowserRouter>
