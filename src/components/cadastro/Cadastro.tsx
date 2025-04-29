@@ -89,7 +89,9 @@ export const Cadastro = () => {
       {/* Cabeçalho */}
       <div className="text-left mb-4 px-2">
         <h1 className="text-xl font-bold text-text-brown">HANDYMAN</h1>
-        <p className="text-sm text-text-brown">A sua plataforma confiável para serviços manuais!</p>
+        <h2 className="text-sm text-text-brown">Não faça você mesmo,</h2>
+        <h2 className="text-sm text-text-brown">encontre um proficional!</h2>
+        <p className="text-xs text-text-brown mt-0.5">A sua plataforma confiável para serviços manuais!</p>
       </div>
 
       <div className="bg-[#EEB16C] rounded-lg p-3">
