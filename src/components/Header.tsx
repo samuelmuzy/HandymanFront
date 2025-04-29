@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
 const Header = () => {
   const navigate = useNavigate();
   
@@ -27,24 +28,33 @@ const Header = () => {
   const navegarHome = () => {
     navigate('/');
   }
+  
 
 
   
   return (
-    <header className="header">
-      <div className="container">
-        <h1 className='cursor-pointer' onClick={navegarHome}>HANDYMAN</h1>
-        <nav>
-          <a className='cursor-pointer' onClick={navegarServicos}>Serviços</a>
-          <a className='cursor-pointer' onClick={navegarSobreNos}>Sobre nós</a>
-          <a className='cursor-pointer' onClick={navegarAjuda}>Ajuda</a>
-        </nav>
-        <div className="buttons">
-          <button onClick={navegarLogin} className="btn-outline">Entrar</button>
-          <button onClick={navegarCadastro} className="btn-fill">Cadastrar-se</button>
+    <header className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex-shrink-0">
+            <span onClick={navegarHome} className="cursor-pointer text-[#A75C00] font-bold text-lg">HANDYMAN</span>
+            </div>
+            <nav className="hidden md:flex space-x-8">
+              <a onClick={navegarServicos} className="cursor-pointer text-gray-700 hover:text-[#A75C00]">Serviços</a>
+              <a onClick={navegarSobreNos} className="cursor-pointer text-gray-700 hover:text-[#A75C00]">Sobre nós</a>
+              <a onClick={navegarAjuda} className="cursor-pointer text-gray-700 hover:text-[#A75C00]">Ajuda</a>
+            </nav>
+            <div className="flex items-center space-x-4">
+              <button onClick={navegarLogin} className="px-4 py-2 border border-[#A75C00] text-[#A75C00] rounded-md hover:bg-[#A75C00] hover:text-white">
+                Entrar
+              </button>
+              <button onClick={navegarCadastro} className="px-4 py-2 bg-[#A75C00] text-white rounded-md hover:bg-[#8B4D00]">
+                Cadastrar-se
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
   );
 };
 

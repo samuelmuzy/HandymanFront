@@ -1,7 +1,9 @@
+import FAQ from "../components/FAQ"
+
 export const AjudaScenn = () =>{
     return(
-        <>
-            <p>Ajuda screen</p>
-        </>
+    <div className="min-h-screen bg-gray-50">
+        <FAQ />
+    </div>
     )
 }

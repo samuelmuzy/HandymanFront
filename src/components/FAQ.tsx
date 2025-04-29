@@ -1,42 +1,14 @@
 import React, { useState } from 'react';
-import { FaSearch, FaEnvelope, FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
-import { SiAppstore, SiGoogleplay } from 'react-icons/si';
+import { FaEnvelope} from 'react-icons/fa';
+import Footer from './Footer';
+import Header from './Header';
+import axios from 'axios';
 
 interface FAQItem {
-  question: string;
-  answer: string;
+  pergunta: string;
+  resposta: string;
 }
 
-const EXAMPLES: FAQItem[] = [
-  {
-    question: "Como posso solicitar um serviço?",
-    answer: "Você pode solicitar um serviço através do nosso aplicativo, selecionando a categoria desejada e preenchendo os detalhes do serviço."
-  },
-  {
-    question: "Quais são as formas de pagamento aceitas?",
-    answer: "Aceitamos cartões de crédito, débito, Pix e transferência bancária."
-  },
-  {
-    question: "Como funciona a garantia dos serviços?",
-    answer: "Todos os nossos serviços possuem garantia de 90 dias, podendo ser estendida dependendo do tipo de serviço."
-  },
-  {
-    question: "Como posso cancelar um serviço agendado?",
-    answer: "Você pode cancelar um serviço agendado acessando a área 'Meus Serviços' e clicando em 'Cancelar'."
-  },
-  {
-    question: "Onde encontro minha fatura?",
-    answer: "As faturas ficam disponíveis na área do cliente, em 'Pagamentos'."
-  },
-  {
-    question: "Qual a política de cancelamento?",
-    answer: "Cancelamentos podem ser feitos até 24h antes do serviço sem cobrança de taxa."
-  },
-  {
-    question: "Como alterar meus dados cadastrais?",
-    answer: "Acesse o menu 'Perfil' e clique em 'Editar dados'."
-  }
-];
 
 const popularTags = ["Fatura", "Pagamento", "Política de cancelamento"];
 
@@ -52,16 +24,21 @@ const FAQ: React.FC = () => {
       setHasSearched(false);
       return;
     }
+
     setLoading(true);
     setHasSearched(true);
-    setTimeout(() => {
-      const results = EXAMPLES.filter(item =>
-        item.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.answer.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+
+    axios.get(`http://localhost:3003/faq?query=${searchTerm}`)
+    .then((response) => {
+      const results = response.data;
       setSearchResults(results);
       setLoading(false);
-    }, 700); // Simula delay de API
+    })
+    .catch((error) => {
+      console.error("Erro ao buscar FAQ:", error);
+      setLoading(false);
+      setSearchResults([]);
+    }); 
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -72,36 +49,13 @@ const FAQ: React.FC = () => {
 
   const handleTagClick = (tag: string) => {
     setSearchTerm(tag);
-    setTimeout(() => {
-      handleSearch();
-    }, 100);
+    handleSearch();
   };
 
   return (
     <div className="min-h-screen bg-white flex flex-col justify-between">
       {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex-shrink-0">
-              <img className="h-8 w-auto" src="/logo.png" alt="HANDYMAN" />
-            </div>
-            <nav className="hidden md:flex space-x-8">
-              <a href="/servicos" className="text-gray-700 hover:text-[#A75C00]">Serviços</a>
-              <a href="/sobre-nos" className="text-gray-700 hover:text-[#A75C00]">Sobre nós</a>
-              <a href="/ajuda" className="text-gray-700 hover:text-[#A75C00]">Ajuda</a>
-            </nav>
-            <div className="flex items-center space-x-4">
-              <button className="px-4 py-2 border border-[#A75C00] text-[#A75C00] rounded-md hover:bg-[#A75C00] hover:text-white">
-                Entrar
-              </button>
-              <button className="px-4 py-2 bg-[#A75C00] text-white rounded-md hover:bg-[#8B4D00]">
-                Cadastrar-se
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -150,8 +104,8 @@ const FAQ: React.FC = () => {
               <div className="space-y-6">
                 {searchResults.map((item, index) => (
                   <div key={index} className="faq-item bg-white p-6 rounded-lg shadow-md border border-[#AD5700]">
-                    <h3 className="faq-question text-[20px] font-bold text-[#AD5700] mb-2">{item.question}</h3>
-                    <p className="faq-answer text-[16px] text-gray-700">{item.answer}</p>
+                    <h3 className="faq-question text-[20px] font-bold text-[#AD5700] mb-2">{item.pergunta}</h3>
+                    <p className="faq-answer text-[16px] text-gray-700">{item.resposta}</p>
                   </div>
                 ))}
               </div>
@@ -169,26 +123,7 @@ const FAQ: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#F9F6F2] mt-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2 mb-4 md:mb-0">
-              <img className="h-10 w-auto" src="/logo.png" alt="HANDYMAN" />
-              <span className="text-[#A75C00] font-bold text-lg">HANDYMAN</span>
-            </div>
-            <div className="flex space-x-6 mb-4 md:mb-0">
-              <a href="#" className="text-[#A75C00] hover:text-[#8B4D00]"><FaFacebook className="h-6 w-6" /></a>
-              <a href="#" className="text-[#A75C00] hover:text-[#8B4D00]"><FaTwitter className="h-6 w-6" /></a>
-              <a href="#" className="text-[#A75C00] hover:text-[#8B4D00]"><FaInstagram className="h-6 w-6" /></a>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-[#A75C00]">Download our App</span>
-              <button className="p-2 bg-black text-white rounded-md"><SiAppstore className="h-6 w-6" /></button>
-              <button className="p-2 bg-black text-white rounded-md"><SiGoogleplay className="h-6 w-6" /></button>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

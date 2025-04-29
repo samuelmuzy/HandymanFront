@@ -115,7 +115,7 @@ export const Login = () => {
           <div className="text-center">
             <p className="text-xs text-white">
               Não tem uma conta?{' '}
-              <a href="#" className="text-white hover:underline">
+              <a href="/cadastro" className="text-white hover:underline">
                 Cadastre-se
               </a>
             </p>

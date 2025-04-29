@@ -5,9 +5,10 @@ import { SecurityPage } from "./screens/SecurityPage";
 import { PaginaErro } from "./screens/PaginaErro";
 import { Servicos } from "./screens/Servicos";
 import { AjudaScenn } from "./screens/AjudaSceen";
-import { Cadastro } from "./screens/Cadastro";
+import { CadastroScreen } from "./screens/CadastroScreen";
 import { SobreSceen } from "./screens/SobreSceen";
-import FAQScreen from "./screens/FAQScreen";
+import { CadastroFornecedorScreen } from "./screens/CadastroFornecedorScreen";
+
 
 export const Router = () =>{
     return(
@@ -18,9 +19,9 @@ export const Router = () =>{
                 <Route path="/seguro" element={<SecurityPage/>}/>
                 <Route path="/servicos" element={<Servicos/>}/>
                 <Route path="/ajuda" element={<AjudaScenn/>}/>
-                <Route path="/cadastro" element={<Cadastro/>}/>
+                <Route path="/cadastro" element={<CadastroScreen/>}/>
                 <Route path="/sobre-nos" element={<SobreSceen/>}/>
-                <Route path="/faq" element={<FAQScreen/>}/>
+                <Route path="/cadastro-fornecedor" element={<CadastroFornecedorScreen/>}/>
                 <Route path="*" element={<PaginaErro/>}/>
             </Routes>
         </BrowserRouter>
