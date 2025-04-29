@@ -6,20 +6,20 @@ import { Loading } from '../Loading';
 import { useForm } from '../../hooks/useForm';
 import { Input } from '../Inputs/Input';
 
-interface Usuario {
-  nome: string;
-  telefone: string;
-  email: string;
-  senha: string;
-  endereco: enderecoUsuario;
+interface Fornecedor {
+    nome: string;
+    telefone: string;
+    email: string;
+    senha: string;
+    endereco: enderecoFornecedor;
 }
 
-interface enderecoUsuario {
-  cep: string;
-  pais: string;
-  cidade: string;
-  estado: string;
-  rua: string;
+interface enderecoFornecedor {
+    cep: string;
+    pais: string;
+    cidade: string;
+    estado: string;
+    rua: string;
 }
 
 export const CadastroFornecedor = () => {
@@ -46,17 +46,17 @@ export const CadastroFornecedor = () => {
         senha: "",
     });
 
-    const requisicao: Usuario = {
+    const requisicao: Fornecedor = {
         nome: form.nome,
         telefone: form.telefone,
         email: form.email,
         senha: form.senha,
         endereco: {
-        cep: form.cep,
-        pais: form.pais,
-        cidade: form.cidade,
-        estado: form.estado,
-        rua: form.rua,
+            cep: form.cep,
+            pais: form.pais,
+            cidade: form.cidade,
+            estado: form.estado,
+            rua: form.rua,
         },
     };
 
@@ -65,20 +65,20 @@ export const CadastroFornecedor = () => {
 
         // Envia os dados apenas se estiver na segunda etapa
         if (step === 2) {
-        setIsLoading(true);
-        axios.post('http://localhost:3003/usuarios', requisicao)
-            .then((response) => {
-            console.log('Cadastro bem-sucedido:', response.data);
-            navigate('/');
-            })
-            .catch((error) => {
-            console.error('Erro ao cadastrar:', error.response?.data?.error || error.message);
-            setError(error.response?.data?.error || "Erro ao cadastrar");
-            })
-            .finally(() => setIsLoading(false));
+            setIsLoading(true);
+            axios.post('http://localhost:3003/fornecedor', requisicao)
+                .then((response) => {
+                    console.log('Cadastro bem-sucedido:', response.data);
+                    navigate('/');
+                })
+                .catch((error) => {
+                    console.error('Erro ao cadastrar:', error.response?.data?.error || error.message);
+                    setError(error.response?.data?.error || "Erro ao cadastrar");
+                })
+                .finally(() => setIsLoading(false));
         } else {
-        // Avança para a próxima etapa
-        setStep(2);
+            // Avança para a próxima etapa
+            setStep(2);
         }
     };
 
@@ -92,9 +92,6 @@ export const CadastroFornecedor = () => {
             <h2 className="text-lg font-semibold text-text-brown mt-6">Trabalhe Conosco</h2>
             <p className="text-sm text-text-brown mt-2">
                 Faça parte da HANDYMAN e leve suas habilidades a mais pessoas! Procuramos profissionais qualificados.
-            </p>
-            <p className="text-sm text-text-brown mt-2">
-                Cadastre-se agora e junte-se à nossa rede de prestadores de serviços confiáveis!
             </p>
         </div>
 
@@ -113,6 +110,27 @@ export const CadastroFornecedor = () => {
                 {/* Senha */}
                 <div className="space-y-1">
                     <label htmlFor="senha" className="text-xs text-white">Senha</label>
+                    <div className="relative">
+                    <input
+                        id="senha"
+                        type={showPassword ? "text" : "password"}
+                        name="senha"
+                        value={form.senha}
+                        onChange={onChange}
+                        className="w-full p-2 rounded-lg bg-[#AD5700]/50 text-sm text-white"
+                        required
+                    />
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 text-white bg-[#AD5700]/50 p-1 rounded-md"
+                    >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </button>
+                    </div>
+                </div>
+                <div className="space-y-1">
+                    <label htmlFor="senha" className="text-xs text-white">Confirmar Senha</label>
                     <div className="relative">
                     <input
                         id="senha"
@@ -171,5 +189,5 @@ export const CadastroFornecedor = () => {
         <p onClick={onNavigateCadastroUsuario} className="w-full p-2 cursor-pointer text-amber-600 rounded-lg hover:opacity-90 transition-opacity text-sm font-medium text-center mt-4"
         >Cadastre-se como usuário</p>
         </div>
-  );
+    );
 };
