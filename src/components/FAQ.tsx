@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaEnvelope} from 'react-icons/fa';
 import Footer from './Footer';
 import Header from './Header';
@@ -7,17 +7,18 @@ import axios from 'axios';
 interface FAQItem {
   pergunta: string;
   resposta: string;
+  palavrasChave: string[];
 }
-
-
-const popularTags = ["Fatura", "Pagamento", "Política de cancelamento"];
 
 const FAQ: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState<FAQItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
-
+  const [verify, setVerify] = useState(false);
+  
+  const popularTags = ["Fatura", "Pagamento", "Política de cancelamento"];
+  
   const handleSearch = () => {
     if (!searchTerm.trim()) {
       setSearchResults([]);
@@ -49,8 +50,13 @@ const FAQ: React.FC = () => {
 
   const handleTagClick = (tag: string) => {
     setSearchTerm(tag);
+    setVerify(!verify);
     handleSearch();
   };
+
+  useEffect(() => {
+    handleSearch();
+  },[verify])
 
   return (
     <div className="min-h-screen bg-white flex flex-col justify-between">
@@ -81,15 +87,29 @@ const FAQ: React.FC = () => {
             </div>
             <div className="mt-4 flex flex-wrap justify-center gap-2 items-center">
               <span className="text-[#AD5700] font-medium mr-2">Pesquisas populares:</span>
-              {popularTags.map((tag, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleTagClick(tag)}
-                  className="px-4 py-1 bg-[#AD5700] text-white rounded-lg hover:opacity-90 text-sm font-semibold"
-                >
-                  {tag}
-                </button>
-              ))}
+              {searchResults.length === 0 ? (
+                  popularTags.map((tag, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleTagClick(tag)}
+                      className="px-4 py-1 bg-[#AD5700] text-white rounded-lg hover:opacity-90 text-sm font-semibold"
+                    >
+                      {tag}
+                    </button>
+                  ))
+                ) : (
+                  searchResults.flatMap((item) =>
+                    item.palavrasChave.map((tag, index) => (
+                      <button
+                        key={`${item.pergunta}-${index}`}
+                        onClick={() => handleTagClick(tag)}
+                        className="px-4 py-1 bg-[#AD5700] text-white rounded-lg hover:opacity-90 text-sm font-semibold"
+                      >
+                        {tag}
+                      </button>
+                    ))
+                  )
+                )}
             </div>
           </div>
         </div>

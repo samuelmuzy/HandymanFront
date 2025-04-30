@@ -11,6 +11,7 @@ interface Fornecedor {
     telefone: string;
     email: string;
     senha: string;
+    categoria_servico: string[];
     endereco: enderecoFornecedor;
 }
 
@@ -44,6 +45,7 @@ export const CadastroFornecedor = () => {
         rua: "",
         email: "",
         senha: "",
+        categoria_servico: [],
     });
 
     const requisicao: Fornecedor = {
@@ -58,6 +60,7 @@ export const CadastroFornecedor = () => {
             estado: form.estado,
             rua: form.rua,
         },
+        categoria_servico: form.categoria_servico,
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -77,9 +80,20 @@ export const CadastroFornecedor = () => {
                 })
                 .finally(() => setIsLoading(false));
         } else {
-            // Avança para a próxima etapa
-            setStep(2);
-        }
+           // Avança para a próxima etapa
+            setIsLoading(true);
+            axios.get(`http://localhost:3003/fornecedor/verificar-email/fornecedor?query=${form.email}`)
+            .then((response) => {
+                console.log('Email verificado:', response.data);
+                setError(''); // Limpa o erro se o email for válido
+                setStep(2);
+            })
+            .catch((error) => {
+                setError(error.response?.data?.error || "Erro ao cadastrar");
+                console.log('Erro ao verificar email:', error.response?.data?.error || error.message);
+            })
+            .finally(() => setIsLoading(false));
+            }
     };
 
     return (

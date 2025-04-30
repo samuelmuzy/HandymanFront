@@ -78,7 +78,18 @@ export const Cadastro = () => {
         .finally(() => setIsLoading(false));
     } else {
       // Avança para a próxima etapa
-      setStep(2);
+      setIsLoading(true);
+      axios.get(`http://localhost:3003/usuarios/verificar-email/usuario?query=${form.email}`)
+        .then((response) => {
+          console.log('Email verificado:', response.data);
+          setError(''); // Limpa o erro se o email for válido
+          setStep(2);
+        })
+        .catch((error) => {
+            setError(error.response?.data?.error || "Erro ao cadastrar");
+            console.log('Erro ao verificar email:', error.response?.data?.error || error.message);
+        })
+        .finally(() => setIsLoading(false));
     }
   };
 

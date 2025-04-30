@@ -17,7 +17,7 @@ const Footer = () => {
                   <a href="#" className="text-[#A75C00] hover:text-[#8B4D00]"><FaInstagram className="h-6 w-6" /></a>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <span className="text-[#A75C00]">Download our App</span>
+                  <span className="text-[#A75C00]">Baixe o aplicativo</span>
                   <button className="p-2 bg-black text-white rounded-md"><SiAppstore className="h-6 w-6" /></button>
                   <button className="p-2 bg-black text-white rounded-md"><SiGoogleplay className="h-6 w-6" /></button>
                 </div>

@@ -3,10 +3,10 @@ import bonecoImage from '../../assets/Boneco1.png' // importando a imagem
 
 export const HeroSection = () => {
   return (
-    <section className="hero">
+  <section className="hero">
       <div className="hero-text">
         <h2>Não faça você mesmo, encontre um profissional</h2>
-        <div className="search-bar">
+        <div className="pesquisa">
           <input type="text" placeholder="O que procura?" />
           <button>🔍</button>
         </div>
