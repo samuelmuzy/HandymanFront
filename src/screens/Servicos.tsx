@@ -1,5 +1,7 @@
+import { PaginaPrincipal } from "../components/servicos/PaginaPrincipal"
+
 export const Servicos = () =>{
     return(
-        <p>Servicos</p>
+        <PaginaPrincipal/>
     )
 }

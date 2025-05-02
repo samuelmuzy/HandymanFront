@@ -76,6 +76,7 @@ export const Cadastro = () => {
           setError(error.response?.data?.error || "Erro ao cadastrar");
         })
         .finally(() => setIsLoading(false));
+        
     } else {
       // Avança para a próxima etapa
       setIsLoading(true);
