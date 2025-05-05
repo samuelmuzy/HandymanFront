@@ -6,7 +6,7 @@ import { Loading } from "../Loading";
 
 export const PaginaPrincipal = () => {
     interface Fornecedor {
-        id_fornecedor: number;
+        id_fornecedor: string;
         nome: string;
         media_avaliacoes: string;
         descricao: string;
@@ -37,6 +37,7 @@ export const PaginaPrincipal = () => {
 
     const listarFornecedores = fornecedores.map((fornecedor) => (
         <CardFornecedor
+            id={fornecedor.id_fornecedor}
             key={fornecedor.id_fornecedor} // ideal incluir uma key
             imagemFornecedor={fornecedor.imagemIlustrativa || imagem}
             nome={fornecedor.nome}

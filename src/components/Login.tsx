@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { FcGoogle } from 'react-icons/fc';
+import { GoogleLogin, GoogleOAuthProvider } from '@react-oauth/google';
 import { FaFacebook, FaApple, FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Loading } from './Loading';
+import {jwtDecode} from 'jwt-decode';
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,6 +16,12 @@ export const Login = () => {
 
   const navigate = useNavigate();
 
+  const handleLoginSuccessGoogle = (credentialResponse:any) => {
+    const decoded = jwtDecode(credentialResponse.credential);
+    console.log('Usuário:', decoded);
+    // Exemplo: decoded.name, decoded.email, decoded.picture
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Aciona o loading
@@ -25,17 +32,14 @@ export const Login = () => {
       senha,
     })
     .then((response) => {
-      console.log('Login bem-sucedido:', response.data);
       setIsLoading(false);
       // Aqui você pode armazenar o token de autenticação ou qualquer outra informação necessária
       localStorage.setItem('token', response.data.token); // Armazenando o token no localStorage
       navigate('/seguro'); // Redireciona para a página inicial após o login
     })
     .catch((error) => {
-      console.error('Erro ao fazer login:', error.response.data.error);
       setIsLoading(false);
       setError(error.response.data.error);
-      
     })
   };
 
@@ -134,13 +138,15 @@ export const Login = () => {
           </div>
 
           <div className="space-y-2">
-            <button
-              type="button"
-              className="w-full p-1.5 bg-button-google text-white rounded-lg flex items-center justify-center space-x-2 hover:opacity-90 transition-opacity"
-            >
-              <FcGoogle className="text-sm" />
-              <span className="text-xs">Entrar com o Google</span>
-            </button>
+          <GoogleOAuthProvider clientId="455735307753-g66pa4q32nubf9fk2c171ehoac22d8bv.apps.googleusercontent.com">
+              <GoogleLogin
+                  onSuccess={handleLoginSuccessGoogle}
+                  onError={() => {
+                    console.log('Login Failed');
+                  }}
+              />
+          </GoogleOAuthProvider>
+
 
             <button
               type="button"

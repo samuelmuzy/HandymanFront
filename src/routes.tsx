@@ -8,6 +8,8 @@ import { AjudaScenn } from "./screens/AjudaSceen";
 import { CadastroScreen } from "./screens/CadastroScreen";
 import { SobreSceen } from "./screens/SobreSceen";
 import { CadastroFornecedorScreen } from "./screens/CadastroFornecedorScreen";
+import { Fornecedor } from "./screens/Fornecedor";
+
 
 
 export const Router = () =>{
@@ -22,6 +24,7 @@ export const Router = () =>{
                 <Route path="/cadastro" element={<CadastroScreen/>}/>
                 <Route path="/sobre-nos" element={<SobreSceen/>}/>
                 <Route path="/cadastro-fornecedor" element={<CadastroFornecedorScreen/>}/>
+                <Route path="/fornecedor/:id" element={<Fornecedor/>}/>
                 <Route path="*" element={<PaginaErro/>}/>
             </Routes>
         </BrowserRouter>
