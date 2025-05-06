@@ -6,6 +6,20 @@ import { useNavigate } from 'react-router-dom';
 import { Loading } from './Loading';
 import {jwtDecode} from 'jwt-decode';
 
+interface jwtDecoded {
+  email: string;
+  name: string;
+  picture: string;
+  sub: string;
+}
+
+interface typeUsuarioGoogle {
+  email: string;
+  name: string;
+  sub: string;
+  picture: string;
+}
+
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -17,9 +31,28 @@ export const Login = () => {
   const navigate = useNavigate();
 
   const handleLoginSuccessGoogle = (credentialResponse:any) => {
-    const decoded = jwtDecode(credentialResponse.credential);
+    const decoded:jwtDecoded = jwtDecode(credentialResponse.credential);
+    
+    const usuarioGoogle:typeUsuarioGoogle = {
+      email: decoded.email,
+      name: decoded.name,
+      sub: decoded.sub,
+      picture: decoded.picture,
+    };
+    
+    setIsLoading(true);
 
-    axios.post()
+    axios.post('http://localhost:3003/usuarios/login/google', usuarioGoogle)
+    .then((response) => {
+      // Aqui você pode armazenar o token de autenticação ou qualquer outra informação necessária
+      localStorage.setItem('token', response.data.token); // Armazenando o token no localStorage
+      navigate('/seguro'); // Redireciona para a página inicial após o login
+      setIsLoading(false);
+
+    }).catch((error) => {
+      setIsLoading(false);
+      setError(error.response.data.error);
+    })
 
     console.log('Usuário:', decoded);
     // Exemplo: decoded.name, decoded.email, decoded.picture
