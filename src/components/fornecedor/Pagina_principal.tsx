@@ -18,6 +18,7 @@ interface Fornecedor {
     imagemIlustrativa: string;
     endereco: enderecoFornecedor;
     imagemServicos: string[];
+    categoria_servico: string[];
 }
 
 interface enderecoFornecedor {
@@ -26,7 +27,7 @@ interface enderecoFornecedor {
     cidade: string;
     estado: string;
     rua: string;
-  }
+}
 
 
 export const Pagina_principal = ({ id }:PropsFornecedor) => {
@@ -72,6 +73,7 @@ export const Pagina_principal = ({ id }:PropsFornecedor) => {
                     sub_descricao={fornecedor.sub_descricao}
                     valor={fornecedor.valor}
                     imagensServicos={fornecedor.imagemServicos}
+                    categoria_servico={fornecedor.categoria_servico}
                 />
             )}
         </>

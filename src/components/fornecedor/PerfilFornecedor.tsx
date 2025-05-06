@@ -11,13 +11,20 @@ interface FornecedorProps {
     imagemFornecedor: string;
     local: string;
     imagensServicos: string[];
+    categoria_servico: string[];
 }
-export const PerfilFornecedor = ({local,nome,media_avaliacoes,descricao,sub_descricao,valor,imagemPerfil,imagemFornecedor,imagensServicos}:FornecedorProps) => {
+export const PerfilFornecedor = ({local,nome,media_avaliacoes,descricao,sub_descricao,valor,imagemPerfil,imagemFornecedor,imagensServicos,categoria_servico}:FornecedorProps) => {
     
     const images = imagensServicos.map((imagem) => ({
         original: imagem,
         thumbnail: imagem,
     }));
+
+    const categorias = categoria_servico.map((fornecedor) => (
+        <button className="border border-orange-400 rounded px-3 py-1 text-sm hover:bg-orange-100" key={fornecedor}>
+            {fornecedor}
+        </button>
+  ));
     
     return(
         <div className="flex flex-col items-center p-6">
@@ -70,12 +77,7 @@ export const PerfilFornecedor = ({local,nome,media_avaliacoes,descricao,sub_desc
             Este serviço é oferecido por um profissional.
           </h3>
           <div className="flex gap-4">
-            <button className="border border-orange-400 rounded px-3 py-1 text-sm hover:bg-orange-100">
-              Reparos em madeira
-            </button>
-            <button className="border border-orange-400 rounded px-3 py-1 text-sm hover:bg-orange-100">
-              Reparos em casas de madeira
-            </button>
+            {categorias}
           </div>
         </div>
         {/*imagem ilustrativa */}
