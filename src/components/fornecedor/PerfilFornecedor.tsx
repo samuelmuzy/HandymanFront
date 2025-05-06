@@ -1,4 +1,3 @@
-import React from "react";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 
@@ -11,22 +10,15 @@ interface FornecedorProps {
     imagemPerfil: string;
     imagemFornecedor: string;
     local: string;
+    imagensServicos: string[];
 }
-export const PerfilFornecedor = ({local,nome,media_avaliacoes,descricao,sub_descricao,valor,imagemPerfil,imagemFornecedor}:FornecedorProps) => {
-    const images = [
-        {
-          original: "https://res.cloudinary.com/dswmubmr2/image/upload/v1746478621/fornecedores/bcc2clxphpjvlha9shue.jpg",
-          thumbnail: "https://res.cloudinary.com/dswmubmr2/image/upload/v1746478621/fornecedores/bcc2clxphpjvlha9shue.jpg",
-        },
-        {
-          original: "https://res.cloudinary.com/dswmubmr2/image/upload/v1746478621/fornecedores/bcc2clxphpjvlha9shue.jpg",
-          thumbnail: "https://res.cloudinary.com/dswmubmr2/image/upload/v1746478621/fornecedores/bcc2clxphpjvlha9shue.jpg",
-        },
-        {
-          original: "https://res.cloudinary.com/dswmubmr2/image/upload/v1746478621/fornecedores/bcc2clxphpjvlha9shue.jpg",
-          thumbnail: "https://res.cloudinary.com/dswmubmr2/image/upload/v1746478621/fornecedores/bcc2clxphpjvlha9shue.jpg",
-        },
-      ];
+export const PerfilFornecedor = ({local,nome,media_avaliacoes,descricao,sub_descricao,valor,imagemPerfil,imagemFornecedor,imagensServicos}:FornecedorProps) => {
+    
+    const images = imagensServicos.map((imagem) => ({
+        original: imagem,
+        thumbnail: imagem,
+    }));
+    
     return(
         <div className="flex flex-col items-center p-6">
         <div className="flex flex-col md:flex-row justify-around w-full  bg-white rounded-lg  p-6 gap-6">

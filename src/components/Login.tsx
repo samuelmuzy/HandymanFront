@@ -18,6 +18,9 @@ export const Login = () => {
 
   const handleLoginSuccessGoogle = (credentialResponse:any) => {
     const decoded = jwtDecode(credentialResponse.credential);
+
+    axios.post()
+
     console.log('Usuário:', decoded);
     // Exemplo: decoded.name, decoded.email, decoded.picture
   };

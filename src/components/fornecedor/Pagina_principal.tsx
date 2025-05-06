@@ -17,6 +17,7 @@ interface Fornecedor {
     imagemPerfil: string;
     imagemIlustrativa: string;
     endereco: enderecoFornecedor;
+    imagemServicos: string[];
 }
 
 interface enderecoFornecedor {
@@ -70,6 +71,7 @@ export const Pagina_principal = ({ id }:PropsFornecedor) => {
                     imagemPerfil={fornecedor.imagemPerfil ?? ""}
                     sub_descricao={fornecedor.sub_descricao}
                     valor={fornecedor.valor}
+                    imagensServicos={fornecedor.imagemServicos}
                 />
             )}
         </>
