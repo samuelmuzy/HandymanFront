@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { LoginSceen } from "./screens/LoginSceen";
-import { HomeScreen } from "./screens/HomeSceen";
+import { LoginSceen } from "./screens/LoginScreen";
+import { HomeScreen } from "./screens/HomeScreen";
 import { SecurityPage } from "./screens/SecurityPage";
 import { PaginaErro } from "./screens/PaginaErro";
 import { Servicos } from "./screens/Servicos";
@@ -9,6 +9,7 @@ import { CadastroScreen } from "./screens/CadastroScreen";
 import { SobreSceen } from "./screens/SobreSceen";
 import { CadastroFornecedorScreen } from "./screens/CadastroFornecedorScreen";
 import { Fornecedor } from "./screens/Fornecedor";
+import { PerfilUsuarioScreen } from "./screens/PerfilUsuarioScreen";
 
 
 
@@ -24,7 +25,8 @@ export const Router = () =>{
                 <Route path="/cadastro" element={<CadastroScreen/>}/>
                 <Route path="/sobre-nos" element={<SobreSceen/>}/>
                 <Route path="/cadastro-fornecedor" element={<CadastroFornecedorScreen/>}/>
-                <Route path="/fornecedor/:id" element={<Fornecedor/>}/>
+                <Route path="/perfil-usuario/:id" element={<PerfilUsuarioScreen/>}/>
+                <Route path="/fornecedor/:id" element={<Fornecedor/>}/>      
                 <Route path="*" element={<PaginaErro/>}/>
             </Routes>
         </BrowserRouter>

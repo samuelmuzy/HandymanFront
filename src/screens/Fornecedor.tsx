@@ -1,7 +1,8 @@
 import Footer from "../components/Footer";
+import { Pagina_principal } from "../components/fornecedor/Pagina_principal";
 import Header from "../components/Header"
 import { useParams } from "react-router-dom";
-import { Pagina_principal } from "../components/fornecedor/pagina_principal";
+
 
 
 export const Fornecedor = () => {

@@ -35,6 +35,10 @@ const Header = () => {
     navigate('/ajuda');
   }
 
+  const navegarPerfilUsuario = () =>{
+    navigate(`/perfil-usuario/${role}`)
+  }
+
   const navegarHome = () => {
     navigate('/');
   }
@@ -54,7 +58,7 @@ const Header = () => {
             
             {isLoggedIn ? (
                 <>
-                  <img className='w-12 rounded-3xl' src={id} alt="imagem-perfil" />
+                  <img onClick={navegarPerfilUsuario} className='w-12 rounded-3xl' src={id} alt="imagem-perfil" />
                 </>
             ): (
               <div className="flex items-center space-x-4">

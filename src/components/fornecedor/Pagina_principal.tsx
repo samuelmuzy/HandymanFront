@@ -64,6 +64,7 @@ export const Pagina_principal = ({ id }:PropsFornecedor) => {
             {error && <div className="flex justify-center items-center h-screen"><p className="text-red-500">{error}</p></div>}
             {fornecedor && (
                 <PerfilFornecedor
+                    id={fornecedor.id_fornecedor}
                     local={fornecedor.endereco.cidade}
                     imagemFornecedor={fornecedor.imagemIlustrativa}
                     nome={fornecedor.nome}
