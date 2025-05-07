@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useGetToken } from '../hooks/useGetToken';
 
@@ -6,7 +6,7 @@ interface Mensagem {
   _id: string;
   remetenteId: string;
   destinatarioId: string;
-  nomeDestinatario:string
+  nomeDestinatario: string;
   texto: string;
   dataEnvio: string;
 }
@@ -15,35 +15,35 @@ interface ChatProps {
   idFornecedor: string;
 }
 
-const socket: Socket = io('http://localhost:3003');
-
 const Chat = ({ idFornecedor }: ChatProps) => {
   const [mensagem, setMensagem] = useState('');
   const [mensagens, setMensagens] = useState<Mensagem[]>([]);
+  const socketRef = useRef<Socket | null>(null);
 
+  const [id,nome,email,imagemPerfil, role ] = useGetToken();
+  const nomeRemetente = nome;
   
-
-  const [id, role] = useGetToken();
-
-  const nomeRemetente = id
-  const remetenteId = role;
+  const remetenteId = id;
   const destinatarioId = idFornecedor;
 
+  console.log(remetenteId,destinatarioId)
+
   useEffect(() => {
+    const socket = io('http://localhost:3003');
+    socketRef.current = socket;
+
     if (remetenteId) {
       socket.emit('join', remetenteId);
     }
-  }, [remetenteId]);
 
-  useEffect(() => {
     socket.on('nova_mensagem', (msg: Mensagem) => {
       setMensagens((prev) => [...prev, msg]);
     });
 
     return () => {
-      socket.off('nova_mensagem');
+      socket.disconnect(); // Desconecta ao desmontar o componente
     };
-  }, []);
+  }, [remetenteId]);
 
   useEffect(() => {
     const fetchHistorico = async () => {
@@ -54,7 +54,6 @@ const Chat = ({ idFornecedor }: ChatProps) => {
         if (!response.ok) throw new Error('Erro ao buscar histórico');
 
         const historico: Mensagem[] = await response.json();
-        console.log(remetenteId)
         setMensagens(historico);
       } catch (error) {
         console.error('Erro ao carregar histórico de mensagens:', error);
@@ -69,10 +68,10 @@ const Chat = ({ idFornecedor }: ChatProps) => {
   const enviarMensagem = () => {
     if (!remetenteId || !destinatarioId || !mensagem.trim()) return;
 
-    socket.emit('mensagem', {
+    socketRef.current?.emit('mensagem', {
       remetenteId,
       destinatarioId,
-      nomeDestinatario:nomeRemetente,
+      nomeDestinatario: nomeRemetente,
       texto: mensagem,
     });
 

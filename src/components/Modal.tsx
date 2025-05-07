@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -5,20 +7,32 @@ interface ModalProps {
 }
 
 export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    }
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
-      {/* Overlay com fundo escuro semi-transparente e desfoque */}
-      <div 
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-all"
-        onClick={onClose}
-      />
-      
-      {/* Conteúdo do Modal */}
-      <div className="bg-[#FFF8F1] rounded-3xl p-6 w-[85%] max-w-[400px] z-10">
-        {children}
-      </div>
+    <div
+      ref={modalRef}
+      className="absolute right-0 mt-2 w-60 bg-white shadow-xl rounded-xl z-50 border border-gray-200"
+    >
+      {children}
     </div>
   );
-}; 
+};
