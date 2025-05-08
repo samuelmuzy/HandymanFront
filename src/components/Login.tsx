@@ -46,7 +46,7 @@ export const Login = () => {
     .then((response) => {
       // Aqui você pode armazenar o token de autenticação ou qualquer outra informação necessária
       localStorage.setItem('token', response.data.token); // Armazenando o token no localStorage
-      navigate('/seguro'); // Redireciona para a página inicial após o login
+      navigate('/'); // Redireciona para a página inicial após o login
       setIsLoading(false);
 
     }).catch((error) => {
@@ -71,7 +71,7 @@ export const Login = () => {
       setIsLoading(false);
       // Aqui você pode armazenar o token de autenticação ou qualquer outra informação necessária
       localStorage.setItem('token', response.data.token); // Armazenando o token no localStorage
-      navigate('/seguro'); // Redireciona para a página inicial após o login
+      navigate('/'); // Redireciona para a página inicial após o login
     })
     .catch((error) => {
       setIsLoading(false);
@@ -178,7 +178,7 @@ export const Login = () => {
               <GoogleLogin
                   onSuccess={handleLoginSuccessGoogle}
                   onError={() => {
-                    console.log('Login Failed');
+                    setError('Login Failed');
                   }}
               />
           </GoogleOAuthProvider>

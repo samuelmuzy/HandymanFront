@@ -9,7 +9,13 @@ const Header = () => {
   const navigate = useNavigate();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [modal, setModal] = useState(false)
+
+  
+  const deslogar = () =>{
+      localStorage.removeItem('token');
+      setIsLoggedIn(false);
+  }
+
 
   const [id, nome, email, imagemPerfil, role] = useGetToken();
 
@@ -77,9 +83,9 @@ const Header = () => {
               <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
                 <div className="flex flex-col gap-2 p-4 text-sm">
                   <p className="cursor-pointer hover:text-orange-500">Conta</p>
-                  <p className="cursor-pointer hover:text-orange-500">Perfil</p>
+                  <p onClick={navegarPerfilUsuario} className="cursor-pointer hover:text-orange-500">Perfil</p>
                   <p className="cursor-pointer hover:text-orange-500">Suporte</p>
-                  <p className="cursor-pointer hover:text-orange-500">Sair</p>
+                  <p onClick={deslogar} className="cursor-pointer hover:text-orange-500">Sair</p>
                 </div>
               </Modal>
             </div>

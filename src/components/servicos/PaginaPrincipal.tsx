@@ -73,7 +73,9 @@ export const PaginaPrincipal = () => {
         <>
 
             <div className="flex flex-col items-center justify-center min-h-screen bg-white p-4">
+                
                 {loading && <Loading />}
+
                 <div className="flex flex-col items-center justify-center mt-6 mb-6 gap-9">
                     <h1 className="w-13 text-center text-[#A75C00] mt-9">Não faça você mesmo,<br></br> encontre um profissional</h1>
                     <div className="flex items-center border-2 border-[#A75C00] rounded-full w-full max-w-md mt-4 overflow-hidden">
@@ -151,6 +153,7 @@ export const PaginaPrincipal = () => {
                 <div className="flex flex-wrap justify-start max-w-8xl mx-auto gap-4">
 
                     {error && <div className="text-red-500 text-center">{error}</div>}
+                    
                     {listarFornecedores}
 
                 </div>
