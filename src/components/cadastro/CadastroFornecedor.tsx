@@ -13,7 +13,7 @@ interface Fornecedor {
     categoria_servico: string[];
     endereco: enderecoFornecedor;
     descricao:string;
-    preco:number;
+    valor:number;
     sub_descricao:string;
 }
 
@@ -26,6 +26,8 @@ interface enderecoFornecedor {
 }
 
 export const CadastroFornecedor = () => {
+    const [valor,setValor] = useState(0);
+    
     const [form, setForm] = useState({
         nome: "",
         telefone: "",
@@ -38,7 +40,6 @@ export const CadastroFornecedor = () => {
         rua: "",
         descricao:"",
         subDescricao:"",
-        valor:0,
         categoria_servico: [] as string[],
     });
 
@@ -63,7 +64,7 @@ export const CadastroFornecedor = () => {
         senha: form.senha,
         categoria_servico: form.categoria_servico,
         descricao:form.descricao,
-        preco:form.valor,
+        valor: valor,
         sub_descricao:form.subDescricao,
         endereco: {
             cep: form.cep,
@@ -76,11 +77,15 @@ export const CadastroFornecedor = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        console.log(valor)
 
         if (step === 3) {
             setIsLoading(true);
             axios.post('http://localhost:3003/fornecedor', requisicao)
-                .then(() => navigate('/'))
+                .then((response) => {
+                    navigate('/')
+                    localStorage.setItem("token",response.data)
+                })
                 .catch((err) => {
                     setError(err.response?.data?.error || "Erro ao cadastrar");
                     console.error(err);
@@ -214,7 +219,7 @@ export const CadastroFornecedor = () => {
                             <h3 className="text-white text-lg font-semibold mb-2">Descrição do serviço</h3>
                             <Input label="Descrição" id="descricao" value={form.descricao} onChange={onChange} />
                             <Input label='subDescrição' id='subDescricao' value={form.subDescricao} onChange={onChange}/>
-                            <input type="number" placeholder='Valor' id="valor" value={form.valor} onChange={onChange} />
+                            <input type="number" placeholder='Valor' id="valor" value={valor} onChange={(e) => setValor(Number(e.target.value))} />
                         </>
                     )}
 

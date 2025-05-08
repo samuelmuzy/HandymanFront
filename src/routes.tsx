@@ -25,7 +25,7 @@ export const Router = () =>{
                 <Route path="/cadastro" element={<CadastroScreen/>}/>
                 <Route path="/sobre-nos" element={<SobreSceen/>}/>
                 <Route path="/cadastro-fornecedor" element={<CadastroFornecedorScreen/>}/>
-                <Route path="/perfil-usuario/:id" element={<PerfilUsuarioScreen/>}/>
+                <Route path="/perfil-usuario/:idPerfil" element={<PerfilUsuarioScreen/>}/>
                 <Route path="/fornecedor/:id" element={<Fornecedor/>}/>      
                 <Route path="*" element={<PaginaErro/>}/>
             </Routes>
