@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isUserLoggedIn } from '../services/isUserLoggedIn';
 import { useGetToken } from '../hooks/useGetToken';
@@ -18,7 +18,7 @@ const Header = () => {
   }
 
 
-  const [id, nome, email, imagemPerfil, role] = useGetToken();
+  const token = useGetToken();
 
   useEffect(() => {
     setIsLoggedIn(isUserLoggedIn());
@@ -45,7 +45,7 @@ const Header = () => {
   }
 
   const navegarPerfilUsuario = () => {
-    navigate(`/perfil-usuario/${id}`)
+    navigate(`/perfil-usuario/${token?.id}`)
   }
 
   const navegarHome = () => {
@@ -77,7 +77,7 @@ const Header = () => {
               <img
                 onClick={toggleModal}
                 className="w-12 rounded-full cursor-pointer"
-                src={imagemPerfil}
+                src={token?.imagemPerfil}
                 alt="imagem-perfil"
               />
 

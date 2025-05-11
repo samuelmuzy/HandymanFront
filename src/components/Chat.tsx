@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useGetToken } from '../hooks/useGetToken';
 
@@ -21,12 +21,13 @@ const Chat = ({ idFornecedor }: ChatProps) => {
 
   const [mensagem, setMensagem] = useState('');
   const [mensagens, setMensagens] = useState<Mensagem[]>([]);
+  
   const socketRef = useRef<Socket | null>(null);
 
-  const [id,nome,email,imagemPerfil, role ] = useGetToken();
-  const nomeRemetente = nome;
+  const token = useGetToken();
+  const nomeRemetente = token?.nome;
   
-  const remetenteId = id;
+  const remetenteId = token?.id;
   const destinatarioId = idFornecedor;
 
   console.log(remetenteId,destinatarioId)

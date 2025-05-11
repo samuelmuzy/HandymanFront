@@ -1,38 +1,29 @@
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { useState, useEffect } from "react";
 
 interface MyJwtPayload {
     id: string;
-    nome:string;
-    email:string;
-    imagemPerfil:string;
+    nome: string;
+    email: string;
+    imagemPerfil: string;
     role: string;
-    // outros campos se quiser, como exp, sub, etc.
 }
 
 export const useGetToken = () => {
-    const [id, setId] = useState("");
-    const [role, setRole] = useState("");
-    const [nome,setNome] = useState("");
-    const [email,setEmail] = useState("");
-    const [imagemPerfil,setImagemPerfil] = useState("")
+    const [tokenData, setTokenData] = useState<MyJwtPayload | null>(null);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
 
         if (token) {
             try {
-                const decodedToken = jwtDecode<MyJwtPayload>(token); // Decodifica o token
-                setId(decodedToken.id); // Define o ID no estado
-                setRole(decodedToken.role);
-                setEmail(decodedToken.email);
-                setNome(decodedToken.nome);
-                setImagemPerfil(decodedToken.imagemPerfil) // Define o Role no estado
+                const decodedToken = jwtDecode<MyJwtPayload>(token);
+                setTokenData(decodedToken);
             } catch (error) {
                 console.error("Erro ao decodificar o token:", error);
             }
         }
     }, []);
 
-    return [id,nome,email,imagemPerfil, role];
+    return tokenData;
 };

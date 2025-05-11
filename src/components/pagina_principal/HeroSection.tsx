@@ -1,4 +1,3 @@
-import React from 'react';
 import bonecoImage from '../../assets/Boneco1.png' // importando a imagem
 
 export const HeroSection = () => {

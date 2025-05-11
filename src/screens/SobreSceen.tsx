@@ -1,4 +1,3 @@
-import React from 'react';
 import trabalhadorImage from '../assets/trabalhador.png';
 import Header from '../components/Header';
 import Footer from '../components/Footer';

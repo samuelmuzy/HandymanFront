@@ -8,12 +8,12 @@ import Footer from "../components/Footer";
 export const PerfilUsuarioScreen = () =>{
     const { idPerfil } = useParams<{ idPerfil: string }>();
 
-     const [id,nome,email,imagemPerfil, role ] = useGetToken();
+    const token = useGetToken();
     
     return(
         <div className="">
             <Header/>
-            {role === 'Fornecedor' ? (<><p>ola</p></>) : (<PerfilUsuario id={idPerfil}/>)}
+            {token?.role === 'Fornecedor' ? (<><p>ola</p></>) : (<PerfilUsuario id={idPerfil}/>)}
             <Footer/>
         </div>
     )
