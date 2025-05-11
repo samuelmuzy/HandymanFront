@@ -11,6 +11,9 @@ interface FAQItem {
 }
 
 const FAQ: React.FC = () => {
+
+  const URLAPI = import.meta.env.VITE_URLAPI;
+
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState<FAQItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -29,7 +32,7 @@ const FAQ: React.FC = () => {
     setLoading(true);
     setHasSearched(true);
 
-    axios.get(`http://localhost:3003/faq?query=${searchTerm}`)
+    axios.get(`${URLAPI}/faq?query=${searchTerm}`)
     .then((response) => {
       const results = response.data;
       setSearchResults(results);

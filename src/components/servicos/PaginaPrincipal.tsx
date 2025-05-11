@@ -22,6 +22,8 @@ export const PaginaPrincipal = () => {
         imagemIlustrativa: string;
     }
 
+    const URLAPI = import.meta.env.VITE_URLAPI;
+
     const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -34,7 +36,7 @@ export const PaginaPrincipal = () => {
 
     const buscarFornecedores = async () => {
         setLoading(true);
-        axios.get(`http://localhost:3003/fornecedor/categorias/${categorias}`)
+        axios.get(`${URLAPI}/fornecedor/categorias/${categorias}`)
             .then((response) => {
                 setFornecedores(response.data);
                 setError(null); // Limpa o erro se a requisição for bem-sucedida

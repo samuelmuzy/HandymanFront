@@ -6,6 +6,7 @@ import { Loading } from '../Loading';
 import { useForm } from '../../hooks/useForm';
 import { Input } from '../Inputs/Input';
 
+
 interface Usuario {
   nome: string;
   telefone: string;
@@ -29,6 +30,9 @@ export const Cadastro = () => {
   const [error, setError] = useState('');
   
   const navigate = useNavigate();
+
+  const URLAPI = import.meta.env.VITE_URLAPI;
+
 
   const onNavigateCadastroFornecedor = () => {
     navigate('/cadastro-fornecedor');
@@ -66,7 +70,7 @@ export const Cadastro = () => {
     // Envia os dados apenas se estiver na segunda etapa
     if (step === 2) {
       setIsLoading(true);
-      axios.post('http://localhost:3003/usuarios', requisicao)
+      axios.post(`${URLAPI}/usuarios`, requisicao)
         .then((response) => {
           console.log('Cadastro bem-sucedido:', response.data);
           navigate('/');
@@ -80,7 +84,7 @@ export const Cadastro = () => {
     } else {
       // Avança para a próxima etapa
       setIsLoading(true);
-      axios.get(`http://localhost:3003/usuarios/verificar-email/usuario?query=${form.email}`)
+      axios.get(`${URLAPI}/usuarios/verificar-email/usuario?query=${form.email}`)
         .then((response) => {
           console.log('Email verificado:', response.data);
           setError(''); // Limpa o erro se o email for válido

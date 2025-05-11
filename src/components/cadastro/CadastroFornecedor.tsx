@@ -50,6 +50,8 @@ export const CadastroFornecedor = () => {
 
     const navigate = useNavigate();
 
+    const URLAPI = import.meta.env.VITE_URLAPI;
+
     const onNavigateCadastroUsuario = () => navigate('/cadastro');
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -81,7 +83,7 @@ export const CadastroFornecedor = () => {
 
         if (step === 3) {
             setIsLoading(true);
-            axios.post('http://localhost:3003/fornecedor', requisicao)
+            axios.post(`${URLAPI}/fornecedor`, requisicao)
                 .then((response) => {
                     navigate('/')
                     localStorage.setItem("token",response.data)
@@ -93,7 +95,7 @@ export const CadastroFornecedor = () => {
                 .finally(() => setIsLoading(false));
         } else if (step === 1) {
             setIsLoading(true);
-            axios.get(`http://localhost:3003/fornecedor/verificar-email/fornecedor?query=${form.email}`)
+            axios.get(`${URLAPI}/fornecedor/verificar-email/fornecedor?query=${form.email}`)
                 .then(() => {
                     setError("");
                     setStep(2);

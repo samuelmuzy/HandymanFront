@@ -13,6 +13,7 @@ const Header = () => {
   
   const deslogar = () =>{
       localStorage.removeItem('token');
+      navigate('/')
       setIsLoggedIn(false);
   }
 

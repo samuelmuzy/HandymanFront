@@ -20,6 +20,8 @@ export type typeUsuario = {
 export const PerfilUsuario = ({id}:PerfilProps) =>{
     const navigate = useNavigate();
 
+    const URLAPI = import.meta.env.VITE_URLAPI;
+
     const logout = () =>{
         localStorage.removeItem("token");
         navigate('/');
@@ -29,7 +31,7 @@ export const PerfilUsuario = ({id}:PerfilProps) =>{
 
     const procurarUsuario = async () =>{
         try{
-            const response = await axios.get(`http://localhost:3003/usuarios/buscar-id/${id}`)
+            const response = await axios.get(`${URLAPI}/usuarios/buscar-id/${id}`)
 
             setUsuario(response.data);
         }catch(error:unknown){

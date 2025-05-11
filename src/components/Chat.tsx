@@ -16,6 +16,9 @@ interface ChatProps {
 }
 
 const Chat = ({ idFornecedor }: ChatProps) => {
+  
+  const URLAPI = import.meta.env.VITE_URLAPI;
+
   const [mensagem, setMensagem] = useState('');
   const [mensagens, setMensagens] = useState<Mensagem[]>([]);
   const socketRef = useRef<Socket | null>(null);
@@ -29,7 +32,7 @@ const Chat = ({ idFornecedor }: ChatProps) => {
   console.log(remetenteId,destinatarioId)
 
   useEffect(() => {
-    const socket = io('http://localhost:3003');
+    const socket = io(`${URLAPI}`);
     socketRef.current = socket;
 
     if (remetenteId) {

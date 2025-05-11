@@ -28,6 +28,8 @@ export const Login = () => {
   const [senha, setSenha] = useState('');
   const [error, setError] = useState('');
 
+  const URLAPI = import.meta.env.VITE_URLAPI;
+
   const navigate = useNavigate();
 
   const handleLoginSuccessGoogle = (credentialResponse:any) => {
@@ -42,7 +44,7 @@ export const Login = () => {
     
     setIsLoading(true);
 
-    axios.post('http://localhost:3003/usuarios/login/google', usuarioGoogle)
+    axios.post(`${URLAPI}/usuarios/login/google`, usuarioGoogle)
     .then((response) => {
       // Aqui você pode armazenar o token de autenticação ou qualquer outra informação necessária
       localStorage.setItem('token', response.data.token); // Armazenando o token no localStorage
@@ -63,7 +65,7 @@ export const Login = () => {
     // Aciona o loading
     setIsLoading(true);
     
-    axios.post('http://localhost:3003/usuarios/login', {
+    axios.post(`${URLAPI}/usuarios/login`, {
       email,
       senha,
     })

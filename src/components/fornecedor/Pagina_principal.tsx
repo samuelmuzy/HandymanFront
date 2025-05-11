@@ -34,6 +34,7 @@ export const Pagina_principal = ({ id }:PropsFornecedor) => {
 
     const [fornecedor, setFornecedor] = useState<Fornecedor | null>(null);
 
+    const URLAPI = import.meta.env.VITE_URLAPI;
 
     const [loading, setLoading] = useState(true);
 
@@ -42,7 +43,7 @@ export const Pagina_principal = ({ id }:PropsFornecedor) => {
     const pesquisarFornecedor = async () => {
         setLoading(true);
         try{
-            const response = await axios.get(`http://localhost:3003/fornecedor/${id}`);
+            const response = await axios.get(`${URLAPI}/fornecedor/${id}`);
             setFornecedor(response.data);
             setLoading(false);
         }catch (error:unknown) {
@@ -56,7 +57,7 @@ export const Pagina_principal = ({ id }:PropsFornecedor) => {
         pesquisarFornecedor();
     },[]);
 
- 
+
 
     return (
         <>
