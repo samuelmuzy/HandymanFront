@@ -28,15 +28,14 @@ export const PaginaPrincipal = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const [categorias, setCategorias] = useState<string>("Serviço 1");
+    const [categoriaSelecionada, setCategoriaSelecionada] = useState<string | null>(null);
 
     const mudarCategorias = (categoria: string) => {
-        setCategorias(categoria);
-    }
-
+        setCategoriaSelecionada(categoria);
+    };
     const buscarFornecedores = async () => {
         setLoading(true);
-        axios.get(`${URLAPI}/fornecedor/categorias/${categorias}`)
+        axios.get(`${URLAPI}/fornecedor/categorias/${categoriaSelecionada}`)
             .then((response) => {
                 setFornecedores(response.data);
                 setError(null); // Limpa o erro se a requisição for bem-sucedida
@@ -55,7 +54,7 @@ export const PaginaPrincipal = () => {
 
     useEffect(() => {
         buscarFornecedores();
-    }, [categorias]);
+    }, [categoriaSelecionada]);
 
     const listarFornecedores = fornecedores.map((fornecedor) => (
         <CardFornecedor
@@ -75,7 +74,7 @@ export const PaginaPrincipal = () => {
         <>
 
             <div className="flex flex-col items-center justify-center min-h-screen bg-white p-4">
-                
+
                 {loading && <Loading />}
 
                 <div className="flex flex-col items-center justify-center mt-6 mb-6 gap-9">
@@ -101,51 +100,117 @@ export const PaginaPrincipal = () => {
                 </div>
 
                 <div className="flex items-center justify-center mt-6 mb-6">
-
                     <div className="flex flex-col items-center gap-8 mb-6">
                         {/* Linha de cima */}
                         <div className="flex justify-center pr-6 gap-8">
-                            <div className="flex items-center flex-col cursor-pointer" onClick={() => mudarCategorias("Mudança")}>
+                            {/* Mudança */}
+                            <div
+                                className={`flex items-center flex-col cursor-pointer transition-all duration-300 ${categoriaSelecionada === "Mudança" ? "-translate-y-2 scale-105 text-orange-700" : ""
+                                    }`}
+                                onClick={() => mudarCategorias("Mudança")}
+                            >
                                 <img className="w-16 h-16" src={imagemCategoriaMudanca} alt="imagem caminhão" />
-                                <p>Mudança</p>
+                                <p
+                                    className={`mt-2 ${categoriaSelecionada === "Mudança" ? "border-b-2 border-orange-700 font-semibold" : ""
+                                        }`}
+                                >
+                                    Mudança
+                                </p>
                             </div>
-                            <div className="flex items-center flex-col cursor-pointer" onClick={() => mudarCategorias("Carpintaria")}>
+
+                            {/* Carpintaria */}
+                            <div
+                                className={`flex items-center flex-col cursor-pointer transition-all duration-300 ${categoriaSelecionada === "Carpintaria" ? "-translate-y-2 scale-105 text-orange-700" : ""
+                                    }`}
+                                onClick={() => mudarCategorias("Carpintaria")}
+                            >
                                 <img className="w-16 h-16" src={imagemCategoriaCarpintaria} alt="imagem carpintaria" />
-                                <p>Carpintaria</p>
+                                <p
+                                    className={`mt-2 ${categoriaSelecionada === "Carpintaria" ? "border-b-2 border-orange-700 font-semibold" : ""
+                                        }`}
+                                >
+                                    Carpintaria
+                                </p>
                             </div>
-                            <div className="flex items-center flex-col cursor-pointer" onClick={() => mudarCategorias("Elétricista")}>
+
+                            {/* Elétrica */}
+                            <div
+                                className={`flex items-center flex-col cursor-pointer transition-all duration-300 ${categoriaSelecionada === "Elétricista" ? "-translate-y-2 scale-105 text-orange-700" : ""
+                                    }`}
+                                onClick={() => mudarCategorias("Elétricista")}
+                            >
                                 <img className="w-16 h-16" src={imagemCategoriaEletrica} alt="imagem eletricista" />
-                                <p>Elétrica</p>
+                                <p
+                                    className={`mt-2 ${categoriaSelecionada === "Elétricista" ? "border-b-2 border-orange-700 font-semibold" : ""
+                                        }`}
+                                >
+                                    Elétrica
+                                </p>
                             </div>
                         </div>
 
                         {/* Linha de baixo */}
                         <div className="flex justify-center pr-6 gap-8">
-                            <div className="flex items-center flex-col cursor-pointer" onClick={() => mudarCategorias("Limpeza")}>
+                            {/* Limpeza */}
+                            <div
+                                className={`flex items-center flex-col cursor-pointer transition-all duration-300 ${categoriaSelecionada === "Limpeza" ? "-translate-y-2 scale-105 text-orange-700" : ""
+                                    }`}
+                                onClick={() => mudarCategorias("Limpeza")}
+                            >
                                 <img className="w-16 h-16" src={imagemCategoriaLimpeza} alt="imagem limpeza" />
-                                <p>Limpeza</p>
+                                <p
+                                    className={`mt-2 ${categoriaSelecionada === "Limpeza" ? "border-b-2 border-orange-700 font-semibold" : ""
+                                        }`}
+                                >
+                                    Limpeza
+                                </p>
                             </div>
-                            <div className="flex items-center flex-col cursor-pointer" onClick={() => mudarCategorias("Jardinagem")}>
+
+                            {/* Jardinagem */}
+                            <div
+                                className={`flex items-center flex-col cursor-pointer transition-all duration-300 ${categoriaSelecionada === "Jardinagem" ? "-translate-y-2 scale-105 text-orange-700" : ""
+                                    }`}
+                                onClick={() => mudarCategorias("Jardinagem")}
+                            >
                                 <img className="w-16 h-16" src={imagemCategoriaJardinagem} alt="imagem jardinagem" />
-                                <p>Jardinagem</p>
+                                <p
+                                    className={`mt-2 ${categoriaSelecionada === "Jardinagem" ? "border-b-2 border-orange-700 font-semibold" : ""
+                                        }`}
+                                >
+                                    Jardinagem
+                                </p>
                             </div>
-                            <div className="flex items-center flex-col cursor-pointer" onClick={() => mudarCategorias("Encanamento")}>
+
+                            {/* Encanamento */}
+                            <div
+                                className={`flex items-center flex-col cursor-pointer transition-all duration-300 ${categoriaSelecionada === "Encanamento" ? "-translate-y-2 scale-105 text-orange-700" : ""
+                                    }`}
+                                onClick={() => mudarCategorias("Encanamento")}
+                            >
                                 <img className="w-16 h-16" src={imagemCategoriaEncanador} alt="imagem encanador" />
-                                <p>Encanamento</p>
+                                <p
+                                    className={`mt-2 ${categoriaSelecionada === "Encanamento" ? "border-b-2 border-orange-700 font-semibold" : ""
+                                        }`}
+                                >
+                                    Encanamento
+                                </p>
                             </div>
                         </div>
                     </div>
+
+
+
                     <div className="flex flex-col items-center gap-3 ml-10 mb-5">
-                        <button className="bg-white text-orange-400 border-[#A75C00] px-4 py-2 rounded hover:bg-orange-600 transition duration-300 w-56" >
+                        <button className="bg-white text-orange-400 border-[#A75C00] px-4 py-2 rounded hover:bg-orange-600 hover:text-white transition duration-300 w-56 " >
+                            Carpintaria novo nome
+                        </button>
+                        <button className="bg-white text-orange-400 border-[#A75C00] px-4 py-2 rounded hover:bg-orange-600 hover:text-white transition duration-300 w-56" >
                             Texto name
                         </button>
-                        <button className="bg-white text-orange-400 border-[#A75C00] px-4 py-2 rounded hover:bg-orange-600 transition duration-300 w-56" >
+                        <button className="bg-white text-orange-400 border-[#A75C00] px-4 py-2 rounded hover:bg-orange-600 hover:text-white transition duration-300 w-56" >
                             Texto name
                         </button>
-                        <button className="bg-white text-orange-400 border-[#A75C00] px-4 py-2 rounded hover:bg-orange-600 transition duration-300 w-56" >
-                            Texto name
-                        </button>
-                        <button className="bg-white text-orange-400 border-[#A75C00] px-4 py-2 rounded hover:bg-orange-600 transition duration-300 w-56" >
+                        <button className="bg-white text-orange-400 border-[#A75C00] px-4 py-2 rounded hover:bg-orange-600 hover:text-white transition duration-300 w-56" >
                             Texto name
                         </button>
                     </div>
@@ -155,11 +220,11 @@ export const PaginaPrincipal = () => {
                 <div className="flex flex-wrap justify-start max-w-8xl mx-auto gap-4">
 
                     {error && <div className="text-red-500 text-center">{error}</div>}
-                    
+
                     {listarFornecedores}
 
                 </div>
-            </div>
+            </div >
 
         </>
     );

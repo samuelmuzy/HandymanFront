@@ -50,17 +50,16 @@ export const PerfilUsuario = ({id}:PerfilProps) =>{
     })
 
     return(
-        <div className="bg-white h-screen">
-            <div>
-                <p>Página inicial</p>
-                <p>Dados Pessoais</p>
-                <p>Histórico</p>
+        <div className="bg-white h-screen flex">
+            <div className="flex-col h-screen border-r border-r-orange-500 p-3">
+                <p className="pt-4">Página inicial</p>
+                <p className="pt-4">Dados Pessoais</p>
+                <p className="pt-4">Histórico</p>
             </div>
-            <div>
+            <div className="flex-col">
                 <img src={usuario?.picture} />
                 <p>{usuario?.nome}</p>
                 <p>{usuario?.email}</p>
-
             </div>
             <p>{usuario?.telefone}</p>
             <p>{historico}</p>
