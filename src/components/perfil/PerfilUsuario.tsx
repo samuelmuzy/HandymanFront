@@ -1,69 +1,61 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Pagina_inicial } from "./Pagina_inicial";
 
 interface PerfilProps {
-    id:string | undefined
+    id: string | undefined
 }
 
 export type typeUsuario = {
-    id_usuario:string;
+    id_usuario: string;
     email: string;
     nome: string;
     sub: string;
     picture: string;
     autenticacaoVia: string;
-    historico_servicos:string[];
-    telefone:string;
+    historico_servicos: string[];
+    telefone: string;
 }
 
-export const PerfilUsuario = ({id}:PerfilProps) =>{
-    const navigate = useNavigate();
+export const PerfilUsuario = ({ id }: PerfilProps) => {
+    
 
     const URLAPI = import.meta.env.VITE_URLAPI;
 
-    const logout = () =>{
-        localStorage.removeItem("token");
-        navigate('/');
-    }
+    const mudarPagina = useState(1);
 
-    const [usuario,setUsuario] = useState<typeUsuario | null>(null)
+    const [usuario, setUsuario] = useState<typeUsuario | null>(null)
 
-    const procurarUsuario = async () =>{
-        try{
+    const procurarUsuario = async () => {
+        try {
             const response = await axios.get(`${URLAPI}/usuarios/buscar-id/${id}`)
 
             setUsuario(response.data);
-        }catch(error:unknown){
+        } catch (error: unknown) {
             console.log(error)
         }
     }
 
-    useEffect(() =>{
+    useEffect(() => {
         procurarUsuario();
-    },[])
+    }, [])
 
-    const historico = usuario?.historico_servicos.map((his) =>{
-        return(
-            <p>{his}</p>
-        )
-    })
 
-    return(
-        <div className="bg-white h-screen flex">
-            <div className="flex-col h-screen border-r border-r-orange-500 p-3">
-                <p className="pt-4">Página inicial</p>
-                <p className="pt-4">Dados Pessoais</p>
-                <p className="pt-4">Histórico</p>
+    return (
+        <div className="bg-white min-h-screen flex font-sans">
+            {/* Menu lateral */}
+            <div className="w-64 bg-gray-100 border-r px-6 py-8">
+                <h2 className="text-lg font-semibold mb-6">Conta</h2>
+                <ul className="space-y-4 text-gray-800">
+                    <li className="font-medium text-black">Página inicial</li>
+                    <li className="hover:text-orange-500 cursor-pointer">Dados pessoais</li>
+                    <li className="hover:text-orange-500 cursor-pointer">Segurança</li>
+                    <li className="hover:text-orange-500 cursor-pointer">Privacidade e dados</li>
+                </ul>
             </div>
-            <div className="flex-col">
-                <img src={usuario?.picture} />
-                <p>{usuario?.nome}</p>
-                <p>{usuario?.email}</p>
-            </div>
-            <p>{usuario?.telefone}</p>
-            <p>{historico}</p>
-            <button onClick={logout}>Sair</button>
+
+            <Pagina_inicial usuario={usuario}/>
         </div>
     );
+
 }

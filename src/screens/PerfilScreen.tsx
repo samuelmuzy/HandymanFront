@@ -5,7 +5,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 
-export const PerfilUsuarioScreen = () =>{
+export const PerfilScreen = () =>{
     const { idPerfil } = useParams<{ idPerfil: string }>();
 
     const token = useGetToken();

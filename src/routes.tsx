@@ -9,7 +9,8 @@ import { CadastroScreen } from "./screens/CadastroScreen";
 import { SobreSceen } from "./screens/SobreSceen";
 import { CadastroFornecedorScreen } from "./screens/CadastroFornecedorScreen";
 import { Fornecedor } from "./screens/Fornecedor";
-import { PerfilUsuarioScreen } from "./screens/PerfilUsuarioScreen";
+import { PerfilScreen } from "./screens/PerfilScreen";
+
 
 
 
@@ -25,7 +26,7 @@ export const Router = () =>{
                 <Route path="/cadastro" element={<CadastroScreen/>}/>
                 <Route path="/sobre-nos" element={<SobreSceen/>}/>
                 <Route path="/cadastro-fornecedor" element={<CadastroFornecedorScreen/>}/>
-                <Route path="/perfil-usuario/:idPerfil" element={<PerfilUsuarioScreen/>}/>
+                <Route path="/perfil-usuario/:idPerfil" element={<PerfilScreen/>}/>
                 <Route path="/fornecedor/:id" element={<Fornecedor/>}/>      
                 <Route path="*" element={<PaginaErro/>}/>
             </Routes>

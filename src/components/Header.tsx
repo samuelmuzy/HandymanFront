@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { isUserLoggedIn } from '../services/isUserLoggedIn';
 import { useGetToken } from '../hooks/useGetToken';
 import { Modal } from './Modal';
+import imagemPerfilProvisoria from '../assets/perfil.png';
 
 
 const Header = () => {
@@ -77,7 +78,7 @@ const Header = () => {
               <img
                 onClick={toggleModal}
                 className="w-12 rounded-full cursor-pointer"
-                src={token?.imagemPerfil}
+                src={token?.imagemPerfil || imagemPerfilProvisoria}
                 alt="imagem-perfil"
               />
 

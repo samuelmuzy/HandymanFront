@@ -16,21 +16,21 @@ interface ChatProps {
 }
 
 const Chat = ({ idFornecedor }: ChatProps) => {
-  
+
   const URLAPI = import.meta.env.VITE_URLAPI;
 
   const [mensagem, setMensagem] = useState('');
   const [mensagens, setMensagens] = useState<Mensagem[]>([]);
-  
+
   const socketRef = useRef<Socket | null>(null);
 
   const token = useGetToken();
   const nomeRemetente = token?.nome;
-  
+
   const remetenteId = token?.id;
   const destinatarioId = idFornecedor;
 
-  console.log(remetenteId,destinatarioId)
+  console.log(remetenteId, destinatarioId)
 
   useEffect(() => {
     const socket = io(`${URLAPI}`);
@@ -91,41 +91,49 @@ const Chat = ({ idFornecedor }: ChatProps) => {
   };
 
   return (
-    <div style={{ padding: '1rem' }}>
-      <h2>Chat</h2>
-
-      <div style={{ maxHeight: '300px', overflowY: 'auto', marginBottom: '1rem' }}>
-        <ul style={{ listStyle: 'none', padding: 0 }}>
-          {mensagens.map((msg) => (
-            <li
-              key={msg._id}
-              style={{
-                textAlign: msg.remetenteId === remetenteId ? 'right' : 'left',
-                marginBottom: '0.5rem',
-              }}
-            >
-              <div>
-                <strong>{msg.remetenteId === remetenteId ? 'Você' : msg.nomeDestinatario}</strong>:
-              </div>
-              <div>{msg.texto}</div>
-              <div style={{ fontSize: '0.75rem', color: 'gray' }}>
-                {formatarData(msg.dataEnvio)}
-              </div>
-            </li>
-          ))}
-        </ul>
+    <div className='flex' style={{ padding: '1rem' }}>
+      <div>
+          <h2>Conversas</h2>
+          <img/>
+          <p></p>
       </div>
 
-      <input
-        type="text"
-        placeholder="Mensagem"
-        value={mensagem}
-        onChange={(e) => setMensagem(e.target.value)}
-        style={{ width: '80%' }}
-      />
-      <button onClick={enviarMensagem} style={{ width: '18%', marginLeft: '2%' }}>
-        Enviar
-      </button>
+      <div>
+        <h2>Chat</h2>
+
+        <div style={{ maxHeight: '300px', overflowY: 'auto', marginBottom: '1rem' }}>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            {mensagens.map((msg) => (
+              <li
+                key={msg._id}
+                style={{
+                  textAlign: msg.remetenteId === remetenteId ? 'right' : 'left',
+                  marginBottom: '0.5rem',
+                }}
+              >
+                <div>
+                  <strong>{msg.remetenteId === remetenteId ? 'Você' : msg.nomeDestinatario}</strong>:
+                </div>
+                <div>{msg.texto}</div>
+                <div style={{ fontSize: '0.75rem', color: 'gray' }}>
+                  {formatarData(msg.dataEnvio)}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <input
+          type="text"
+          placeholder="Mensagem"
+          value={mensagem}
+          onChange={(e) => setMensagem(e.target.value)}
+          style={{ width: '80%' }}
+        />
+        <button onClick={enviarMensagem} style={{ width: '18%', marginLeft: '2%' }}>
+          Enviar
+        </button>
+      </div>
     </div>
   );
 };
