@@ -1,6 +1,8 @@
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 import Chat from "../Chat";
+import { Modal } from "../Modal";
+import { useState } from "react";
 
 interface FornecedorProps {
   id: string
@@ -21,6 +23,7 @@ export const PerfilFornecedor = ({ id, local, nome, media_avaliacoes, descricao,
     original: imagem,
     thumbnail: imagem,
   }));
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const categorias = categoria_servico.map((fornecedor) => (
     <button className="border border-orange-400 rounded px-3 py-1 text-sm hover:bg-orange-100" key={fornecedor}>
@@ -67,7 +70,7 @@ export const PerfilFornecedor = ({ id, local, nome, media_avaliacoes, descricao,
           <button className="mb-2 border border-gray-400 rounded px-3 py-1 text-sm text-gray-700 hover:bg-gray-100">
             Salvar
           </button>
-          <button className="bg-green-500 text-white text-sm px-4 py-2 rounded hover:bg-green-600 transition-colors">
+          <button onClick={() => setIsChatOpen(true)} className="bg-green-500 text-white text-sm px-4 py-2 rounded hover:bg-green-600 transition-colors">
             Me contate
           </button>
         </div>
@@ -101,7 +104,15 @@ export const PerfilFornecedor = ({ id, local, nome, media_avaliacoes, descricao,
         <p className="text-orange-700 font-semibold mb-2">sobre-min:</p>
         <p>textkjjhkjhjkkj jkhkjhkjhjkhk hjkhkjhjkhjkhj hkjhkjhkjh</p>
       </div>
-      <Chat idFornecedor={id}/>
+      
+      <Modal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)}>
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div onClick={() => setIsChatOpen(false)} className="fixed inset-0 bg-black opacity-40"></div>
+          <div className="relative bg-white rounded-lg shadow-lg p-4 max-w-[1000px] w-[90vw] h-[80vh] max-h-[600px] flex flex-col">
+            <Chat idFornecedor={id} />
+          </div>
+        </div>
+      </Modal>
     </div>
 
   )
