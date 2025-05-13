@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { LoginSceen } from "./screens/LoginScreen";
 import { HomeScreen } from "./screens/HomeScreen";
 import { SecurityPage } from "./screens/SecurityPage";
@@ -12,11 +12,8 @@ import { Fornecedor } from "./screens/Fornecedor";
 import { PerfilScreen } from "./screens/PerfilScreen";
 
 
-
-
 export const Router = () =>{
     return(
-        <BrowserRouter>
             <Routes>
                 <Route path="/" element={<HomeScreen/>}/>
                 <Route path="/login" element={<LoginSceen/>}/>  
@@ -30,6 +27,5 @@ export const Router = () =>{
                 <Route path="/fornecedor/:id" element={<Fornecedor/>}/>      
                 <Route path="*" element={<PaginaErro/>}/>
             </Routes>
-        </BrowserRouter>
     )
 }

@@ -24,8 +24,6 @@ const Header = () => {
 
   const imagem = localStorage.getItem("imagemPerfil");
 
-
-
   const deslogar = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('imagemPerfil');
@@ -44,6 +42,7 @@ const Header = () => {
       localStorage.setItem("imagemPerfil", imagem);
     } catch (error) {
       console.log(error);
+      setImagemPerfil({ picture: imagemPerfilProvisoria });
     }
   };
   
@@ -55,16 +54,41 @@ const Header = () => {
       procurarImagemPerfil();
     }
   }, [token]);
+
+
   
 
-  const navegarLogin = () => navigate('/login');
-  const navegarCadastro = () => navigate('/cadastro');
-  const navegarServicos = () => navigate('/servicos');
-  const navegarSobreNos = () => navigate('/sobre-nos');
-  const navegarAjuda = () => navigate('/ajuda');
-  const navegarPerfilUsuario = () => navigate(`/perfil-usuario`);
-  const navegarHome = () => navigate('/');
-  const toggleModal = () => setIsModalOpen((prev) => !prev);
+  const navegarLogin = () => {
+    navigate('/login');
+  }
+
+  const navegarCadastro = () => {
+    navigate('/cadastro');
+  }
+
+  const navegarServicos = () => {
+    navigate('/servicos');
+  }
+
+  const navegarSobreNos = () => {
+    navigate('/sobre-nos');
+  }
+
+  const navegarAjuda = () => {
+    navigate('/ajuda');
+  }
+
+  const navegarPerfilUsuario = () => {
+    navigate(`/perfil-usuario/${token?.id}`)
+  }
+
+  const navegarHome = () => {
+    navigate('/');
+  }
+
+  const toggleModal = () => {
+    setIsModalOpen((prev) => !prev); // alterna entre true/false
+  };
 
   return (
     <header className="bg-white shadow-sm border-b border-b-[#A75C00]">
