@@ -1,16 +1,19 @@
 import { useNavigate } from "react-router-dom";
 import { typeUsuario } from "./PerfilUsuario"
 import imagemPerfilProvisoria from '../../assets/perfil.png';
+import { Dispatch, SetStateAction } from "react";
 
 interface Pagina_inicialProps {
     usuario:typeUsuario | null
+    setMudarPagina: Dispatch<SetStateAction<number>>;
 }
-export const Pagina_inicial = ({usuario}:Pagina_inicialProps) => {
+export const Pagina_inicial = ({usuario,setMudarPagina}:Pagina_inicialProps) => {
 
     const navigate = useNavigate();
 
     const logout = () => {
         localStorage.removeItem("token");
+        localStorage.removeItem('imagemPerfil');
         navigate('/');
     }
 
@@ -32,7 +35,7 @@ export const Pagina_inicial = ({usuario}:Pagina_inicialProps) => {
 
                 {/* Botões de navegação */}
                 <div className="flex space-x-4 mb-8">
-                    <button className="bg-gray-100 w-32 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-200">
+                    <button onClick={() => setMudarPagina(2)} className="bg-gray-100 w-32 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-200">
                         Dados pessoais
                     </button>
                     <button className="bg-gray-100 w-32 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-200">

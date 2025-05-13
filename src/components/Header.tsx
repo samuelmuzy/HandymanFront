@@ -5,57 +5,66 @@ import { useGetToken } from '../hooks/useGetToken';
 import { Modal } from './Modal';
 import imagemPerfilProvisoria from '../assets/perfil.png';
 import Chat from './Chat';
+import axios from 'axios';
+
+type typeUsuario = {
+  picture: string;
+}
 
 const Header = () => {
   const navigate = useNavigate();
+
+  const URLAPI = import.meta.env.VITE_URLAPI;
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
 
+  const [imagemPerfil,setImagemPerfil] = useState<typeUsuario | null>(null);
+
+  const imagem = localStorage.getItem("imagemPerfil");
+
+
+
   const deslogar = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('imagemPerfil');
     navigate('/')
     setIsLoggedIn(false);
   }
 
   const token = useGetToken();
 
+  const procurarImagemPerfil = async () => {
+    try {
+      const response = await axios.get(`${URLAPI}/usuarios/buscar-id/${token?.id}`);
+      const imagem = response.data.picture;
+  
+      setImagemPerfil({ picture: imagem });
+      localStorage.setItem("imagemPerfil", imagem);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+
   useEffect(() => {
     setIsLoggedIn(isUserLoggedIn());
-  }, []);
+  
+    if (token?.id && !imagem) {
+      procurarImagemPerfil();
+    }
+  }, [token]);
+  
 
-  const navegarLogin = () => {
-    navigate('/login');
-  }
-
-  const navegarCadastro = () => {
-    navigate('/cadastro');
-  }
-
-  const navegarServicos = () => {
-    navigate('/servicos');
-  }
-
-  const navegarSobreNos = () => {
-    navigate('/sobre-nos');
-  }
-
-  const navegarAjuda = () => {
-    navigate('/ajuda');
-  }
-
-  const navegarPerfilUsuario = () => {
-    navigate(`/perfil-usuario/${token?.id}`)
-  }
-
-  const navegarHome = () => {
-    navigate('/');
-  }
-
-  const toggleModal = () => {
-    setIsModalOpen((prev) => !prev); // alterna entre true/false
-  };
+  const navegarLogin = () => navigate('/login');
+  const navegarCadastro = () => navigate('/cadastro');
+  const navegarServicos = () => navigate('/servicos');
+  const navegarSobreNos = () => navigate('/sobre-nos');
+  const navegarAjuda = () => navigate('/ajuda');
+  const navegarPerfilUsuario = () => navigate(`/perfil-usuario`);
+  const navegarHome = () => navigate('/');
+  const toggleModal = () => setIsModalOpen((prev) => !prev);
 
   return (
     <header className="bg-white shadow-sm border-b border-b-[#A75C00]">
@@ -86,7 +95,7 @@ const Header = () => {
                   <img
                     onClick={toggleModal}
                     className="w-12 rounded-full cursor-pointer"
-                    src={token?.imagemPerfil || imagemPerfilProvisoria}
+                    src={imagem || imagemPerfilProvisoria}
                     alt="imagem-perfil"
                   />
                 </div>

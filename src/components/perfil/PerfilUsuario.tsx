@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Pagina_inicial } from "./Pagina_inicial";
+import { DadosPessoais } from "./DadosPessoais";
 
 interface PerfilProps {
     id: string | undefined
@@ -18,11 +19,11 @@ export type typeUsuario = {
 }
 
 export const PerfilUsuario = ({ id }: PerfilProps) => {
-    
+
 
     const URLAPI = import.meta.env.VITE_URLAPI;
 
-    const mudarPagina = useState(1);
+    const [mudarPagina, setMudarPagina] = useState(1);
 
     const [usuario, setUsuario] = useState<typeUsuario | null>(null)
 
@@ -47,14 +48,29 @@ export const PerfilUsuario = ({ id }: PerfilProps) => {
             <div className="w-64 bg-gray-100 border-r px-6 py-8">
                 <h2 className="text-lg font-semibold mb-6">Conta</h2>
                 <ul className="space-y-4 text-gray-800">
-                    <li className="font-medium text-black">Página inicial</li>
-                    <li className="hover:text-orange-500 cursor-pointer">Dados pessoais</li>
+                    <li onClick={() => setMudarPagina(1)} className="font-medium text-black">Página inicial</li>
+                    <li onClick={() => setMudarPagina(2)} className="hover:text-orange-500 cursor-pointer">Dados pessoais</li>
                     <li className="hover:text-orange-500 cursor-pointer">Segurança</li>
                     <li className="hover:text-orange-500 cursor-pointer">Privacidade e dados</li>
                 </ul>
             </div>
+            {mudarPagina === 1 && (
+                <Pagina_inicial setMudarPagina={setMudarPagina} usuario={usuario} />
+            )}
+            {mudarPagina === 2 && (
+                <DadosPessoais
+                    email={usuario?.email}
+                    id_usuario={usuario?.id_usuario}
+                    nome={usuario?.nome}
+                    telefone={usuario?.telefone}
+                    picture={usuario?.picture}
+                />
+            )}
+            {mudarPagina === 3 && (
+                <p>ola</p>
+            )}
 
-            <Pagina_inicial usuario={usuario}/>
+
         </div>
     );
 

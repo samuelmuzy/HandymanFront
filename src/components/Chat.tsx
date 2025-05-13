@@ -17,10 +17,10 @@ interface ChatProps {
   idFornecedor: string;
 }
 
-interface Usuario{
-  id:string
-  picture:string;
-  nome:string;
+interface Usuario {
+  id: string
+  picture: string;
+  nome: string;
 }
 
 const Chat = ({ idFornecedor }: ChatProps) => {
@@ -30,7 +30,7 @@ const Chat = ({ idFornecedor }: ChatProps) => {
   const [mensagem, setMensagem] = useState('');
   const [mensagens, setMensagens] = useState<Mensagem[]>([]);
 
-  const [usuarios,setUsuarios] = useState<Usuario[]>([]);
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
 
   const socketRef = useRef<Socket | null>(null);
 
@@ -40,25 +40,25 @@ const Chat = ({ idFornecedor }: ChatProps) => {
   const nomeRemetente = token?.nome;
 
   const remetenteId = token?.id;
-  const [destinatarioId,setDestinatarioId] = useState(idFornecedor);
+  const [destinatarioId, setDestinatarioId] = useState(idFornecedor);
 
-  const buscarConversas = async () =>{
-    try{
-      const response = await axios.get(`${URLAPI}/mensagem/buscar-usuarios-conversas/${token?.id}`,{
-        headers:{
-          Authorization:tokenVerify
+  const buscarConversas = async () => {
+    try {
+      const response = await axios.get(`${URLAPI}/mensagem/buscar-usuarios-conversas/${token?.id}`, {
+        headers: {
+          Authorization: tokenVerify
         }
       });
       setUsuarios(response.data);
 
-    }catch(error:unknown){
-        console.log(error)
+    } catch (error: unknown) {
+      console.log(error)
     }
   }
 
-  useEffect(() =>{
+  useEffect(() => {
     buscarConversas()
-  },[usuarios])
+  }, [usuarios])
 
 
   useEffect(() => {
@@ -98,7 +98,7 @@ const Chat = ({ idFornecedor }: ChatProps) => {
     }
   }, [remetenteId, destinatarioId]);
 
- 
+
 
   const enviarMensagem = () => {
     if (!remetenteId || !destinatarioId || !mensagem.trim()) return;
@@ -122,18 +122,17 @@ const Chat = ({ idFornecedor }: ChatProps) => {
   };
 
   const listarUsuariosConversa = usuarios.map((usu) => (
-    <div 
+    <div
       key={usu.id}
       onClick={() => {
         setDestinatarioId(usu.id);
         setMensagens([]); // Limpa as mensagens antes de carregar as novas
       }}
-      className={`flex items-center p-2 cursor-pointer hover:bg-gray-100 ${
-        destinatarioId === usu.id ? 'bg-gray-200' : ''
-      }`}
+      className={`flex items-center p-2 cursor-pointer hover:bg-gray-100 ${destinatarioId === usu.id ? 'bg-gray-200' : ''
+        }`}
     >
-      <img 
-        src={usu.picture || imagemPerfilProvisoria} 
+      <img
+        src={usu.picture || imagemPerfilProvisoria}
         alt={usu.nome}
         className="w-10 h-10 rounded-full mr-2"
       />
@@ -158,13 +157,16 @@ const Chat = ({ idFornecedor }: ChatProps) => {
             {mensagens.map((msg) => (
               <li
                 key={msg._id}
-                className={`flex flex-col ${
-                  msg.remetenteId === remetenteId ? 'items-end' : 'items-start'
-                }`}
+                className={`flex flex-col ${msg.remetenteId === remetenteId ? 'items-end' : 'items-start'
+                  }`}
               >
                 <div className='flex items-center mb-1'>
-                  <img 
-                    src={usuarios.find(u => u.id === msg.remetenteId)?.picture || imagemPerfilProvisoria} 
+                  <img
+                    src={
+                      msg.remetenteId === token?.id
+                        ? token.imagemPerfil // quando o usuário é o remetente
+                        : usuarios.find(u => u.id === msg.remetenteId)?.picture || imagemPerfilProvisoria
+                    }
                     alt=""
                     className="w-6 h-6 rounded-full mr-2"
                   />
@@ -192,7 +194,7 @@ const Chat = ({ idFornecedor }: ChatProps) => {
             onKeyPress={(e) => e.key === 'Enter' && enviarMensagem()}
             className='flex-1 p-2 border rounded-lg'
           />
-          <button 
+          <button
             onClick={enviarMensagem}
             className='bg-[#A75C00] text-white px-4 py-2 rounded-lg hover:bg-[#8B4D00]'
           >
