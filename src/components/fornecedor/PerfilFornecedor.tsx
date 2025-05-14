@@ -3,6 +3,7 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import Chat from "../Chat";
 import { Modal } from "../Modal";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface FornecedorProps {
   id: string
@@ -30,6 +31,7 @@ export const PerfilFornecedor = ({ id, local, nome, media_avaliacoes, descricao,
       {fornecedor}
     </button>
   ));
+  const navigate = useNavigate();
 
   return (
     <div className="flex flex-col items-center p-6">
@@ -72,6 +74,9 @@ export const PerfilFornecedor = ({ id, local, nome, media_avaliacoes, descricao,
           </button>
           <button onClick={() => setIsChatOpen(true)} className="bg-green-500 text-white text-sm px-4 py-2 rounded hover:bg-green-600 transition-colors">
             Me contate
+          </button>
+          <button onClick={() => navigate(`/pagamento/${id}`)} className="bg-orange-500 text-white text-sm px-4 py-2 rounded hover:bg-orange-500-600 transition-colors">
+            Fazer chamado
           </button>
         </div>
       </div>

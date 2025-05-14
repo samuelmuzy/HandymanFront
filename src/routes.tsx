@@ -10,6 +10,7 @@ import { SobreSceen } from "./screens/SobreSceen";
 import { CadastroFornecedorScreen } from "./screens/CadastroFornecedorScreen";
 import { Fornecedor } from "./screens/Fornecedor";
 import { PerfilScreen } from "./screens/PerfilScreen";
+import { PagamentoScreen } from "./screens/PagamentoScreen";
 
 
 export const Router = () =>{
@@ -24,7 +25,8 @@ export const Router = () =>{
                 <Route path="/sobre-nos" element={<SobreSceen/>}/>
                 <Route path="/cadastro-fornecedor" element={<CadastroFornecedorScreen/>}/>
                 <Route path="/perfil-usuario/:idPerfil" element={<PerfilScreen/>}/>
-                <Route path="/fornecedor/:id" element={<Fornecedor/>}/>      
+                <Route path="/fornecedor/:id" element={<Fornecedor/>}/>   
+                <Route path="/pagamento/:id" element={<PagamentoScreen/>}/>   
                 <Route path="*" element={<PaginaErro/>}/>
             </Routes>
     )
