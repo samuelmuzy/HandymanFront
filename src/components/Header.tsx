@@ -22,6 +22,8 @@ const Header = () => {
 
   const [imagemPerfil,setImagemPerfil] = useState<typeUsuario | null>(null);
 
+  console.log(imagemPerfil);
+
   const imagem = localStorage.getItem("imagemPerfil");
 
   const deslogar = () => {

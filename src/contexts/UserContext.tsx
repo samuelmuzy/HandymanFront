@@ -3,9 +3,6 @@ import axios from 'axios';
 import { useGetToken } from '../hooks/useGetToken';
 import { useNavigate } from 'react-router-dom';
 
-type Usuario = {
-    picture: string;
-};
 
 type UserContextType = {
     isLoggedIn: boolean;
