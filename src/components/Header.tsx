@@ -56,8 +56,6 @@ const Header = () => {
   }, [token]);
 
 
-  
-
   const navegarLogin = () => {
     navigate('/login');
   }
