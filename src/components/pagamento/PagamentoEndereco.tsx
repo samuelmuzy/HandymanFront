@@ -1,3 +1,5 @@
+import { PagamentoForma } from "./PagamentoForma"
+
 export const PagamentoEndereco = () =>{
     return(
         <div>
@@ -10,6 +12,7 @@ export const PagamentoEndereco = () =>{
                 <button>Alter localização</button>
             </div>
             <button>Continuar</button>
+            <PagamentoForma/>
         </div>
     )
 }
