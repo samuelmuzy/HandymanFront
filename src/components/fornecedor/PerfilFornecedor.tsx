@@ -108,6 +108,8 @@ export const PerfilFornecedor = ({ id, local, nome, media_avaliacoes, descricao,
       <div className="mt-6 w-full max-w-5xl rounded-lg p-4">
         <p className="text-orange-700 font-semibold mb-2">sobre-min:</p>
         <p>textkjjhkjhjkkj jkhkjhkjhjkhk hjkhkjhjkhjkhj hkjhkjhkjh</p>
+        <p>{sub_descricao}</p>
+        <p>{imagemFornecedor}</p>
       </div>
       
       <Modal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)}>
