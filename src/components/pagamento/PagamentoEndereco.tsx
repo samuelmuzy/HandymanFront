@@ -11,7 +11,7 @@ export const PagamentoEndereco = () =>{
                 <p>Nome</p>
                 <button>Alter localização</button>
             </div>
-            <button>Continuar</button>
+            <button>Continuart</button>
             <PagamentoForma/>
         </div>
     )
