@@ -75,7 +75,7 @@ export const PerfilFornecedor = ({ id, local, nome, media_avaliacoes, descricao,
           <button onClick={() => setIsChatOpen(true)} className="bg-green-500 text-white text-sm px-4 py-2 rounded hover:bg-green-600 transition-colors">
             Me contate
           </button>
-          <button onClick={() => navigate(`/pagamento/${id}`)} className="bg-orange-500 text-white text-sm px-4 py-2 rounded hover:bg-orange-500-600 transition-colors">
+          <button onClick={() => navigate(`/pagamento/${id}`)} className="bg-orange-500 text-white text-sm px-4 pt-2 rounded hover:bg-orange-500-600 transition-colors">
             Fazer chamado
           </button>
         </div>

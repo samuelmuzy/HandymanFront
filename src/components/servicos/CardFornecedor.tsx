@@ -32,7 +32,7 @@ export const CardFornecedor = ({
 
     return (
         <div className="w-72 bg-white rounded-xl shadow-md overflow-hidden flex flex-col m-5">
-            <img onClick={() => handleNavigation(id)} src={imagemFornecedor} alt={`Imagem de ${nome}`} className="w-full h-60 p-5 rounded-s cursor-pointer" />
+            <img onClick={() => handleNavigation(id)} src={imagemFornecedor} alt={`Imagem de ${nome}`} className="w-full h-60 p-5 rounded-3xl cursor-pointer" />
 
             <div className="flex items-center gap-2 px-4 mt-4">
                 <img onClick={() => handleNavigation(id)} src={imagemIcone} alt="Ícone do fornecedor" className="w-8 h-8 rounded-full" />

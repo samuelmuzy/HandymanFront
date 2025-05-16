@@ -10,10 +10,10 @@ export const PagamentoForma = () => {
         body: JSON.stringify({
           title: 'Camiseta Preta',
           quantity: 1,
-          unit_price: 100,
+          unit_price: 1,
           payer: {
             name: 'João da Silva',
-            email: 'joaodasilva-teste@email.com', // TEM QUE ser diferente do vendedor!
+            email: 'joaodasilva@email.com', // TEM QUE ser diferente do vendedor!
             identification: {
               type: 'CPF',
               number: '12345678909',
