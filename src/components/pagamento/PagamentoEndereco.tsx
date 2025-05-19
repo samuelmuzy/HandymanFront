@@ -111,6 +111,7 @@ export const PagamentoEndereco = ({ setStep }: PagamentoEnderecoProps) => {
     };
 
     const handleAddEndereco = () => {
+        resetForm()
         setForm({
             cep: "",
             cidade: "",
