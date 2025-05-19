@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import { useGetToken } from '../../hooks/useGetToken';
+import { Loading } from '../Loading';
 
 interface Agendamento {
   id_usuario: string;
@@ -11,6 +12,7 @@ interface Agendamento {
   status: string;
   id_pagamento?: string;
   id_avaliacao?: string;
+  descricao:string;
 }
 
 interface AgendamentoProps{
@@ -19,6 +21,8 @@ interface AgendamentoProps{
 
 export const Agendamento = ({idFornecedor}:AgendamentoProps) => {
   const URLAPI = import.meta.env.VITE_URLAPI;
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const token = useGetToken();
 
@@ -42,6 +46,7 @@ export const Agendamento = ({idFornecedor}:AgendamentoProps) => {
   };
 
   const handleAgendar = async (e: React.FormEvent) => {
+    setIsLoading(true)
     try {
       e.preventDefault();
       
@@ -56,17 +61,25 @@ export const Agendamento = ({idFornecedor}:AgendamentoProps) => {
         horario: dataHora,
         status: formData.status,
         id_pagamento: formData.id_pagamento || undefined,
-        id_avaliacao: formData.id_avaliacao || undefined
+        id_avaliacao: formData.id_avaliacao || undefined,
+        descricao:formData.descricao
       };
 
       const response = await axios.post(`${URLAPI}/servicos`, agendamentoData);
       console.log('Agendamento criado:', response.data);
       // Aqui você pode adicionar redirecionamento ou mensagem de sucesso
+      
     } catch (error) {
       console.error('Erro ao agendar serviço:', error);
       alert('Erro ao agendar serviço. Tente novamente.');
+    } finally {
+        setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <Loading />;
+}
 
   return (
     <div className='flex items-center justify-center w-full min-h-screen bg-white'>

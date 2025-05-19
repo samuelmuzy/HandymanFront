@@ -11,13 +11,15 @@ import { CadastroFornecedorScreen } from "./screens/CadastroFornecedorScreen";
 import { Fornecedor } from "./screens/Fornecedor";
 import { PerfilScreen } from "./screens/PerfilScreen";
 import { PagamentoScreen } from "./screens/PagamentoScreen";
+import { LoginFornecedorScreen } from "./screens/LoginFornecedorScreen";
 
 
 export const Router = () =>{
     return(
             <Routes>
                 <Route path="/" element={<HomeScreen/>}/>
-                <Route path="/login" element={<LoginSceen/>}/>  
+                <Route path="/login" element={<LoginSceen/>}/>
+                <Route path="/login-fornecedor" element={<LoginFornecedorScreen/>}/>
                 <Route path="/seguro" element={<SecurityPage/>}/>
                 <Route path="/servicos" element={<Servicos/>}/>
                 <Route path="/ajuda" element={<AjudaScenn/>}/>

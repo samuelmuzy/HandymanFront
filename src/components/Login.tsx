@@ -4,7 +4,7 @@ import { FaFacebook, FaApple, FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Loading } from './Loading';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 interface jwtDecoded {
   email: string;
@@ -23,7 +23,7 @@ interface typeUsuarioGoogle {
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [error, setError] = useState('');
@@ -32,31 +32,35 @@ export const Login = () => {
 
   const navigate = useNavigate();
 
-  const onNavigateCadastroUsuario = () =>{navigate('/cadastro')};
+  const onNavigateCadastroUsuario = () => { navigate('/cadastro') };
+  
+  const onNavigateLoginFornecedor = () => {
+    navigate('/login-fornecedor');
+  };
 
-  const handleLoginSuccessGoogle = (credentialResponse:any) => {
-    const decoded:jwtDecoded = jwtDecode(credentialResponse.credential);
-    
-    const usuarioGoogle:typeUsuarioGoogle = {
+  const handleLoginSuccessGoogle = (credentialResponse: any) => {
+    const decoded: jwtDecoded = jwtDecode(credentialResponse.credential);
+
+    const usuarioGoogle: typeUsuarioGoogle = {
       email: decoded.email,
       name: decoded.name,
       sub: decoded.sub,
       picture: decoded.picture,
     };
-    
+
     setIsLoading(true);
 
     axios.post(`${URLAPI}/usuarios/login/google`, usuarioGoogle)
-    .then((response) => {
-      // Aqui você pode armazenar o token de autenticação ou qualquer outra informação necessária
-      localStorage.setItem('token', response.data.token); // Armazenando o token no localStorage
-      navigate('/'); // Redireciona para a página inicial após o login
-      setIsLoading(false);
+      .then((response) => {
+        // Aqui você pode armazenar o token de autenticação ou qualquer outra informação necessária
+        localStorage.setItem('token', response.data.token); // Armazenando o token no localStorage
+        navigate('/'); // Redireciona para a página inicial após o login
+        setIsLoading(false);
 
-    }).catch((error) => {
-      setIsLoading(false);
-      setError(error.response.data.error);
-    })
+      }).catch((error) => {
+        setIsLoading(false);
+        setError(error.response.data.error);
+      })
 
     console.log('Usuário:', decoded);
     // Exemplo: decoded.name, decoded.email, decoded.picture
@@ -66,30 +70,30 @@ export const Login = () => {
     e.preventDefault();
     // Aciona o loading
     setIsLoading(true);
-    
+
     axios.post(`${URLAPI}/usuarios/login`, {
       email,
       senha,
     })
-    .then((response) => {
-      setIsLoading(false);
-      // Aqui você pode armazenar o token de autenticação ou qualquer outra informação necessária
-      localStorage.setItem('token', response.data.token); // Armazenando o token no localStorage
-      navigate('/'); // Redireciona para a página inicial após o login
-    })
-    .catch((error) => {
-      setIsLoading(false);
-      setError(error.response.data.error);
-    })
+      .then((response) => {
+        setIsLoading(false);
+        // Aqui você pode armazenar o token de autenticação ou qualquer outra informação necessária
+        localStorage.setItem('token', response.data.token); // Armazenando o token no localStorage
+        navigate('/'); // Redireciona para a página inicial após o login
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        setError(error.response.data.error);
+      })
   };
 
   return (
-    
+
     <div className="w-full max-w-[370px] mx-auto my-8 shadow-lg p-6 rounded-md">
-      
+
       {/* Loading Spinner */}
       {isLoading && (<Loading />)}
-      
+
       {/* Seção Superior */}
       <div className="text-left mb-4 px-2">
         <h1 className="text-xl font-bold text-text-brown">HANDYMAN</h1>
@@ -100,7 +104,7 @@ export const Login = () => {
 
       {/* Seção do Formulário */}
       <div className="bg-[#EEB16C] rounded-lg p-3">
-        
+
         <form onSubmit={handleSubmit} className="space-y-2.5">
           <div className="space-y-1">
             <div className="text-left w-full">
@@ -178,14 +182,14 @@ export const Login = () => {
           </div>
 
           <div className="space-y-2">
-          <GoogleOAuthProvider clientId="455735307753-g66pa4q32nubf9fk2c171ehoac22d8bv.apps.googleusercontent.com">
+            <GoogleOAuthProvider clientId="455735307753-g66pa4q32nubf9fk2c171ehoac22d8bv.apps.googleusercontent.com">
               <GoogleLogin
-                  onSuccess={handleLoginSuccessGoogle}
-                  onError={() => {
-                    setError('Login Failed');
-                  }}
+                onSuccess={handleLoginSuccessGoogle}
+                onError={() => {
+                  setError('Login Failed');
+                }}
               />
-          </GoogleOAuthProvider>
+            </GoogleOAuthProvider>
 
 
             <button
@@ -206,6 +210,10 @@ export const Login = () => {
           </div>
         </form>
       </div>
+      <p onClick={onNavigateLoginFornecedor}
+        className="w-full p-2 cursor-pointer text-amber-600 rounded-lg hover:opacity-90 transition-opacity text-sm font-medium text-center mt-4">
+        Entrar como Fornecedor
+      </p>
     </div>
   );
 }; 
