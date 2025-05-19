@@ -1,8 +1,9 @@
 import { useParams } from "react-router-dom";
-import { PerfilUsuario } from "../components/perfil/PerfilUsuario";
+import { PerfilUsuario } from "../components/perfilUsuario/PerfilUsuario";
 import { useGetToken } from "../hooks/useGetToken";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { PerfilFornecedor } from "../components/perfilFornecedor/PerfilFornecedor";
 
 
 export const PerfilScreen = () =>{
@@ -13,7 +14,7 @@ export const PerfilScreen = () =>{
     return(
         <div className="">
             <Header/>
-            {token?.role === 'Fornecedor' ? (<><p>ola</p></>) : (<PerfilUsuario id={idPerfil}/>)}
+            {token?.role === 'Fornecedor' ? (<PerfilFornecedor idFornecedor={idPerfil}/>) : (<PerfilUsuario id={idPerfil}/>)}
             <Footer/>
         </div>
     )

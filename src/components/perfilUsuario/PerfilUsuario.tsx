@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Pagina_inicial } from "./Pagina_inicial";
 import { DadosPessoais } from "./DadosPessoais";
+import { HistoricoServico } from "../../types/historicoServico";
 
 interface PerfilProps {
     id: string | undefined
@@ -27,6 +28,8 @@ export const PerfilUsuario = ({ id }: PerfilProps) => {
 
     const [usuario, setUsuario] = useState<typeUsuario | null>(null)
 
+    const [historicoServico,sethistoricoServico] = useState<HistoricoServico[] | null>(null)
+
     const procurarUsuario = async () => {
         try {
             const response = await axios.get(`${URLAPI}/usuarios/buscar-id/${id}`)
@@ -37,8 +40,18 @@ export const PerfilUsuario = ({ id }: PerfilProps) => {
         }
     }
 
+    const procurarHistoricoServico = async () =>{
+        try{
+            const response = await axios.get(`${URLAPI}/usuarios/historico/${id}`)
+            sethistoricoServico(response.data);
+        }catch (error :unknown){
+            console.log(error)
+        }
+    }
+
     useEffect(() => {
         procurarUsuario();
+        procurarHistoricoServico();
     }, [])
 
 
@@ -55,7 +68,7 @@ export const PerfilUsuario = ({ id }: PerfilProps) => {
                 </ul>
             </div>
             {mudarPagina === 1 && (
-                <Pagina_inicial setMudarPagina={setMudarPagina} usuario={usuario} />
+                <Pagina_inicial historico={historicoServico} setMudarPagina={setMudarPagina} usuario={usuario} />
             )}
             {mudarPagina === 2 && (
                 <DadosPessoais

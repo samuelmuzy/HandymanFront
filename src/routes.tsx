@@ -12,6 +12,7 @@ import { Fornecedor } from "./screens/Fornecedor";
 import { PerfilScreen } from "./screens/PerfilScreen";
 import { PagamentoScreen } from "./screens/PagamentoScreen";
 import { LoginFornecedorScreen } from "./screens/LoginFornecedorScreen";
+import { ConfirmacaoAgendamento } from './screens/ConfirmacaoAgendamento';
 
 
 export const Router = () =>{
@@ -29,6 +30,7 @@ export const Router = () =>{
                 <Route path="/perfil-usuario/:idPerfil" element={<PerfilScreen/>}/>
                 <Route path="/fornecedor/:id" element={<Fornecedor/>}/>   
                 <Route path="/pagamento/:id" element={<PagamentoScreen/>}/>   
+                <Route path="/confirmacao-agendamento" element={<ConfirmacaoAgendamento />} />
                 <Route path="*" element={<PaginaErro/>}/>
             </Routes>
     )

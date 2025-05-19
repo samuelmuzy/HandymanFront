@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Loading } from './Loading';
+import { Loading } from '../Loading';
 
 
 

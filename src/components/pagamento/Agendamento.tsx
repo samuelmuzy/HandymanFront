@@ -2,27 +2,18 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useGetToken } from '../../hooks/useGetToken';
 import { Loading } from '../Loading';
+import { useNavigate } from 'react-router-dom';
+import { AgendamentoType } from '../../types/agendamento';
 
-interface Agendamento {
-  id_usuario: string;
-  id_fornecedor: string;
-  categoria: string;
-  data: Date;
-  horario: Date;
-  status: string;
-  id_pagamento?: string;
-  id_avaliacao?: string;
-  descricao:string;
-}
-
-interface AgendamentoProps{
-    idFornecedor:string;
+interface AgendamentoProps {
+    idFornecedor: string;
 }
 
 export const Agendamento = ({idFornecedor}:AgendamentoProps) => {
   const URLAPI = import.meta.env.VITE_URLAPI;
-
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+
 
   const token = useGetToken();
 
@@ -53,7 +44,7 @@ export const Agendamento = ({idFornecedor}:AgendamentoProps) => {
       // Combinando data e hora para criar o objeto Date
       const dataHora = new Date(`${formData.data}T${formData.horario}`);
       
-      const agendamentoData: Agendamento = {
+      const agendamentoData: AgendamentoType = {
         id_usuario: token?.id as string,
         id_fornecedor: idFornecedor,
         categoria: formData.categoria,
@@ -62,12 +53,19 @@ export const Agendamento = ({idFornecedor}:AgendamentoProps) => {
         status: formData.status,
         id_pagamento: formData.id_pagamento || undefined,
         id_avaliacao: formData.id_avaliacao || undefined,
-        descricao:formData.descricao
+        descricao: formData.descricao
       };
 
       const response = await axios.post(`${URLAPI}/servicos`, agendamentoData);
       console.log('Agendamento criado:', response.data);
-      // Aqui você pode adicionar redirecionamento ou mensagem de sucesso
+      
+      // Salvar o agendamento confirmado e redirecionar
+      navigate('/confirmacao-agendamento', { 
+        state: { 
+          agendamento: response.data,
+          valor: formData.valor
+        } 
+      });
       
     } catch (error) {
       console.error('Erro ao agendar serviço:', error);
