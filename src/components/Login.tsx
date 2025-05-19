@@ -32,6 +32,8 @@ export const Login = () => {
 
   const navigate = useNavigate();
 
+  const onNavigateCadastroUsuario = () =>{navigate('/cadastro')};
+
   const handleLoginSuccessGoogle = (credentialResponse:any) => {
     const decoded:jwtDecoded = jwtDecode(credentialResponse.credential);
     
@@ -157,7 +159,7 @@ export const Login = () => {
           <div className="text-center">
             <p className="text-xs text-white">
               Não tem uma conta?{' '}
-              <a href="/cadastro" className="text-white hover:underline">
+              <a onClick={onNavigateCadastroUsuario} className="text-white cursor-pointer hover:underline">
                 Cadastre-se
               </a>
             </p>

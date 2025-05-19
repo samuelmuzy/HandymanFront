@@ -1,5 +1,4 @@
 import axios from "axios"
-import { PagamentoForma } from "./PagamentoForma"
 import { useGetToken } from "../../hooks/useGetToken"
 import { useEffect, useState } from "react";
 import { Loading } from "../Loading";

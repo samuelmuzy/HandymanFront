@@ -1,0 +1,156 @@
+import axios from 'axios';
+import { useState } from 'react';
+import { useGetToken } from '../../hooks/useGetToken';
+
+interface Agendamento {
+  id_usuario: string;
+  id_fornecedor: string;
+  categoria: string;
+  data: Date;
+  horario: Date;
+  status: string;
+  id_pagamento?: string;
+  id_avaliacao?: string;
+}
+
+interface AgendamentoProps{
+    idFornecedor:string;
+}
+
+export const Agendamento = ({idFornecedor}:AgendamentoProps) => {
+  const URLAPI = import.meta.env.VITE_URLAPI;
+
+  const token = useGetToken();
+
+  const [formData, setFormData] = useState({
+    categoria: "",
+    data: "",
+    horario: "",
+    status: "pendente",
+    id_pagamento: "",
+    id_avaliacao: "",
+    descricao:"",
+    valor:""
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleAgendar = async (e: React.FormEvent) => {
+    try {
+      e.preventDefault();
+      
+      // Combinando data e hora para criar o objeto Date
+      const dataHora = new Date(`${formData.data}T${formData.horario}`);
+      
+      const agendamentoData: Agendamento = {
+        id_usuario: token?.id as string,
+        id_fornecedor: idFornecedor,
+        categoria: formData.categoria,
+        data: new Date(formData.data),
+        horario: dataHora,
+        status: formData.status,
+        id_pagamento: formData.id_pagamento || undefined,
+        id_avaliacao: formData.id_avaliacao || undefined
+      };
+
+      const response = await axios.post(`${URLAPI}/servicos`, agendamentoData);
+      console.log('Agendamento criado:', response.data);
+      // Aqui você pode adicionar redirecionamento ou mensagem de sucesso
+    } catch (error) {
+      console.error('Erro ao agendar serviço:', error);
+      alert('Erro ao agendar serviço. Tente novamente.');
+    }
+  };
+
+  return (
+    <div className='flex items-center justify-center w-full min-h-screen bg-white'>
+      <div className="w-[600px] mx-auto p-8 border border-[#A75C00]/20 rounded-lg">
+        <h2 className="text-2xl font-medium mb-8 text-center text-[#A75C00]">Agendamento de Serviço</h2>
+
+        <form onSubmit={handleAgendar} className="space-y-5">
+          <div>
+            <label className="block text-sm text-[#A75C00] mb-1">Categoria do Serviço</label>
+            <select
+              name="categoria"
+              value={formData.categoria}
+              onChange={handleChange}
+              className="w-full p-2 border border-[#A75C00]/20 rounded-md focus:outline-none focus:border-[#A75C00]"
+              required
+            >
+              <option value="">Selecione uma categoria</option>
+              <option value="Limpeza">Limpeza</option>
+              <option value="Elétrica">Elétrica</option>
+              <option value="Encanamento">Encanamento</option>
+              <option value="Carpintaria">Carpintaria</option>
+              <option value="Jardinagem">Jardinagem</option>
+              <option value="Mudança">Mudança</option>
+            </select>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm text-[#A75C00] mb-1">Data</label>
+              <input
+                type="date"
+                name="data"
+                value={formData.data}
+                onChange={handleChange}
+                className="w-full p-2 border border-[#A75C00]/20 rounded-md focus:outline-none focus:border-[#A75C00]"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm text-[#A75C00] mb-1">Hora</label>
+              <input
+                type="time"
+                name="horario"
+                value={formData.horario}
+                onChange={handleChange}
+                className="w-full p-2 border border-[#A75C00]/20 rounded-md focus:outline-none focus:border-[#A75C00]"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm text-[#A75C00] mb-1">Descrição do Serviço</label>
+            <textarea
+              name="descricao"
+              value={formData.descricao}
+              onChange={handleChange}
+              rows={3}
+              className="w-full p-2 border border-[#A75C00]/20 rounded-md focus:outline-none focus:border-[#A75C00] resize-none"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-[#A75C00] mb-1">Valor do Serviço (R$)</label>
+            <input
+              type="number"
+              name="valor"
+              value={formData.valor}
+              onChange={handleChange}
+              className="w-full p-2 border border-[#A75C00]/20 rounded-md focus:outline-none focus:border-[#A75C00]"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-[#A75C00] text-white py-2.5 mt-8 rounded-md hover:bg-[#8B4D00] transition-colors"
+          >
+            Agendar
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};

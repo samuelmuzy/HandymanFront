@@ -12,9 +12,9 @@ interface Fornecedor {
     senha: string;
     categoria_servico: string[];
     endereco: enderecoFornecedor;
-    descricao:string;
-    valor:number;
-    sub_descricao:string;
+    descricao: string;
+    valor: number;
+    sub_descricao: string;
 }
 
 interface enderecoFornecedor {
@@ -26,8 +26,27 @@ interface enderecoFornecedor {
 }
 
 export const CadastroFornecedor = () => {
-    const [valor,setValor] = useState(0);
-    
+    const [valorFormatado, setValorFormatado] = useState("");
+
+    const formatarValor = (valor: string) => {
+        // Remove tudo que não é número
+        const apenasNumeros = valor.replace(/\D/g, '');
+        
+        // Converte para número e divide por 100 para ter os centavos
+        const valorNumerico = Number(apenasNumeros) / 100;
+        
+        // Formata o valor com 2 casas decimais
+        return valorNumerico.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    };
+
+    const handleValorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const valorFormatado = formatarValor(e.target.value);
+        setValorFormatado(valorFormatado);
+    };
+
     const [form, setForm] = useState({
         nome: "",
         telefone: "",
@@ -38,8 +57,8 @@ export const CadastroFornecedor = () => {
         cidade: "",
         estado: "",
         rua: "",
-        descricao:"",
-        subDescricao:"",
+        descricao: "",
+        subDescricao: "",
         categoria_servico: [] as string[],
     });
 
@@ -49,10 +68,10 @@ export const CadastroFornecedor = () => {
     const [error, setError] = useState("");
 
     const navigate = useNavigate();
-
     const URLAPI = import.meta.env.VITE_URLAPI;
 
-    const onNavigateCadastroUsuario = () => navigate('/cadastro');
+    const onNavigateCadastroUsuario = () =>{navigate('/cadastro')};
+    const onNavigateloginUsuario = () => {navigate('/login')};
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -65,9 +84,9 @@ export const CadastroFornecedor = () => {
         email: form.email,
         senha: form.senha,
         categoria_servico: form.categoria_servico,
-        descricao:form.descricao,
-        valor: valor,
-        sub_descricao:form.subDescricao,
+        descricao: form.descricao,
+        valor: Number(valorFormatado.replace(/\./g, '').replace(',', '.')),
+        sub_descricao: form.subDescricao,
         endereco: {
             cep: form.cep,
             pais: form.pais,
@@ -79,14 +98,14 @@ export const CadastroFornecedor = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log(valor)
+        console.log(valorFormatado)
 
         if (step === 3) {
             setIsLoading(true);
             axios.post(`${URLAPI}/fornecedor`, requisicao)
                 .then((response) => {
                     navigate('/')
-                    localStorage.setItem("token",response.data)
+                    localStorage.setItem("token", response.data)
                 })
                 .catch((err) => {
                     setError(err.response?.data?.error || "Erro ao cadastrar");
@@ -198,7 +217,7 @@ export const CadastroFornecedor = () => {
                         <>
                             <h3 className="text-white text-lg font-semibold mb-2">Categoria de Serviço</h3>
                             <div className="flex flex-col gap-2 text-white">
-                                {["Encanamento", "Jardinagem", "Limpeza","Elétrica","Carpintaria","Mudança"].map((categoria) => (
+                                {["Encanamento", "Jardinagem", "Limpeza", "Elétrica", "Carpintaria", "Mudança"].map((categoria) => (
                                     <label key={categoria} className="flex items-center gap-2">
                                         <input
                                             type="checkbox"
@@ -220,8 +239,21 @@ export const CadastroFornecedor = () => {
                             </div>
                             <h3 className="text-white text-lg font-semibold mb-2">Descrição do serviço</h3>
                             <Input label="Descrição" id="descricao" value={form.descricao} onChange={onChange} />
-                            <Input label='subDescrição' id='subDescricao' value={form.subDescricao} onChange={onChange}/>
-                            <input type="number" placeholder='Valor' id="valor" value={valor} onChange={(e) => setValor(Number(e.target.value))} />
+                            <Input label='subDescrição' id='subDescricao' value={form.subDescricao} onChange={onChange} />
+                            <div>
+                                <label className="block text-sm text-white mb-1">Valor do Serviço (R$)</label>
+                                <div className="relative">
+                                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white">R$</span>
+                                    <input
+                                        type="text"
+                                        value={valorFormatado}
+                                        onChange={handleValorChange}
+                                        className="w-full p-2 pl-8 rounded-lg bg-[#AD5700]/50 text-sm text-white"
+                                        placeholder="0,00"
+                                        required
+                                    />
+                                </div>
+                            </div>
                         </>
                     )}
 
@@ -240,7 +272,7 @@ export const CadastroFornecedor = () => {
                 </form>
 
                 <p className="text-center text-xs text-white mt-4">
-                    Tem uma conta? <a href="/login" className="underline">Conecte-se</a>
+                    Tem uma conta? <a onClick={onNavigateloginUsuario} className="underline">Conecte-se</a>
                 </p>
             </div>
 

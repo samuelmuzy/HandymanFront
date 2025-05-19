@@ -38,6 +38,8 @@ export const Cadastro = () => {
     navigate('/cadastro-fornecedor');
   };
 
+  const onNavigateloginUsuario = () => {navigate('/login')};
+
   const [form, onChange] = useForm({
     nome: "",
     telefone: "",
@@ -177,7 +179,7 @@ export const Cadastro = () => {
         </form>
 
         <p className="text-center text-xs text-white mt-4">
-          Tem uma conta? <a href="/login" className="underline">Conecte-se</a>
+          Tem uma conta? <a onClick={onNavigateloginUsuario} className="underline cursor-pointer">Conecte-se</a>
         </p>
       </div>
       <p onClick={onNavigateCadastroFornecedor} className="w-full p-2 cursor-pointer text-amber-600 rounded-lg hover:opacity-90 transition-opacity text-sm font-medium text-center mt-4"
