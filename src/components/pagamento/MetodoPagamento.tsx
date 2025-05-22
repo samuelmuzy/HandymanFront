@@ -70,8 +70,6 @@ export const MetodoPagamento = () => {
         <h2 className="text-2xl font-medium mb-8 text-center text-[#A75C00]">Agendamento de Serviço</h2>
         
         <form className="space-y-5">
-         
-
           <div>
             <label className="block text-sm text-[#A75C00] mb-1">Telefone</label>
             <input

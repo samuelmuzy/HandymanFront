@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Pagina_inicial } from "./Pagina_inicial";
 import { DadosPessoais } from "./DadosPessoais";
 import { HistoricoServico } from "../../types/historicoServico";
+import { MetodoPagamento } from "../pagamento/MetodoPagamento";
 
 interface PerfilProps {
     id: string | undefined
@@ -80,7 +81,7 @@ export const PerfilUsuario = ({ id }: PerfilProps) => {
                 />
             )}
             {mudarPagina === 3 && (
-                <p>ola</p>
+                <MetodoPagamento/>
             )}
 
 

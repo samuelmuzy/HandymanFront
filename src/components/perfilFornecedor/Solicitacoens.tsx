@@ -23,8 +23,9 @@ interface Solicitacao {
 interface PerfilProps {
     idFornecedor: string | undefined
 }
-export const Solicitacoes = ({idFornecedor}:PerfilProps) =>{
+export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
     const [solicitacoes, setSolicitacoes] = useState<Solicitacao[]>([]);
+    const [verificarStatus,setVerificarStatus] = useState(false);
     const URLAPI = import.meta.env.VITE_URLAPI;
 
     const formatarData = (data: Date) => {
@@ -34,6 +35,23 @@ export const Solicitacoes = ({idFornecedor}:PerfilProps) =>{
     const formatarHora = (data: Date) => {
         return new Date(data).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
     };
+
+    const atualizarStatus = async (id_servico:string,status: string) => {
+        try {
+            const data = {
+                id_servico: id_servico,
+                status:status
+            }
+
+            const response = await axios.put(`${URLAPI}/servicos`, data);
+
+            setVerificarStatus((verificar) => !verificar)
+            
+            console.log(response.data);
+        } catch (error: unknown) {
+            console.log(error);
+        }
+    }
 
     const getStatusColor = (status: string) => {
         switch (status.toLowerCase()) {
@@ -61,14 +79,14 @@ export const Solicitacoes = ({idFornecedor}:PerfilProps) =>{
 
     useEffect(() => {
         buscarSolicitacoes();
-    }, []);
+    }, [verificarStatus]);
 
 
-    return(
+    return (
         <div className="p-6">
             <div className="mb-8">
                 <h2 className="text-2xl font-semibold text-[#A75C00] mb-4">Solicitações de Serviço</h2>
-                
+
                 {solicitacoes.length > 0 ? (
                     <div className="grid gap-4">
                         {solicitacoes.map((solicitacao, index) => (
@@ -104,15 +122,15 @@ export const Solicitacoes = ({idFornecedor}:PerfilProps) =>{
                                 )}
 
                                 <div className="mt-4 flex justify-end space-x-2">
-                                    <button 
+                                    <button
                                         className="px-4 py-2 bg-[#A75C00] text-white rounded-md hover:bg-[#8B4D00] transition-colors"
-                                        onClick={() => {/* Função para aceitar solicitação */}}
+                                        onClick={() =>{atualizarStatus(solicitacao.servico.id_servico,'confirmado')}}
                                     >
                                         Aceitar
                                     </button>
-                                    <button 
+                                    <button
                                         className="px-4 py-2 border border-[#A75C00] text-[#A75C00] rounded-md hover:bg-[#A75C00]/10 transition-colors"
-                                        onClick={() => {/* Função para recusar solicitação */}}
+                                        onClick={() => {atualizarStatus(solicitacao.servico.id_servico,'cancelado')}}
                                     >
                                         Recusar
                                     </button>
