@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Login } from "../components/login/Login";
+import { Login } from "../../components/login/Login";
 
 
 export const LoginSceen = () => {

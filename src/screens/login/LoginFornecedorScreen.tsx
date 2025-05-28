@@ -1,4 +1,4 @@
-import { LoginFornecedor } from "../components/login/LoginFornecedor"
+import { LoginFornecedor } from "../../components/login/LoginFornecedor"
 
 export const LoginFornecedorScreen = () =>{
     return(

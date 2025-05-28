@@ -1,18 +1,23 @@
 import { Routes, Route } from "react-router-dom";
-import { LoginSceen } from "./screens/LoginScreen";
+import { LoginSceen } from "./screens/login/LoginScreen";
 import { HomeScreen } from "./screens/HomeScreen";
 import { SecurityPage } from "./screens/SecurityPage";
 import { PaginaErro } from "./screens/PaginaErro";
 import { Servicos } from "./screens/Servicos";
 import { AjudaScenn } from "./screens/AjudaSceen";
-import { CadastroScreen } from "./screens/CadastroScreen";
+
 import { SobreSceen } from "./screens/SobreSceen";
-import { CadastroFornecedorScreen } from "./screens/CadastroFornecedorScreen";
+
 import { Fornecedor } from "./screens/Fornecedor";
-import { PerfilScreen } from "./screens/PerfilScreen";
-import { PagamentoScreen } from "./screens/PagamentoScreen";
-import { LoginFornecedorScreen } from "./screens/LoginFornecedorScreen";
+import { PerfilScreen } from "./screens/perfil/PerfilScreen";
+import { AgendamentoScreen } from "./screens/AgendamentoScreen";
+
 import { ConfirmacaoAgendamento } from './screens/ConfirmacaoAgendamento';
+import { LoginFornecedorScreen } from "./screens/login/LoginFornecedorScreen";
+import { CadastroScreen } from "./screens/cadastro/CadastroScreen";
+import { CadastroFornecedorScreen } from "./screens/cadastro/CadastroFornecedorScreen";
+import { DetalhesServicoConfirmadoScreen } from "./screens/DetalhesServicoConfirmadoScreen";
+import { PagamentoScreen } from "./screens/PagamentoScreen";
 
 
 export const Router = () =>{
@@ -28,8 +33,10 @@ export const Router = () =>{
                 <Route path="/sobre-nos" element={<SobreSceen/>}/>
                 <Route path="/cadastro-fornecedor" element={<CadastroFornecedorScreen/>}/>
                 <Route path="/perfil-usuario/:idPerfil" element={<PerfilScreen/>}/>
-                <Route path="/fornecedor/:id" element={<Fornecedor/>}/>   
-                <Route path="/pagamento/:id" element={<PagamentoScreen/>}/>   
+                <Route path="/fornecedor/:id" element={<Fornecedor/>}/>
+                <Route path="/detalhes-servico-confirmado/:id" element={<DetalhesServicoConfirmadoScreen/>}/>
+                <Route path="/pagamento" element={<PagamentoScreen/>}/>
+                <Route path="/pagamento/:id" element={<AgendamentoScreen/>}/>   
                 <Route path="/confirmacao-agendamento" element={<ConfirmacaoAgendamento />} />
                 <Route path="*" element={<PaginaErro/>}/>
             </Routes>

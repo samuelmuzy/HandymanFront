@@ -67,7 +67,7 @@ export const MetodoPagamento = () => {
   return (
     <div className='flex items-center justify-center w-full min-h-screen bg-white'>
       <div className="w-[600px] mx-auto p-8 border border-[#A75C00]/20 rounded-lg">
-        <h2 className="text-2xl font-medium mb-8 text-center text-[#A75C00]">Agendamento de Serviço</h2>
+        <h2 className="text-2xl font-medium mb-8 text-center text-[#A75C00]">Metodo de pagamento</h2>
         
         <form className="space-y-5">
           <div>

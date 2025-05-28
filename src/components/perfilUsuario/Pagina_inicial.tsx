@@ -5,12 +5,12 @@ import { Dispatch, SetStateAction } from "react";
 import { HistoricoServico } from "../../types/historicoServico";
 
 interface Pagina_inicialProps {
-    usuario:typeUsuario | null
-    historico:HistoricoServico[] | null
+    usuario: typeUsuario | null
+    historico: HistoricoServico[] | null
     setMudarPagina: Dispatch<SetStateAction<number>>;
 }
 
-export const Pagina_inicial = ({usuario,setMudarPagina,historico}:Pagina_inicialProps) => {
+export const Pagina_inicial = ({ usuario, setMudarPagina, historico }: Pagina_inicialProps) => {
     const navigate = useNavigate();
 
     const formatarData = (data: Date) => {
@@ -25,8 +25,10 @@ export const Pagina_inicial = ({usuario,setMudarPagina,historico}:Pagina_inicial
         switch (status.toLowerCase()) {
             case 'pendente':
                 return 'bg-yellow-100 text-yellow-800';
-            case 'confirmado':
+            case 'Esperando confirmação':
                 return 'bg-green-100 text-green-800';
+            case 'Em Andamento':
+                return 'bg-gray-100 text-gray-800';
             case 'cancelado':
                 return 'bg-red-100 text-red-800';
             case 'concluido':
@@ -74,7 +76,7 @@ export const Pagina_inicial = ({usuario,setMudarPagina,historico}:Pagina_inicial
 
                 <div className="text-gray-700 space-y-4">
                     <p><strong>Telefone:</strong> {usuario?.telefone}</p>
-                    
+
                     <div className="mt-6">
                         <h3 className="text-lg font-semibold mb-4">Histórico de Serviços</h3>
                         {historico && historico.length > 0 ? (
@@ -90,13 +92,20 @@ export const Pagina_inicial = ({usuario,setMudarPagina,historico}:Pagina_inicial
                                                 {servico.status}
                                             </span>
                                         </div>
-                                        
+
                                         <div className="text-sm text-gray-600 space-y-1">
                                             <p><strong>Data:</strong> {formatarData(servico.data)}</p>
                                             <p><strong>Horário:</strong> {formatarHora(servico.horario)}</p>
                                             <p><strong>Descrição:</strong> {servico.descricao}</p>
                                         </div>
+
+                                        {servico.status === 'confirmado' && (
+                                            <div className="flex justify-end">
+                                                <button onClick={() => navigate(`/detalhes-servico-confirmado/${servico.id_servico}`)} className="bg-green-200">Confirmar</button>
+                                            </div>
+                                        )}
                                     </div>
+
                                 ))}
                             </div>
                         ) : (
