@@ -10,14 +10,17 @@ import { SobreSceen } from "./screens/SobreSceen";
 
 import { Fornecedor } from "./screens/Fornecedor";
 import { PerfilScreen } from "./screens/perfil/PerfilScreen";
-import { AgendamentoScreen } from "./screens/AgendamentoScreen";
 
-import { ConfirmacaoAgendamento } from './screens/ConfirmacaoAgendamento';
+
+
 import { LoginFornecedorScreen } from "./screens/login/LoginFornecedorScreen";
 import { CadastroScreen } from "./screens/cadastro/CadastroScreen";
 import { CadastroFornecedorScreen } from "./screens/cadastro/CadastroFornecedorScreen";
 import { DetalhesServicoConfirmadoScreen } from "./screens/DetalhesServicoConfirmadoScreen";
-import { PagamentoScreen } from "./screens/PagamentoScreen";
+import { PagamentoScreen } from "./screens/pagamento/PagamentoScreen";
+import { ConfirmacaoPagamento } from "./screens/pagamento/ConfirmacaoPagamento";
+import { AgendamentoScreen } from "./screens/agendamento/AgendamentoScreen";
+import { ConfirmacaoAgendamento } from "./screens/agendamento/ConfirmacaoAgendamento";
 
 
 export const Router = () =>{
@@ -36,7 +39,8 @@ export const Router = () =>{
                 <Route path="/fornecedor/:id" element={<Fornecedor/>}/>
                 <Route path="/detalhes-servico-confirmado/:id" element={<DetalhesServicoConfirmadoScreen/>}/>
                 <Route path="/pagamento" element={<PagamentoScreen/>}/>
-                <Route path="/pagamento/:id" element={<AgendamentoScreen/>}/>   
+                <Route path="/pagamento/:id" element={<AgendamentoScreen/>}/>
+                <Route path="/confirmaco-pagamento/:idServico" element={<ConfirmacaoPagamento/>}/>
                 <Route path="/confirmacao-agendamento" element={<ConfirmacaoAgendamento />} />
                 <Route path="*" element={<PaginaErro/>}/>
             </Routes>

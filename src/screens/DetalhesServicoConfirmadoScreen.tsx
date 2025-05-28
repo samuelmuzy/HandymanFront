@@ -31,47 +31,46 @@ export const DetalhesServicoConfirmadoScreen = () => {
 
     const handlePagar = async () => {
         try {
-          const res = await fetch(`${URLAPI}/pagamento/criar-preferencia`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              title: 'Agendamento de Serviço',
-              quantity: 1,
-              //alterar para valor do servico
-              unit_price: 1,
-              payer: {
-                name: 'Samuel',
-                email: 'foda',
-                identification: {
-                  type: 'CPF',
-                  number: '12345678909', // Você pode adicionar um campo para CPF se necessário
+            const res = await fetch(`${URLAPI}/pagamento/criar-preferencia`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
-              },
-              description: 'Foda',
-              external_reference: JSON.stringify({
-                endereco: 'RUa',
-                data: '2020/05/10',
-                hora: '10:00',
-                telefone: '2423423'
-              })
-            }),
-          });
-    
-          const data = await res.json();
-    
-          if (data?.init_point) {
+                body: JSON.stringify({
+                    title: 'Agendamento de Serviço',
+                    servicoId: id,
+                    quantity: 1,
+                    unit_price: /*service?.valor*/  1,
+                    payer: {
+                        name: service?.fornecedor?.nome || '',
+                        email: service?.fornecedor?.email || '',
+                        identification: {
+                            type: 'CPF',
+                            number: /*service?.fornecedor?.cpf*/  '',
+                        },
+                    },
+                    description: service?.descricao || 'Serviço Handyman',
+                    external_reference: JSON.stringify({
+                        endereco: /*service?.endereco*/  '',
+                        data: service?.data || '',
+                        hora: service?.horario || '',
+                        telefone: /*service?.telefone*/  ''
+                    })
+                }),
+            });
+
+            if (!res.ok) {
+                throw new Error('Erro ao processar pagamento');
+            }
+
+            const data = await res.json();
             window.location.href = data.init_point;
-          } else {
-            alert('Erro ao gerar link de pagamento!');
-            console.error('Erro:', data);
-          }
         } catch (error) {
-          console.error('Erro ao processar pagamento:', error);
-          alert('Erro ao processar pagamento. Tente novamente.');
+            console.error('Erro ao processar pagamento:', error);
+            alert('Erro ao processar pagamento. Tente novamente.');
         }
-      };
+    };
 
     useEffect(() => {
         procurarServico();

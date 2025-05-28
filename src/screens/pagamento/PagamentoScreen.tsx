@@ -1,4 +1,4 @@
-import { MetodoPagamento } from "../components/agendamento/MetodoPagamento"
+import { MetodoPagamento } from "../../components/agendamento/MetodoPagamento"
 
 export const PagamentoScreen = () =>{
     return(

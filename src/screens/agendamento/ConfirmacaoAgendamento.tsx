@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { AgendamentoType } from '../types/agendamento';
+import { AgendamentoType } from '../../types/agendamento';
+
 
 export const ConfirmacaoAgendamento = () => {
   const location = useLocation();

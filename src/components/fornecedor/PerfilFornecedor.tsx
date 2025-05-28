@@ -69,10 +69,8 @@ export const PerfilFornecedor = ({ id, local, nome, media_avaliacoes, descricao,
           <p className="text-xl font-bold text-gray-900 mb-1">R$ {valor},00</p>
           <p className="text-xs text-gray-500 mb-2">* Valor cobrado por hora</p>
           <p className="text-xs text-gray-500 mb-4">Finalização em 2 dias</p>
-          <button className="mb-2 border border-gray-400 rounded px-3 py-1 text-sm text-gray-700 hover:bg-gray-100">
-            Salvar
-          </button>
-          <button onClick={() => setIsChatOpen(true)} className="bg-green-500 text-white text-sm px-4 py-2 rounded hover:bg-green-600 transition-colors">
+       
+          <button onClick={() => setIsChatOpen(true)} className="bg-green-500 mb-3 text-white text-sm px-4 py-2 rounded hover:bg-green-600 transition-colors">
             Me contate
           </button>
           <button onClick={() => navigate(`/pagamento/${id}`)} className="bg-orange-500 text-white text-sm px-4 pt-2 rounded hover:bg-orange-500-600 transition-colors">

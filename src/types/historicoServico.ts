@@ -1,6 +1,7 @@
 export type HistoricoServico  = {
     id_servico: string;
     id_usuario: string;
+    id_fornecedor:string
     categoria: string;
     data: Date;
     horario: Date;

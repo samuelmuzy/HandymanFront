@@ -25,7 +25,7 @@ interface PerfilProps {
 }
 export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
     const [solicitacoes, setSolicitacoes] = useState<Solicitacao[]>([]);
-    const [verificarStatus,setVerificarStatus] = useState(false);
+    const [verificarStatus, setVerificarStatus] = useState(false);
     const URLAPI = import.meta.env.VITE_URLAPI;
 
     const formatarData = (data: Date) => {
@@ -36,17 +36,17 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
         return new Date(data).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
     };
 
-    const atualizarStatus = async (id_servico:string,status: string) => {
+    const atualizarStatus = async (id_servico: string, status: string) => {
         try {
             const data = {
                 id_servico: id_servico,
-                status:status
+                status: status
             }
 
             const response = await axios.put(`${URLAPI}/servicos`, data);
 
             setVerificarStatus((verificar) => !verificar)
-            
+
             console.log(response.data);
         } catch (error: unknown) {
             console.log(error);
@@ -62,9 +62,13 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
             case 'cancelado':
                 return 'bg-red-100 text-red-800';
             case 'concluido':
-                return 'bg-blue-100 text-blue-800';
+                return 'bg-green-100 text-green-800';
+            case 'Aquardando pagamento':
+                return 'bg-yellow-200 text-yellow-800'
+            case 'Recusado':
+                return 'bg-red-100 text-red-800'
             default:
-                return 'bg-gray-100 text-gray-800';
+                return 'bg-blue-100 text-gray-800';
         }
     };
 
@@ -120,21 +124,41 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
                                         </div>
                                     </div>
                                 )}
+                                {solicitacao.servico.status === 'pendente' && (
+                                    <div className="mt-4 flex justify-end space-x-2">
+                                        <button
+                                            className="px-4 py-2 bg-[#A75C00] text-white rounded-md hover:bg-[#8B4D00] transition-colors"
+                                            onClick={() => { atualizarStatus(solicitacao.servico.id_servico, 'Em Andamento') }}
+                                        >
+                                            Aceitar
+                                        </button>
+                                        <button
+                                            className="px-4 py-2 border border-[#A75C00] text-[#A75C00] rounded-md hover:bg-[#A75C00]/10 transition-colors"
+                                            onClick={() => { atualizarStatus(solicitacao.servico.id_servico, 'Recusado') }}
+                                        >
+                                            Recusar
+                                        </button>
+                                    </div>
+                                )}
 
-                                <div className="mt-4 flex justify-end space-x-2">
-                                    <button
-                                        className="px-4 py-2 bg-[#A75C00] text-white rounded-md hover:bg-[#8B4D00] transition-colors"
-                                        onClick={() =>{atualizarStatus(solicitacao.servico.id_servico,'confirmado')}}
-                                    >
-                                        Aceitar
-                                    </button>
-                                    <button
-                                        className="px-4 py-2 border border-[#A75C00] text-[#A75C00] rounded-md hover:bg-[#A75C00]/10 transition-colors"
-                                        onClick={() => {atualizarStatus(solicitacao.servico.id_servico,'cancelado')}}
-                                    >
-                                        Recusar
-                                    </button>
-                                </div>
+                                {solicitacao.servico.status === 'Em Andamento' && (
+                                    <div className="mt-4 flex justify-end space-x-2">
+
+                                        <button
+                                            className="px-4 py-2 border bg-red-700 border-red-500 text-white rounded-md hover:bg-red-800 transition-colors"
+                                            onClick={() => { atualizarStatus(solicitacao.servico.id_servico, 'cancelado') }}
+                                        >
+                                            Cancelar Servico
+                                        </button>
+                                        <button
+                                            onClick={() => { atualizarStatus(solicitacao.servico.id_servico, 'Aquardando pagamento') }}
+                                            className="px-4 py-2 border bg-green-500 border-green-200 text-white rounded-md hover:bg-green-700 transition-colors"
+                                        >
+                                            Finalizar Serviço
+                                        </button>
+                                    </div>
+                                )}
+
                             </div>
                         ))}
                     </div>
