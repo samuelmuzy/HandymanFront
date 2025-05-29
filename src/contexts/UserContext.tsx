@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useGetToken } from '../hooks/useGetToken';
 import { useNavigate } from 'react-router-dom';
+import { URLAPI } from '../constants/Api';
 
 
 type UserContextType = {
@@ -14,7 +15,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     const token = useGetToken();
-    const URLAPI = import.meta.env.VITE_URLAPI;
+    
 
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);

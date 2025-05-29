@@ -5,11 +5,12 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { URLAPI } from '../constants/Api';
 
 export const DetalhesServicoConfirmadoScreen = () => {
     const { id } = useParams<{ id: string }>();
 
-    const URLAPI = import.meta.env.VITE_URLAPI;
+    
     
     const [service, setService] = useState<HistoricoServico | null>(null);
     

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Pagina_inicial } from "./Pagina_inicial";
 import { DadosPessoais } from "./DadosPessoais";
 import { HistoricoServico } from "../../types/historicoServico";
+import { URLAPI } from "../../constants/Api";
 
 
 interface PerfilProps {
@@ -23,7 +24,7 @@ export type typeUsuario = {
 export const PerfilUsuario = ({ id }: PerfilProps) => {
 
 
-    const URLAPI = import.meta.env.VITE_URLAPI;
+    
 
     const [mudarPagina, setMudarPagina] = useState(1);
 

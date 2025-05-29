@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Loading } from '../Loading';
 import { Input } from '../Inputs/Input';
+import { URLAPI } from '../../constants/Api';
 
 interface Fornecedor {
     nome: string;
@@ -68,7 +69,7 @@ export const CadastroFornecedor = () => {
     const [error, setError] = useState("");
 
     const navigate = useNavigate();
-    const URLAPI = import.meta.env.VITE_URLAPI;
+    
 
     const onNavigateCadastroUsuario = () =>{navigate('/cadastro')};
     const onNavigateloginUsuario = () => {navigate('/login')};

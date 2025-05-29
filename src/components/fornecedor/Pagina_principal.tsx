@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { PerfilFornecedor } from "./PerfilFornecedor";
 import { Loading } from "../Loading";
+import { URLAPI } from "../../constants/Api";
 
 interface PropsFornecedor {
     id: string | undefined;
@@ -34,7 +35,7 @@ export const Pagina_principal = ({ id }:PropsFornecedor) => {
 
     const [fornecedor, setFornecedor] = useState<Fornecedor | null>(null);
 
-    const URLAPI = import.meta.env.VITE_URLAPI;
+   
 
     const [loading, setLoading] = useState(true);
 

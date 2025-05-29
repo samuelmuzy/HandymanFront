@@ -1,13 +1,14 @@
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { URLAPI } from '../../constants/Api';
 
 export const ConfirmacaoPagamento = () => {
     const { idServico } = useParams<{ idServico: string }>();
 
     const navigate = useNavigate();
 
-    const URLAPI = import.meta.env.VITE_URLAPI;
+    
 
     const atualizarStatus = async (id_servico: string | undefined, status: string) => {
         try {

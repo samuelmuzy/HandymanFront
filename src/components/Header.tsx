@@ -6,6 +6,7 @@ import { Modal } from './Modal';
 import imagemPerfilProvisoria from '../assets/perfil.png';
 import Chat from './Chat';
 import axios from 'axios';
+import { URLAPI } from '../constants/Api';
 
 type typeUsuario = {
   picture: string;
@@ -14,7 +15,7 @@ type typeUsuario = {
 const Header = () => {
   const navigate = useNavigate();
 
-  const URLAPI = import.meta.env.VITE_URLAPI;
+ 
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);

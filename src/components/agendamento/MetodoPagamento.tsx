@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { URLAPI } from '../../constants/Api';
 
 export const MetodoPagamento = () => {
-  const URLAPI = import.meta.env.VITE_URLAPI;
+  
   const [formData, setFormData] = useState({
     nome: '',
     email: '',

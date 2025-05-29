@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useRef, useState } from "react";
 import imagemPerfilProvisoria from '../../assets/perfil.png';
+import { URLAPI } from "../../constants/Api";
 
 interface DadosPessoaisProps {
     id_usuario: string | undefined;
@@ -12,7 +13,7 @@ interface DadosPessoaisProps {
 
 export const DadosPessoais = ({ id_usuario, email, nome, telefone, picture }: DadosPessoaisProps) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const URLAPI = import.meta.env.VITE_URLAPI;
+    
     const token = localStorage.getItem("token");
     const [imagemPerfil, setImagemPerfil] = useState<string | undefined>(picture);
 

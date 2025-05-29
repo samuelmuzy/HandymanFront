@@ -3,6 +3,7 @@ import { io, Socket } from 'socket.io-client';
 import { useGetToken } from '../hooks/useGetToken';
 import axios from 'axios';
 import imagemPerfilProvisoria from '../assets/perfil.png';
+import { URLAPI } from '../constants/Api';
 
 interface Mensagem {
   _id: string;
@@ -25,7 +26,7 @@ interface Usuario {
 
 const Chat = ({ idFornecedor }: ChatProps) => {
 
-  const URLAPI = import.meta.env.VITE_URLAPI;
+  
 
   const [mensagem, setMensagem] = useState('');
   const [mensagens, setMensagens] = useState<Mensagem[]>([]);

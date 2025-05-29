@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { URLAPI } from "../../constants/Api";
 
 interface Solicitacao {
     servico: {
@@ -26,7 +27,7 @@ interface PerfilProps {
 export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
     const [solicitacoes, setSolicitacoes] = useState<Solicitacao[]>([]);
     const [verificarStatus, setVerificarStatus] = useState(false);
-    const URLAPI = import.meta.env.VITE_URLAPI;
+    
 
     const formatarData = (data: Date) => {
         return new Date(data).toLocaleDateString('pt-BR');

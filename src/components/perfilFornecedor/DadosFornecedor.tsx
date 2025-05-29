@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { typeFornecedor } from "./PerfilFornecedor";
+import { URLAPI } from "../../constants/Api";
 
 interface DadosFornecedorProps {
     idFornecedor: string | undefined;
@@ -9,7 +10,7 @@ interface DadosFornecedorProps {
 }
 
 export const DadosFornecedor = ({ idFornecedor, usuario, onUpdate }: DadosFornecedorProps) => {
-    const URLAPI = import.meta.env.VITE_URLAPI;
+    
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [selectedIllustrativeImage, setSelectedIllustrativeImage] = useState<File | null>(null);
     const [previewImage, setPreviewImage] = useState<string>("");

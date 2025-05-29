@@ -3,6 +3,7 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Loading } from '../Loading';
+import { URLAPI } from '../../constants/Api';
 
 
 
@@ -14,7 +15,7 @@ export const LoginFornecedor = () => {
     const [senha, setSenha] = useState('');
     const [error, setError] = useState('');
 
-    const URLAPI = import.meta.env.VITE_URLAPI;
+    
 
     const navigate = useNavigate();
 

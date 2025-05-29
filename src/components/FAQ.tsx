@@ -3,6 +3,7 @@ import { FaEnvelope} from 'react-icons/fa';
 import Footer from './Footer';
 import Header from './Header';
 import axios from 'axios';
+import { URLAPI } from '../constants/Api';
 
 interface FAQItem {
   pergunta: string;
@@ -12,7 +13,7 @@ interface FAQItem {
 
 const FAQ: React.FC = () => {
 
-  const URLAPI = import.meta.env.VITE_URLAPI;
+  
 
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState<FAQItem[]>([]);

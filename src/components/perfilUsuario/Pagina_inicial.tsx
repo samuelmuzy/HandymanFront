@@ -7,6 +7,7 @@ import { Modal } from "../Modal";
 import Chat from "../Chat";
 import axios from "axios";
 import { useGetToken } from "../../hooks/useGetToken";
+import { URLAPI } from "../../constants/Api";
 
 interface Pagina_inicialProps {
     usuario: typeUsuario | null
@@ -16,7 +17,7 @@ interface Pagina_inicialProps {
 
 export const Pagina_inicial = ({ usuario, setMudarPagina, historico }: Pagina_inicialProps) => {
     const navigate = useNavigate();
-    const URLAPI = import.meta.env.VITE_URLAPI;
+    
 
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [isAvaliacaoOpen, setIsAvaliacaoOpen] = useState(false);

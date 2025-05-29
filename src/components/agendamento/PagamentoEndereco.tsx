@@ -8,6 +8,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import { Dispatch, SetStateAction } from "react";
+import { URLAPI } from "../../constants/Api";
 
 interface PagamentoEnderecoProps {
     setStep:Dispatch<SetStateAction<number>>
@@ -36,7 +37,7 @@ export const PagamentoEndereco = ({ setStep }: PagamentoEnderecoProps) => {
 
     const [isOpen, setIsOpen] = useState(false);
 
-    const URLAPI = import.meta.env.VITE_URLAPI;
+    
     const token = useGetToken();
 
     const tokenVerify = localStorage.getItem("token")

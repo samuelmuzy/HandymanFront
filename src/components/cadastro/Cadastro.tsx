@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Loading } from '../Loading';
 import { useForm } from '../../hooks/useForm';
 import { Input } from '../Inputs/Input';
+import { URLAPI } from '../../constants/Api';
 
 
 interface Usuario {
@@ -31,7 +32,7 @@ export const Cadastro = () => {
   
   const navigate = useNavigate();
 
-  const URLAPI = import.meta.env.VITE_URLAPI;
+  
 
 
   const onNavigateCadastroFornecedor = () => {

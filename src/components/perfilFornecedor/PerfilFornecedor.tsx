@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Solicitacoes } from "./Solicitacoens";
 import { DadosFornecedor } from "./DadosFornecedor";
+import { URLAPI } from "../../constants/Api";
 
 export type typeEndereco = {
     rua: string;
@@ -39,7 +40,7 @@ interface PerfilProps {
 }
 
 export const PerfilFornecedor = ({ idFornecedor }: PerfilProps) => {
-    const URLAPI = import.meta.env.VITE_URLAPI;
+    
     const [mudarPagina, setMudarPagina] = useState(1);
     const [usuario, setUsuario] = useState<typeFornecedor | null>(null);
 
