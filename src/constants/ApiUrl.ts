@@ -1,4 +1,4 @@
-export const URLAPI = 'http://localhost:3003'
+// export const URLAPI = 'http://localhost:3003'
 
 //URL local
 // http://localhost:3003
@@ -6,4 +6,4 @@ export const URLAPI = 'http://localhost:3003'
 //
 
 //URL API
-// https://handyman-back-production.up.railway.app
+export const URLAPI = 'https://handyman-back-production.up.railway.app'
