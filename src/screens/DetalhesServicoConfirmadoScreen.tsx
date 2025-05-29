@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { HistoricoServico } from '../types/historicoServico';
-import { Dispatch, SetStateAction } from 'react';
+
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 export const DetalhesServicoConfirmadoScreen = () => {
     const { id } = useParams<{ id: string }>();
-
-    const navigate = useNavigate();
 
     const URLAPI = import.meta.env.VITE_URLAPI;
     
@@ -24,10 +22,6 @@ export const DetalhesServicoConfirmadoScreen = () => {
             console.log(error);
         }
     }
-
-    const handleIrParaPagamento = () => {
-        navigate('/pagamento');
-    };
 
     const handlePagar = async () => {
         try {

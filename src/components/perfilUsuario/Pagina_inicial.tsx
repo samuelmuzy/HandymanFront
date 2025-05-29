@@ -5,6 +5,8 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { HistoricoServico } from "../../types/historicoServico";
 import { Modal } from "../Modal";
 import Chat from "../Chat";
+import axios from "axios";
+import { useGetToken } from "../../hooks/useGetToken";
 
 interface Pagina_inicialProps {
     usuario: typeUsuario | null
@@ -14,15 +16,22 @@ interface Pagina_inicialProps {
 
 export const Pagina_inicial = ({ usuario, setMudarPagina, historico }: Pagina_inicialProps) => {
     const navigate = useNavigate();
+    const URLAPI = import.meta.env.VITE_URLAPI;
 
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [isAvaliacaoOpen, setIsAvaliacaoOpen] = useState(false);
+
+    const token = useGetToken();
 
     const [id_servico, setIdServico] = useState("");
     const [servicoSelecionado, setServicoSelecionado] = useState<HistoricoServico | null>(null);
     const [avaliacao, setAvaliacao] = useState({
         nota: 5,
-        comentario: ""
+        comentario: "",
+        id_servico: "",
+        id_usuario: "",
+        id_fornecedor: "",
+        data: ""
     });
 
     console.log(historico)
@@ -58,7 +67,7 @@ export const Pagina_inicial = ({ usuario, setMudarPagina, historico }: Pagina_in
         navigate('/');
     }
 
-    const handleOpenChat = (idServico:string) => {
+    const handleOpenChat = (idServico: string) => {
         setIdServico(idServico);
         console.log(idServico)
         setIsChatOpen(true);
@@ -70,12 +79,21 @@ export const Pagina_inicial = ({ usuario, setMudarPagina, historico }: Pagina_in
     };
 
     const handleSubmitAvaliacao = async () => {
+        if (!servicoSelecionado) return;
+        
         try {
-            // Aqui você deve implementar a chamada para sua API
-            // await api.post(`/avaliacoes/${servicoSelecionado?.id_servico}`, avaliacao);
+            const dataAvaliacao = {
+                id_servico: servicoSelecionado.id_servico,
+                id_usuario: token?.id,
+                id_fornecedor: servicoSelecionado.id_fornecedor,
+                data: servicoSelecionado.data,
+                nota: avaliacao.nota,
+                comentario: avaliacao.comentario
+            };
+            
+            await axios.post(`${URLAPI}/avaliacoes/`, dataAvaliacao);
             setIsAvaliacaoOpen(false);
-            setAvaliacao({ nota: 5, comentario: "" });
-            // Atualizar o histórico após a avaliação
+            setAvaliacao({ nota: 5, comentario: "", data:"",id_fornecedor:"",id_servico:"",id_usuario:"" });
         } catch (error) {
             console.error("Erro ao enviar avaliação:", error);
         }
@@ -149,8 +167,8 @@ export const Pagina_inicial = ({ usuario, setMudarPagina, historico }: Pagina_in
                                         )}
                                         {servico.status === 'concluido' && (
                                             <div className="flex justify-end">
-                                                <button 
-                                                    onClick={() => handleAvaliarServico(servico)} 
+                                                <button
+                                                    onClick={() => handleAvaliarServico(servico)}
                                                     className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
                                                 >
                                                     Avaliar Serviço
@@ -181,7 +199,7 @@ export const Pagina_inicial = ({ usuario, setMudarPagina, historico }: Pagina_in
                     <div onClick={() => setIsAvaliacaoOpen(false)} className="fixed inset-0 bg-black opacity-40"></div>
                     <div className="relative bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
                         <h2 className="text-xl font-semibold mb-4">Avaliar Serviço</h2>
-                        
+
                         <div className="mb-4">
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Nota
@@ -194,11 +212,10 @@ export const Pagina_inicial = ({ usuario, setMudarPagina, historico }: Pagina_in
                                         className="focus:outline-none"
                                     >
                                         <svg
-                                            className={`w-8 h-8 ${
-                                                avaliacao.nota >= nota 
-                                                    ? 'text-yellow-400' 
+                                            className={`w-8 h-8 ${avaliacao.nota >= nota
+                                                    ? 'text-yellow-400'
                                                     : 'text-gray-300'
-                                            }`}
+                                                }`}
                                             fill="currentColor"
                                             viewBox="0 0 20 20"
                                             xmlns="http://www.w3.org/2000/svg"
