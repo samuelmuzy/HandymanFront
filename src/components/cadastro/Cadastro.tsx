@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Loading } from '../Loading';
 import { useForm } from '../../hooks/useForm';
 import { Input } from '../Inputs/Input';
-import { URLAPI } from '../../constants/Api';
+import { URLAPI } from '../../constants/ApiUrl';
 
 
 interface Usuario {

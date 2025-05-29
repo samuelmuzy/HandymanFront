@@ -3,7 +3,7 @@ import { io, Socket } from 'socket.io-client';
 import { useGetToken } from '../hooks/useGetToken';
 import axios from 'axios';
 import imagemPerfilProvisoria from '../assets/perfil.png';
-import { URLAPI } from '../constants/Api';
+import { URLAPI } from '../constants/ApiUrl';
 
 interface Mensagem {
   _id: string;

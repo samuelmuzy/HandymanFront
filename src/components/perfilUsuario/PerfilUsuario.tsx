@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Pagina_inicial } from "./Pagina_inicial";
 import { DadosPessoais } from "./DadosPessoais";
 import { HistoricoServico } from "../../types/historicoServico";
-import { URLAPI } from "../../constants/Api";
+import { URLAPI } from "../../constants/ApiUrl";
 
 
 interface PerfilProps {

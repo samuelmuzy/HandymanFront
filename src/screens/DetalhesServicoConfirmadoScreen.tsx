@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { URLAPI } from '../constants/Api';
+import { URLAPI } from '../constants/ApiUrl';
 
 export const DetalhesServicoConfirmadoScreen = () => {
     const { id } = useParams<{ id: string }>();

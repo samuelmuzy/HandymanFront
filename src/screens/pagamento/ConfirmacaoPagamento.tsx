@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { URLAPI } from '../../constants/Api';
+import { URLAPI } from '../../constants/ApiUrl';
 
 export const ConfirmacaoPagamento = () => {
     const { idServico } = useParams<{ idServico: string }>();

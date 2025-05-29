@@ -4,7 +4,7 @@ import { useGetToken } from '../../hooks/useGetToken';
 import { Loading } from '../Loading';
 import { useNavigate } from 'react-router-dom';
 import { AgendamentoType } from '../../types/agendamento';
-import { URLAPI } from '../../constants/Api';
+import { URLAPI } from '../../constants/ApiUrl';
 
 interface AgendamentoProps {
     idFornecedor: string;

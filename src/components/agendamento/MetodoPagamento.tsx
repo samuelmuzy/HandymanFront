@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { URLAPI } from '../../constants/Api';
+import { URLAPI } from '../../constants/ApiUrl';
 
 export const MetodoPagamento = () => {
   

@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Solicitacoes } from "./Solicitacoens";
 import { DadosFornecedor } from "./DadosFornecedor";
-import { URLAPI } from "../../constants/Api";
+import { URLAPI } from "../../constants/ApiUrl";
 
 export type typeEndereco = {
     rua: string;

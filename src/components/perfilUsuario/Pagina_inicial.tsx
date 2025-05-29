@@ -7,7 +7,7 @@ import { Modal } from "../Modal";
 import Chat from "../Chat";
 import axios from "axios";
 import { useGetToken } from "../../hooks/useGetToken";
-import { URLAPI } from "../../constants/Api";
+import { URLAPI } from "../../constants/ApiUrl";
 
 interface Pagina_inicialProps {
     usuario: typeUsuario | null

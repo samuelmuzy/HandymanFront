@@ -9,7 +9,7 @@ import imagemCategoriaEletrica from '../../assets/operator_17972847 1.png';
 import imagemCategoriaLimpeza from '../../assets/cleaning_995053 1.png';
 import imagemCategoriaEncanador from '../../assets/pipe_4003199 1.png';
 import imagemCategoriaJardinagem from '../../assets/trimming_10144805 1.png';
-import { URLAPI } from "../../constants/Api";
+import { URLAPI } from "../../constants/ApiUrl";
 
 export const PaginaPrincipal = () => {
     interface Fornecedor {

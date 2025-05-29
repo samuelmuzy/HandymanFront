@@ -3,7 +3,7 @@ import { FaEnvelope} from 'react-icons/fa';
 import Footer from './Footer';
 import Header from './Header';
 import axios from 'axios';
-import { URLAPI } from '../constants/Api';
+import { URLAPI } from '../constants/ApiUrl';
 
 interface FAQItem {
   pergunta: string;
