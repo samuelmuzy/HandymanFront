@@ -92,7 +92,7 @@ export const Pagina_inicial = ({ usuario, setMudarPagina, historico }: Pagina_in
                 comentario: avaliacao.comentario
             };
             
-            await axios.post(`${URLAPI}/avaliacoes/`, dataAvaliacao);
+            await axios.post(`${URLAPI}/avaliacao/`, dataAvaliacao);
             setIsAvaliacaoOpen(false);
             setAvaliacao({ nota: 5, comentario: "", data:"",id_fornecedor:"",id_servico:"",id_usuario:"" });
         } catch (error) {
