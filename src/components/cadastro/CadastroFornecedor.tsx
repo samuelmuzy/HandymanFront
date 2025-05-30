@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Loading } from '../Loading';
 import { Input } from '../Inputs/Input';
-import { URLAPI } from '../../constants/Api';
+import { URLAPI } from '../../constants/ApiUrl';
 
 interface Fornecedor {
     nome: string;

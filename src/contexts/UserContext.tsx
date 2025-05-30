@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { useGetToken } from '../hooks/useGetToken';
 import { useNavigate } from 'react-router-dom';
-import { URLAPI } from '../constants/Api';
+import { URLAPI } from '../constants/ApiUrl';
 
 
 type UserContextType = {

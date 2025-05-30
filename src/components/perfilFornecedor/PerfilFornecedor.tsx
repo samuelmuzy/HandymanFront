@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Solicitacoes } from "./Solicitacoens";
 import { DadosFornecedor } from "./DadosFornecedor";
-import { URLAPI } from "../../constants/Api";
+import { URLAPI } from "../../constants/ApiUrl";
 
 export type typeEndereco = {
     rua: string;
@@ -58,7 +58,7 @@ export const PerfilFornecedor = ({ idFornecedor }: PerfilProps) => {
     }, []);
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 pt-8 px-8">
             <div className="flex space-x-4 mb-6">
                 <button
                     onClick={() => setMudarPagina(1)}

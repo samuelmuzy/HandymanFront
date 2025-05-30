@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Loading } from '../Loading';
 import { jwtDecode } from 'jwt-decode';
-import { URLAPI } from '../../constants/Api';
+import { URLAPI } from '../../constants/ApiUrl';
 
 interface jwtDecoded {
   email: string;

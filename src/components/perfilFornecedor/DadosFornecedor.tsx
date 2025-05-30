@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { typeFornecedor } from "./PerfilFornecedor";
-import { URLAPI } from "../../constants/Api";
+import { URLAPI } from "../../constants/ApiUrl";
 
 interface DadosFornecedorProps {
     idFornecedor: string | undefined;

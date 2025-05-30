@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { URLAPI } from "../../constants/Api";
+import { URLAPI } from "../../constants/ApiUrl";
 
 interface Solicitacao {
     servico: {
@@ -90,7 +90,7 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
     return (
         <div className="p-6">
             <div className="mb-8">
-                <h2 className="text-2xl font-semibold text-[#A75C00] mb-4">Solicitações de Serviço</h2>
+                <h2 className="text-2xl font-semibold text-[#A75C00] mb-4">Solicitações de Serviço:</h2>
 
                 {solicitacoes.length > 0 ? (
                     <div className="grid gap-4">
@@ -99,10 +99,10 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
                                 <div className="flex justify-between items-start mb-4">
                                     <div>
                                         <h3 className="font-medium text-lg text-[#A75C00]">
-                                            {solicitacao.servico.categoria}
+                                            {solicitacao.servico.categoria}:
                                         </h3>
                                         <p className="text-sm text-gray-600">
-                                            Cliente: {solicitacao.usuario?.nome}
+                                            <strong>Cliente:</strong> {solicitacao.usuario?.nome}
                                         </p>
                                     </div>
                                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(solicitacao.servico.status)}`}>
@@ -118,7 +118,7 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
 
                                 {solicitacao.usuario && (
                                     <div className="mt-4 pt-4 border-t border-gray-100">
-                                        <h4 className="font-medium text-[#A75C00] mb-2">Contato do Cliente</h4>
+                                        <h4 className="font-medium text-[#A75C00] mb-2">Contato do Cliente:</h4>
                                         <div className="space-y-1 text-sm text-gray-600">
                                             <p><strong>Email:</strong> {solicitacao.usuario.email}</p>
                                             <p><strong>Telefone:</strong> {solicitacao.usuario.telefone}</p>

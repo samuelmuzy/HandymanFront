@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useRef, useState } from "react";
 import imagemPerfilProvisoria from '../../assets/perfil.png';
-import { URLAPI } from "../../constants/Api";
+import { URLAPI } from "../../constants/ApiUrl";
 
 interface DadosPessoaisProps {
     id_usuario: string | undefined;

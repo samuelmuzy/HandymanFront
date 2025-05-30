@@ -8,7 +8,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import { Dispatch, SetStateAction } from "react";
-import { URLAPI } from "../../constants/Api";
+import { URLAPI } from "../../constants/ApiUrl";
 
 interface PagamentoEnderecoProps {
     setStep:Dispatch<SetStateAction<number>>

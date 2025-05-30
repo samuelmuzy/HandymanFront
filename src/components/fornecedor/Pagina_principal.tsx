@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { PerfilFornecedor } from "./PerfilFornecedor";
 import { Loading } from "../Loading";
-import { URLAPI } from "../../constants/Api";
+import { URLAPI } from "../../constants/ApiUrl";
 
 interface PropsFornecedor {
     id: string | undefined;

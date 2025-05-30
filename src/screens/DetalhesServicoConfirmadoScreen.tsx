@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { URLAPI } from '../constants/Api';
+import { URLAPI } from '../constants/ApiUrl';
 
 export const DetalhesServicoConfirmadoScreen = () => {
     const { id } = useParams<{ id: string }>();
@@ -79,12 +79,12 @@ export const DetalhesServicoConfirmadoScreen = () => {
         <>
             <Header />
             <div className="container mx-auto p-6">
-                <h1 className="text-2xl font-bold text-gray-800 mb-6">Detalhes do Serviço Confirmado</h1>
+                <h1 className="text-2xl font-bold text-gray-800 mb-6">Detalhes do Serviço Confirmado:</h1>
 
                 <div className="bg-white p-6 rounded-lg shadow-md">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <h2 className="text-xl font-semibold text-[#A75C00] mb-4">{service.categoria}</h2>
+                            <h2 className="text-xl font-semibold text-[#A75C00] mb-4">{service.categoria}:</h2>
                             <div className="space-y-3">
                                 <p className="text-gray-700">
                                     <span className="font-semibold">Fornecedor:</span> {service.fornecedor?.nome}
@@ -110,7 +110,7 @@ export const DetalhesServicoConfirmadoScreen = () => {
                         </div>
 
                         <div>
-                            <h3 className="text-lg font-semibold text-gray-800 mb-3">Informações do Fornecedor</h3>
+                            <h3 className="text-xl font-semibold text-[#A75C00] mb-4">Informações do Fornecedor:</h3>
                             <div className="space-y-3">
                                 <p className="text-gray-700">
                                     <span className="font-semibold">Email:</span> {service.fornecedor?.email}
@@ -136,7 +136,7 @@ export const DetalhesServicoConfirmadoScreen = () => {
                     </div>
 
                     <div className="mt-6">
-                        <h3 className="text-lg font-semibold text-gray-800 mb-3">Descrição do Serviço</h3>
+                        <h3 className="text-xl font-semibold text-[#A75C00] mb-4">Descrição do Serviço:</h3>
                         <p className="text-gray-700 bg-gray-50 p-4 rounded-lg">{service.descricao}</p>
                     </div>
 
