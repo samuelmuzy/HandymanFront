@@ -115,7 +115,7 @@ export const PaginaPrincipal = () => {
                                     className={`mt-2 ${categoriaSelecionada === "Mudança" ? "border-b-2 border-orange-700 font-semibold" : ""
                                         }`}
                                 >
-                                    Mudança
+                                    Mudança Residencial
                                 </p>
                             </div>
 
@@ -130,7 +130,7 @@ export const PaginaPrincipal = () => {
                                     className={`mt-2 ${categoriaSelecionada === "Carpintaria" ? "border-b-2 border-orange-700 font-semibold" : ""
                                         }`}
                                 >
-                                    Carpintaria
+                                    Serviços de Carpintaria
                                 </p>
                             </div>
 
@@ -145,7 +145,7 @@ export const PaginaPrincipal = () => {
                                     className={`mt-2 ${categoriaSelecionada === "Elétricista" ? "border-b-2 border-orange-700 font-semibold" : ""
                                         }`}
                                 >
-                                    Elétrica
+                                    Instalações Elétricas
                                 </p>
                             </div>
                         </div>
@@ -163,7 +163,7 @@ export const PaginaPrincipal = () => {
                                     className={`mt-2 ${categoriaSelecionada === "Limpeza" ? "border-b-2 border-orange-700 font-semibold" : ""
                                         }`}
                                 >
-                                    Limpeza
+                                    Limpeza Residencial
                                 </p>
                             </div>
 
@@ -178,7 +178,7 @@ export const PaginaPrincipal = () => {
                                     className={`mt-2 ${categoriaSelecionada === "Jardinagem" ? "border-b-2 border-orange-700 font-semibold" : ""
                                         }`}
                                 >
-                                    Jardinagem
+                                    Serviços de Jardinagem
                                 </p>
                             </div>
 
@@ -193,7 +193,7 @@ export const PaginaPrincipal = () => {
                                     className={`mt-2 ${categoriaSelecionada === "Encanamento" ? "border-b-2 border-orange-700 font-semibold" : ""
                                         }`}
                                 >
-                                    Encanamento
+                                    Serviços de Encanamento
                                 </p>
                             </div>
                         </div>
@@ -203,16 +203,16 @@ export const PaginaPrincipal = () => {
 
                     <div className="flex flex-col items-center gap-3 ml-10 mb-5">
                         <button className="bg-white text-orange-400 border-[#A75C00] px-4 py-2 rounded hover:bg-orange-600 hover:text-white transition duration-300 w-56 " >
-                            Carpintaria novo nome
+                            Serviços de Montagem
                         </button>
                         <button className="bg-white text-orange-400 border-[#A75C00] px-4 py-2 rounded hover:bg-orange-600 hover:text-white transition duration-300 w-56" >
-                            Texto name
+                            Pintura Residencial
                         </button>
                         <button className="bg-white text-orange-400 border-[#A75C00] px-4 py-2 rounded hover:bg-orange-600 hover:text-white transition duration-300 w-56" >
-                            Texto name
+                            Manutenção Geral
                         </button>
                         <button className="bg-white text-orange-400 border-[#A75C00] px-4 py-2 rounded hover:bg-orange-600 hover:text-white transition duration-300 w-56" >
-                            Texto name
+                            Reformas e Reparos
                         </button>
                     </div>
 

@@ -25,11 +25,15 @@ export const HowItWorks = () => {
           </li>
         </ul>
 
-        {/* Placeholder de vídeo */}
-        <div className="relative w-full md:w-1/2 aspect-video rounded-xl shadow-lg bg-gray-200 flex items-center justify-center">
-          <button className="bg-[#8B4000] text-white text-4xl rounded-full w-16 h-16 flex items-center justify-center shadow-md hover:scale-105 transition">
-            ▶
-          </button>
+        {/* Vídeo do YouTube */}
+        <div className="relative w-full md:w-1/2 aspect-video rounded-xl shadow-lg overflow-hidden">
+          <iframe
+            className="w-full h-full"
+            src="https://www.youtube.com/embed/IHDvrpUdSc0"
+            title="Handyman Demo Video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
         </div>
       </div>
     </section>
