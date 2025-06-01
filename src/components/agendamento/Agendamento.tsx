@@ -1,10 +1,12 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useGetToken } from '../../hooks/useGetToken';
 import { Loading } from '../Loading';
 import { useNavigate } from 'react-router-dom';
 import { AgendamentoType } from '../../types/agendamento';
 import { URLAPI } from '../../constants/ApiUrl';
+import { io, Socket } from 'socket.io-client';
+import { toast } from 'react-toastify';
 
 interface AgendamentoProps {
     idFornecedor: string;
@@ -14,7 +16,7 @@ export const Agendamento = ({idFornecedor}:AgendamentoProps) => {
   
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-
+  const socketRef = useRef<Socket | null>(null);
 
   const token = useGetToken();
 
@@ -28,6 +30,15 @@ export const Agendamento = ({idFornecedor}:AgendamentoProps) => {
     descricao:"",
     valor:""
   });
+
+  // Inicializa o socket
+  useEffect(() => {
+    const socket = io(URLAPI);
+    socketRef.current = socket;
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -57,8 +68,20 @@ export const Agendamento = ({idFornecedor}:AgendamentoProps) => {
         descricao: formData.descricao
       };
 
+      console.log('Enviando dados do agendamento:', agendamentoData);
       const response = await axios.post(`${URLAPI}/servicos`, agendamentoData);
-      console.log('Agendamento criado:', response.data);
+      console.log('Resposta do servidor:', response.data);
+      
+      // Emite o evento de novo agendamento
+      if (socketRef.current) {
+        console.log('Emitindo evento de novo agendamento');
+        socketRef.current.emit('novo_agendamento', {
+          ...response.data,
+          id_fornecedor: idFornecedor
+        });
+      } else {
+        console.error('Socket não está conectado');
+      }
       
       // Salvar o agendamento confirmado e redirecionar
       navigate('/confirmacao-agendamento', { 
@@ -70,7 +93,7 @@ export const Agendamento = ({idFornecedor}:AgendamentoProps) => {
       
     } catch (error) {
       console.error('Erro ao agendar serviço:', error);
-      alert('Erro ao agendar serviço. Tente novamente.');
+      toast.error('Erro ao agendar serviço. Tente novamente.');
     } finally {
         setIsLoading(false);
     }

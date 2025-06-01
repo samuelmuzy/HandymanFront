@@ -70,7 +70,7 @@ export const PerfilUsuario = ({ id }: PerfilProps) => {
                 </ul>
             </div>
             {mudarPagina === 1 && (
-                <Pagina_inicial historico={historicoServico} setMudarPagina={setMudarPagina} usuario={usuario} />
+                <Pagina_inicial historico={historicoServico} setMudarPagina={setMudarPagina} usuario={usuario} setHistorico={sethistoricoServico} />
             )}
             {mudarPagina === 2 && (
                 <DadosPessoais

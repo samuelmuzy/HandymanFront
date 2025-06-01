@@ -1,6 +1,9 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { URLAPI } from "../../constants/ApiUrl";
+import { useStatusNotifications } from '../../hooks/useStatusNotifications';
+import { toast } from 'react-toastify'; 
+import { io, Socket } from 'socket.io-client';
 
 interface Solicitacao {
     servico: {
@@ -27,7 +30,108 @@ interface PerfilProps {
 export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
     const [solicitacoes, setSolicitacoes] = useState<Solicitacao[]>([]);
     const [verificarStatus, setVerificarStatus] = useState(false);
-    
+    const socketRef = useRef<Socket | null>(null);
+
+    const buscarSolicitacoes = async () => {
+        try {
+            console.log('Buscando solicitações para o fornecedor:', idFornecedor);
+            const response = await axios.get(`${URLAPI}/fornecedor/${idFornecedor}/solicitacoes`);
+            console.log('Solicitações recebidas:', response.data);
+            setSolicitacoes(response.data);
+        } catch (error: unknown) {
+            console.error('Erro ao buscar solicitações:', error);
+            toast.error('Erro ao carregar solicitações');
+        }
+    };
+
+    // Efeito para carregar solicitações iniciais e quando verificarStatus mudar
+    useEffect(() => {
+        if (idFornecedor) {
+            console.log('Efeito de carregar solicitações - ID Fornecedor:', idFornecedor);
+            buscarSolicitacoes();
+        }
+    }, [verificarStatus, idFornecedor]);
+
+    // Efeito para configurar o socket
+    useEffect(() => {
+        if (!idFornecedor) return;
+
+        console.log('Iniciando conexão socket para fornecedor:', idFornecedor);
+        
+        // Inicializa o socket
+        const socket = io(URLAPI, {
+            reconnection: true,
+            reconnectionAttempts: 5,
+            reconnectionDelay: 1000
+        });
+        
+        socketRef.current = socket;
+
+        // Eventos de conexão do socket
+        socket.on('connect', () => {
+            console.log('Socket conectado');
+            socket.emit('join', idFornecedor);
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Socket desconectado');
+        });
+
+        socket.on('connect_error', (error) => {
+            console.error('Erro na conexão do socket:', error);
+        });
+
+        // Escuta o evento de novo agendamento
+        socket.on('novo_agendamento', (novoAgendamento) => {
+            console.log('Novo agendamento recebido:', novoAgendamento);
+            // Busca as solicitações atualizadas
+            buscarSolicitacoes();
+            
+            // Mostra uma notificação toast
+            toast.info('Nova solicitação recebida!', {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+        });
+
+        return () => {
+            console.log('Desconectando socket');
+            socket.disconnect();
+        };
+    }, [idFornecedor]);
+
+    const handleStatusUpdate = (update: { id_servico: string; novo_status: string }) => {
+        console.log('Atualização de status recebida:', update);
+        setSolicitacoes(prevSolicitacoes => 
+            prevSolicitacoes.map(solicitacao => 
+                solicitacao.servico.id_servico === update.id_servico
+                    ? { 
+                        ...solicitacao, 
+                        servico: { 
+                            ...solicitacao.servico, 
+                            status: update.novo_status 
+                        } 
+                    }
+                    : solicitacao
+            )
+        );
+
+        // Mostra uma notificação toast
+        toast.info(`Status atualizado para: ${update.novo_status}`, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+        });
+    };
+
+    const { emitirMudancaStatus } = useStatusNotifications(handleStatusUpdate, idFornecedor);
 
     const formatarData = (data: Date) => {
         return new Date(data).toLocaleDateString('pt-BR');
@@ -45,12 +149,15 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
             }
 
             const response = await axios.put(`${URLAPI}/servicos`, data);
+            
+            // Emite o evento de socket
+            emitirMudancaStatus(id_servico, status, idFornecedor as string);
 
-            setVerificarStatus((verificar) => !verificar)
-
+            setVerificarStatus((verificar) => !verificar);
             console.log(response.data);
         } catch (error: unknown) {
             console.log(error);
+            toast.error('Erro ao atualizar status');
         }
     }
 
@@ -72,20 +179,6 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
                 return 'bg-blue-100 text-gray-800';
         }
     };
-
-    const buscarSolicitacoes = async () => {
-        try {
-            const response = await axios.get(`${URLAPI}/fornecedor/${idFornecedor}/solicitacoes`);
-            setSolicitacoes(response.data);
-        } catch (error: unknown) {
-            console.log(error);
-        }
-    };
-
-    useEffect(() => {
-        buscarSolicitacoes();
-    }, [verificarStatus]);
-
 
     return (
         <div className="p-6">

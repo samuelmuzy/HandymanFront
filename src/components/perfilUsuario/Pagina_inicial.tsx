@@ -8,14 +8,17 @@ import Chat from "../Chat";
 import axios from "axios";
 import { useGetToken } from "../../hooks/useGetToken";
 import { URLAPI } from "../../constants/ApiUrl";
+import { useStatusNotifications } from '../../hooks/useStatusNotifications';
+import { toast } from 'react-toastify';
 
 interface Pagina_inicialProps {
     usuario: typeUsuario | null
     historico: HistoricoServico[] | null
     setMudarPagina: Dispatch<SetStateAction<number>>;
+    setHistorico: Dispatch<SetStateAction<HistoricoServico[] | null>>;
 }
 
-export const Pagina_inicial = ({ usuario, setMudarPagina, historico }: Pagina_inicialProps) => {
+export const Pagina_inicial = ({ usuario, setMudarPagina, historico, setHistorico }: Pagina_inicialProps) => {
     const navigate = useNavigate();
     
 
@@ -44,6 +47,33 @@ export const Pagina_inicial = ({ usuario, setMudarPagina, historico }: Pagina_in
     const formatarHora = (data: Date) => {
         return new Date(data).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
     };
+
+    
+    const handleStatusUpdate = (update: { id_servico: string; novo_status: string }) => {
+        if (historico) {
+            const novoHistorico = historico.map(servico => 
+                servico.id_servico === update.id_servico
+                    ? { ...servico, status: update.novo_status }
+                    : servico
+            );
+            // Atualizar o histórico no componente pai
+            setHistorico(novoHistorico);
+        }
+
+        // Mostra uma notificação toast
+        toast.info(`Status do serviço atualizado para: ${update.novo_status}`, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+        });
+    };
+
+    const { emitirMudancaStatus } = useStatusNotifications(handleStatusUpdate, token?.id);
+
+    console.log(emitirMudancaStatus);
 
     const getStatusColor = (status: string) => {
         switch (status.toLowerCase()) {
