@@ -23,13 +23,11 @@ export const PaginaPrincipal = () => {
         imagemIlustrativa: string;
     }
 
-    
-
     const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const [categoriaSelecionada, setCategoriaSelecionada] = useState<string | null>(null);
+    const [categoriaSelecionada, setCategoriaSelecionada] = useState<string | null>("Controle");
 
     const mudarCategorias = (categoria: string) => {
         setCategoriaSelecionada(categoria);

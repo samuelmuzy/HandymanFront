@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { typeFornecedor } from "./PerfilFornecedor";
 import { URLAPI } from "../../constants/ApiUrl";
+import ImageGallery from "react-image-gallery";
+import "react-image-gallery/styles/css/image-gallery.css";
 
 interface DadosFornecedorProps {
     idFornecedor: string | undefined;
@@ -13,8 +15,11 @@ export const DadosFornecedor = ({ idFornecedor, usuario, onUpdate }: DadosFornec
     
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [selectedIllustrativeImage, setSelectedIllustrativeImage] = useState<File | null>(null);
+    const [selectedServiceImages, setSelectedServiceImages] = useState<File[]>([]);
     const [previewImage, setPreviewImage] = useState<string>("");
     const [previewIllustrativeImage, setPreviewIllustrativeImage] = useState<string>("");
+    const [previewServiceImages, setPreviewServiceImages] = useState<string[]>([]);
+    const [currentServiceImages, setCurrentServiceImages] = useState<string[]>(usuario?.imagemServicos || []);
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
         nome: usuario?.nome || "",
@@ -35,6 +40,7 @@ export const DadosFornecedor = ({ idFornecedor, usuario, onUpdate }: DadosFornec
                 sub_descricao: usuario.sub_descricao,
                 valor: usuario.valor,
             });
+            setCurrentServiceImages(usuario.imagemServicos || []);
         }
     }, [usuario]);
 
@@ -49,6 +55,13 @@ export const DadosFornecedor = ({ idFornecedor, usuario, onUpdate }: DadosFornec
                 setPreviewIllustrativeImage(URL.createObjectURL(file));
             }
         }
+    };
+
+    const handleServiceImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = Array.from(event.target.files || []);
+        setSelectedServiceImages(files);
+        const previews = files.map(file => URL.createObjectURL(file));
+        setPreviewServiceImages(previews);
     };
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -88,6 +101,7 @@ export const DadosFornecedor = ({ idFornecedor, usuario, onUpdate }: DadosFornec
             });
             onUpdate();
             setSelectedImage(null);
+            setPreviewImage("");
             alert('Imagem de perfil atualizada com sucesso!');
         } catch (error) {
             console.error('Erro ao atualizar imagem de perfil:', error);
@@ -109,12 +123,43 @@ export const DadosFornecedor = ({ idFornecedor, usuario, onUpdate }: DadosFornec
             });
             onUpdate();
             setSelectedIllustrativeImage(null);
+            setPreviewIllustrativeImage("");
             alert('Imagem ilustrativa atualizada com sucesso!');
         } catch (error) {
             console.error('Erro ao atualizar imagem ilustrativa:', error);
             alert('Erro ao atualizar imagem ilustrativa. Tente novamente.');
         }
     };
+
+    const handleSubmitServiceImagens = async () => {
+        if (!idFornecedor || selectedServiceImages.length === 0) return;
+
+        for (const imageFile of selectedServiceImages) {
+            const formData = new FormData();
+            formData.append('imagem', imageFile);
+
+            try {
+                await axios.post(`${URLAPI}/fornecedor/salvar-imagem-servico/${idFornecedor}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+            } catch (error) {
+                console.error(`Erro ao atualizar imagem de serviço ${imageFile.name}:`, error);
+                alert(`Erro ao atualizar imagem de serviço ${imageFile.name}. Tente novamente.`);
+            }
+        }
+
+        onUpdate();
+        setSelectedServiceImages([]);
+        setPreviewServiceImages([]);
+        alert('Imagens de serviço atualizadas com sucesso!');
+    };
+
+    const imagesForGallery = currentServiceImages.map(url => ({
+        original: url,
+        thumbnail: url,
+    }));
 
     return (
         <div className="p-6 bg-white rounded-lg shadow-sm">
@@ -204,6 +249,63 @@ export const DadosFornecedor = ({ idFornecedor, usuario, onUpdate }: DadosFornec
                             )}
                         </div>
                     </div>
+                </div>
+
+                {/* Seção de Imagens do Serviço */}
+                <div className="space-y-4 p-6 bg-gray-50 rounded-lg">
+                    <h3 className="font-medium text-[#A75C00]">Imagens do Serviço</h3>
+                    {isEditing && (
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Selecionar Imagens</label>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    multiple
+                                    onChange={handleServiceImageChange}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#A75C00]"
+                                />
+                            </div>
+                            {previewServiceImages.length > 0 && (
+                                <div className="mt-4">
+                                    <h4 className="text-sm font-medium text-gray-700 mb-2">Pré-visualização:</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                        {previewServiceImages.map((previewUrl, index) => (
+                                            <img
+                                                key={index}
+                                                src={previewUrl}
+                                                alt={`Pré-visualização ${index + 1}`}
+                                                className="w-10 h-14 object-cover rounded-md"
+                                            />
+                                        ))}
+                                    </div>
+                                    {selectedServiceImages.length > 0 && (
+                                        <button
+                                            type="button"
+                                            onClick={handleSubmitServiceImagens}
+                                            className="mt-4 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                                        >
+                                            Upload Imagens do Serviço
+                                        </button>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                    
+                    {currentServiceImages.length > 0 && (
+                        <div className="mt-6">
+                            <h3 className="text-lg font-semibold text-gray-800 mb-3">Imagens Atuais:</h3>
+                            <ImageGallery
+                                items={imagesForGallery}
+                                showPlayButton={false}
+                                showFullscreenButton={false}
+                                showNav={true}
+                                showThumbnails={true}
+                                thumbnailPosition="bottom"
+                            />
+                        </div>
+                    )}
                 </div>
 
                 {/* Seção de Dados Pessoais */}

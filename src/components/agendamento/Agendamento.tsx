@@ -143,18 +143,6 @@ export const Agendamento = ({idFornecedor}:AgendamentoProps) => {
             />
           </div>
 
-          <div>
-            <label className="block text-sm text-[#A75C00] mb-1">Valor do Serviço (R$)</label>
-            <input
-              type="number"
-              name="valor"
-              value={formData.valor}
-              onChange={handleChange}
-              className="w-full p-2 border border-[#A75C00]/20 rounded-md focus:outline-none focus:border-[#A75C00]"
-              required
-            />
-          </div>
-
           <button
             type="submit"
             className="w-full bg-[#A75C00] text-white py-2.5 mt-8 rounded-md hover:bg-[#8B4D00] transition-colors"
