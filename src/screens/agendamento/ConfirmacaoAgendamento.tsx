@@ -5,7 +5,7 @@ import { AgendamentoType } from '../../types/agendamento';
 export const ConfirmacaoAgendamento = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { agendamento, valor } = location.state as { agendamento: AgendamentoType, valor: string };
+  const { agendamento } = location.state as { agendamento: AgendamentoType, valor: string };
 
   const formatarData = (data: Date) => {
     return new Date(data).toLocaleDateString('pt-BR');
@@ -30,7 +30,6 @@ export const ConfirmacaoAgendamento = () => {
               <p><span className="font-medium">Categoria:</span> {agendamento.categoria}</p>
               <p><span className="font-medium">Data:</span> {formatarData(agendamento.data)}</p>
               <p><span className="font-medium">Horário:</span> {formatarHora(agendamento.horario)}</p>
-              <p><span className="font-medium">Valor:</span> R$ {valor}</p>
               <p><span className="font-medium">Descrição:</span> {agendamento.descricao}</p>
             </div>
           </div>

@@ -245,7 +245,7 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
                                             Cancelar Servico
                                         </button>
                                         <button
-                                            onClick={() => { atualizarStatus(solicitacao.servico.id_servico, 'Aquardando pagamento') }}
+                                            onClick={() => { atualizarStatus(solicitacao.servico.id_servico, 'Aquardando Pagamento') }}
                                             className="px-4 py-2 border bg-green-500 border-green-200 text-white rounded-md hover:bg-green-700 transition-colors"
                                         >
                                             Finalizar Serviço
