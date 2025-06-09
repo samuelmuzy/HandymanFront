@@ -191,7 +191,7 @@ export const Pagina_inicial = ({ usuario, setMudarPagina, historico, setHistoric
                                             </div>
                                         )}
 
-                                        {servico.status === 'Aquardando pagamento' && (
+                                        {servico.status === 'Aquardando Pagamento' && (
                                             <div className="flex justify-end">
                                                 <button onClick={() => navigate(`/detalhes-servico-confirmado/${servico.id_servico}`)} className="bg-green-200">Pagamento</button>
                                             </div>
