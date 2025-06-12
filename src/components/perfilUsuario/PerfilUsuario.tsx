@@ -4,6 +4,7 @@ import { Pagina_inicial } from "./Pagina_inicial";
 import { DadosPessoais } from "./DadosPessoais";
 import { HistoricoServico } from "../../types/historicoServico";
 import { URLAPI } from "../../constants/ApiUrl";
+import { Agenda } from "./Agenda";
 
 
 interface PerfilProps {
@@ -23,10 +24,8 @@ export type typeUsuario = {
 
 export const PerfilUsuario = ({ id }: PerfilProps) => {
 
-
-    
-
     const [mudarPagina, setMudarPagina] = useState(1);
+    const [itemSelecionado, setItemSelecionado] = useState(1);
 
     const [usuario, setUsuario] = useState<typeUsuario | null>(null)
 
@@ -56,6 +55,10 @@ export const PerfilUsuario = ({ id }: PerfilProps) => {
         procurarHistoricoServico();
     }, [])
 
+    const handleItemClick = (pagina: number) => {
+        setMudarPagina(pagina);
+        setItemSelecionado(pagina);
+    };
 
     return (
         <div className="bg-white min-h-screen flex font-sans">
@@ -63,14 +66,50 @@ export const PerfilUsuario = ({ id }: PerfilProps) => {
             <div className="w-64 bg-gray-100 border-r px-6 py-8">
                 <h2 className="text-lg font-semibold mb-6">Conta</h2>
                 <ul className="space-y-4 text-gray-800">
-                    <li onClick={() => setMudarPagina(1)} className="font-medium text-black">Página inicial</li>
-                    <li onClick={() => setMudarPagina(2)} className="hover:text-orange-500 cursor-pointer">Dados pessoais</li>
-                    <li className="hover:text-orange-500 cursor-pointer">Segurança</li>
-                    <li className="hover:text-orange-500 cursor-pointer">Privacidade e dados</li>
+                    <li 
+                        onClick={() => handleItemClick(1)} 
+                        className={`cursor-pointer transition-colors  ${
+                            itemSelecionado === 1 
+                            ? 'text-black font-medium' 
+                            : 'text-gray-600 hover:text-orange-500'
+                        }`}
+                    >
+                        Página inicial
+                    </li>
+                    <li 
+                        onClick={() => handleItemClick(2)} 
+                        className={`cursor-pointer transition-colors  ${
+                            itemSelecionado === 2 
+                            ? 'text-black font-medium' 
+                            : 'text-gray-600 hover:text-orange-500'
+                        }`}
+                    >
+                        Dados pessoais
+                    </li>
+                    <li 
+                        onClick={() => handleItemClick(3)} 
+                        className={`cursor-pointer transition-colors  ${
+                            itemSelecionado === 3 
+                            ? 'text-black font-medium' 
+                            : 'text-gray-600 hover:text-orange-500'
+                        }`}
+                    >
+                        Serviços Agendados
+                    </li>
+                    <li 
+                        onClick={() => handleItemClick(4)} 
+                        className={`cursor-pointer transition-colors  ${
+                            itemSelecionado === 4 
+                            ? 'text-black font-medium' 
+                            : 'text-gray-600 hover:text-orange-500'
+                        }`}
+                    >
+                        Privacidade e dados
+                    </li>
                 </ul>
             </div>
             {mudarPagina === 1 && (
-                <Pagina_inicial historico={historicoServico} setMudarPagina={setMudarPagina} usuario={usuario} setHistorico={sethistoricoServico} />
+                <Pagina_inicial historico={historicoServico} setMudarPagina={handleItemClick} usuario={usuario} setHistorico={sethistoricoServico} />
             )}
             {mudarPagina === 2 && (
                 <DadosPessoais
@@ -80,6 +119,10 @@ export const PerfilUsuario = ({ id }: PerfilProps) => {
                     telefone={usuario?.telefone}
                     picture={usuario?.picture}
                 />
+            )}
+            
+            {mudarPagina === 3 && (
+                <Agenda/>
             )}
         </div>
     );

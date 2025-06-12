@@ -10,16 +10,14 @@ interface FornecedorProps {
   nome: string;
   media_avaliacoes: string;
   descricao: string;
-  sub_descricao: string;
   valor: string;
   imagemPerfil: string;
-  imagemFornecedor: string;
   local: string;
   imagensServicos: string[];
   categoria_servico: string[];
   sobre:string;
 }
-export const PerfilFornecedor = ({ id, local, nome, media_avaliacoes, descricao, sub_descricao, valor, imagemPerfil, imagemFornecedor, imagensServicos, categoria_servico,sobre }: FornecedorProps) => {
+export const PerfilFornecedor = ({ id, local, nome, media_avaliacoes, descricao, valor, imagemPerfil, imagensServicos, categoria_servico,sobre }: FornecedorProps) => {
 
   const images = imagensServicos.map((imagem) => ({
     original: imagem,

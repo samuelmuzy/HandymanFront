@@ -14,7 +14,7 @@ import { toast } from 'react-toastify';
 interface Pagina_inicialProps {
     usuario: typeUsuario | null
     historico: HistoricoServico[] | null
-    setMudarPagina: Dispatch<SetStateAction<number>>;
+    setMudarPagina: (num:number) => void;
     setHistorico: Dispatch<SetStateAction<HistoricoServico[] | null>>;
 }
 
@@ -149,9 +149,9 @@ export const Pagina_inicial = ({ usuario, setMudarPagina, historico, setHistoric
                     <button onClick={() => setMudarPagina(2)} className="bg-gray-100 w-32 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-200">
                         Dados pessoais
                     </button>
-                    <button className="bg-gray-100 w-32 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-200">
-                        Segurança
-                    </button>
+                    <button onClick={() => setMudarPagina(3)} className="bg-gray-100 w-32 px-4 py-2 rounded-md text-sm font-medium hover:bg-gray-200">
+                        Serviços Agendados
+                    </button> 
                     <button
                         onClick={logout}
                         className="bg-red-100 w-32 text-red-600 px-4 py-2 rounded-md text-sm font-medium hover:bg-red-200"

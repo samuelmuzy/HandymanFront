@@ -36,8 +36,6 @@ export const Pagina_principal = ({ id }:PropsFornecedor) => {
 
     const [fornecedor, setFornecedor] = useState<Fornecedor | null>(null);
 
-   
-
     const [loading, setLoading] = useState(true);
 
     const [error, setError] = useState<string | null>(null);
@@ -69,12 +67,10 @@ export const Pagina_principal = ({ id }:PropsFornecedor) => {
                 <PerfilFornecedor
                     id={fornecedor.id_fornecedor}
                     local={fornecedor.endereco.cidade}
-                    imagemFornecedor={fornecedor.imagemIlustrativa}
                     nome={fornecedor.nome}
                     media_avaliacoes={fornecedor.media_avaliacoes}
                     descricao={fornecedor.descricao}
                     imagemPerfil={fornecedor.imagemPerfil ?? ""}
-                    sub_descricao={fornecedor.sub_descricao}
                     valor={fornecedor.valor}
                     imagensServicos={fornecedor.imagemServicos}
                     categoria_servico={fornecedor.categoria_servico}
