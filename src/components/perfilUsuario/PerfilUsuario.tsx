@@ -77,16 +77,6 @@ export const PerfilUsuario = ({ id }: PerfilProps) => {
                         Página inicial
                     </li>
                     <li 
-                        onClick={() => handleItemClick(2)} 
-                        className={`cursor-pointer transition-colors  ${
-                            itemSelecionado === 2 
-                            ? 'text-black font-medium' 
-                            : 'text-gray-600 hover:text-orange-500'
-                        }`}
-                    >
-                        Dados pessoais
-                    </li>
-                    <li 
                         onClick={() => handleItemClick(3)} 
                         className={`cursor-pointer transition-colors  ${
                             itemSelecionado === 3 
@@ -95,6 +85,16 @@ export const PerfilUsuario = ({ id }: PerfilProps) => {
                         }`}
                     >
                         Serviços Agendados
+                    </li>
+                    <li 
+                        onClick={() => handleItemClick(2)} 
+                        className={`cursor-pointer transition-colors  ${
+                            itemSelecionado === 2 
+                            ? 'text-black font-medium' 
+                            : 'text-gray-600 hover:text-orange-500'
+                        }`}
+                    >
+                        Dados pessoais
                     </li>
                     <li 
                         onClick={() => handleItemClick(4)} 
@@ -122,7 +122,7 @@ export const PerfilUsuario = ({ id }: PerfilProps) => {
             )}
             
             {mudarPagina === 3 && (
-                <Agenda/>
+                <Agenda historicoServico={historicoServico}/>
             )}
         </div>
     );

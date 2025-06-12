@@ -5,6 +5,7 @@ export type HistoricoServico  = {
     categoria: string;
     data: Date;
     horario: Date;
+    data_submisao: Date;
     status: string;
     id_pagamento?: string;
     id_avaliacao?: string;
@@ -15,5 +16,6 @@ export type HistoricoServico  = {
         telefone: string;
         categoria_servico: string[];
         media_avaliacoes: number;
+        imagemPerfil: string;
     } | null;
 }

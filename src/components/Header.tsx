@@ -15,8 +15,6 @@ type typeUsuario = {
 const Header = () => {
   const navigate = useNavigate();
 
- 
-
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
