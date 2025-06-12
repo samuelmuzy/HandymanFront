@@ -40,7 +40,7 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
             setSolicitacoes(response.data);
         } catch (error: unknown) {
             console.error('Erro ao buscar solicitações:', error);
-            toast.error('Erro ao carregar solicitações');
+            
         }
     };
 

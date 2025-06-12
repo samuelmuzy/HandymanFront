@@ -28,6 +28,7 @@ export const DadosFornecedor = ({ idFornecedor, usuario, onUpdate }: DadosFornec
         descricao: usuario?.descricao || "",
         sub_descricao: usuario?.sub_descricao || "",
         valor: usuario?.valor || 0,
+        sobre:usuario?.sobre || ""
     });
 
     useEffect(() => {
@@ -39,6 +40,7 @@ export const DadosFornecedor = ({ idFornecedor, usuario, onUpdate }: DadosFornec
                 descricao: usuario.descricao,
                 sub_descricao: usuario.sub_descricao,
                 valor: usuario.valor,
+                sobre: usuario.sobre
             });
             setCurrentServiceImages(usuario.imagemServicos || []);
         }
@@ -407,6 +409,20 @@ export const DadosFornecedor = ({ idFornecedor, usuario, onUpdate }: DadosFornec
                                     />
                                 ) : (
                                     <p className="text-gray-600">{usuario?.sub_descricao}</p>
+                                )}
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Sobre-min</label>
+                                {isEditing ? (
+                                    <textarea
+                                        name="sobre"
+                                        value={formData.sobre}
+                                        onChange={handleInputChange}
+                                        rows={4}
+                                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#A75C00]"
+                                    />
+                                ) : (
+                                    <p className="text-gray-600">{usuario?.sobre}</p>
                                 )}
                             </div>
                         </div>

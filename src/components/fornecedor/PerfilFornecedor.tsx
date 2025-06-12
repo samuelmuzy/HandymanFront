@@ -17,8 +17,9 @@ interface FornecedorProps {
   local: string;
   imagensServicos: string[];
   categoria_servico: string[];
+  sobre:string;
 }
-export const PerfilFornecedor = ({ id, local, nome, media_avaliacoes, descricao, sub_descricao, valor, imagemPerfil, imagemFornecedor, imagensServicos, categoria_servico }: FornecedorProps) => {
+export const PerfilFornecedor = ({ id, local, nome, media_avaliacoes, descricao, sub_descricao, valor, imagemPerfil, imagemFornecedor, imagensServicos, categoria_servico,sobre }: FornecedorProps) => {
 
   const images = imagensServicos.map((imagem) => ({
     original: imagem,
@@ -105,9 +106,7 @@ export const PerfilFornecedor = ({ id, local, nome, media_avaliacoes, descricao,
       {/* Sobre o profissional */}
       <div className="mt-6 w-full max-w-5xl rounded-lg p-4">
         <p className="text-orange-700 font-semibold mb-2">sobre-min:</p>
-        <p>textkjjhkjhjkkj jkhkjhkjhjkhk hjkhkjhjkhjkhj hkjhkjhkjh</p>
-        <p>{sub_descricao}</p>
-        <p>{imagemFornecedor}</p>
+        <p>{sobre}</p>
       </div>
       
       <Modal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)}>

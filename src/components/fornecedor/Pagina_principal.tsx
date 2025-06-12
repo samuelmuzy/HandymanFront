@@ -19,6 +19,7 @@ interface Fornecedor {
     imagemIlustrativa: string;
     endereco: enderecoFornecedor;
     imagemServicos: string[];
+    sobre:string;
     categoria_servico: string[];
 }
 
@@ -77,6 +78,7 @@ export const Pagina_principal = ({ id }:PropsFornecedor) => {
                     valor={fornecedor.valor}
                     imagensServicos={fornecedor.imagemServicos}
                     categoria_servico={fornecedor.categoria_servico}
+                    sobre={fornecedor.sobre}
                 />
             )}
         </>

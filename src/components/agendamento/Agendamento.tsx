@@ -9,13 +9,15 @@ import { io, Socket } from 'socket.io-client';
 import { toast } from 'react-toastify';
 
 interface AgendamentoProps {
-    idFornecedor: string;
+  idFornecedor: string;
 }
 
-export const Agendamento = ({idFornecedor}:AgendamentoProps) => {
-  
+export const Agendamento = ({ idFornecedor }: AgendamentoProps) => {
+
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [categoriasServico, setCategoriasServico] = useState<string[] | null>(null)
+
   const socketRef = useRef<Socket | null>(null);
 
   const token = useGetToken();
@@ -27,9 +29,26 @@ export const Agendamento = ({idFornecedor}:AgendamentoProps) => {
     status: "pendente",
     id_pagamento: "",
     id_avaliacao: "",
-    descricao:"",
-    valor:""
+    descricao: "",
+    valor: ""
   });
+
+  const [imagens, setImagens] = useState<File[]>([]);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+
+
+  const buscarCategoria = async () => {
+    try {
+      const response = await axios.get(`${URLAPI}/fornecedor/${idFornecedor}`)
+      setCategoriasServico(response.data.categoria_servico);
+    } catch (error: unknown) {
+      toast.error("Erro ao buscar Categorias")
+    }
+  }
+
+  useEffect(() => {
+    buscarCategoria();
+  }, [])
 
   // Inicializa o socket
   useEffect(() => {
@@ -48,14 +67,64 @@ export const Agendamento = ({idFornecedor}:AgendamentoProps) => {
     }));
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const filesArray = Array.from(e.target.files);
+      
+      // Validar se todos os arquivos são imagens
+      const validFiles = filesArray.filter(file => {
+        const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+        if (!validTypes.includes(file.type)) {
+          toast.error(`O arquivo ${file.name} não é uma imagem válida. Apenas JPG, PNG e GIF são permitidos.`);
+          return false;
+        }
+        return true;
+      });
+
+      setImagens(prev => [...prev, ...validFiles]);
+      
+      // Criar URLs de preview apenas para arquivos válidos
+      const newPreviewUrls = validFiles.map(file => URL.createObjectURL(file));
+      setPreviewUrls(prev => [...prev, ...newPreviewUrls]);
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setImagens(prev => prev.filter((_, i) => i !== index));
+    setPreviewUrls(prev => {
+      const newUrls = [...prev];
+      URL.revokeObjectURL(newUrls[index]);
+      return newUrls.filter((_, i) => i !== index);
+    });
+  };
+
+  const enviarImagens = async (idServico: string) => {
+    try {
+      const formData = new FormData();
+      imagens.forEach((imagem) => {
+        formData.append('imagens', imagem);
+      });
+
+      await axios.post(`${URLAPI}/servicos/${idServico}/imagens`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      toast.success('Imagens enviadas com sucesso!');
+    } catch (error) {
+      console.error('Erro ao enviar imagens:', error);
+      toast.error('Erro ao enviar imagens. Tente novamente.');
+    }
+  };
+
   const handleAgendar = async (e: React.FormEvent) => {
     setIsLoading(true)
     try {
       e.preventDefault();
-      
-      // Combinando data e hora para criar o objeto Date
+
       const dataHora = new Date(`${formData.data}T${formData.horario}`);
-      
+
       const agendamentoData: AgendamentoType = {
         id_usuario: token?.id as string,
         id_fornecedor: idFornecedor,
@@ -68,40 +137,39 @@ export const Agendamento = ({idFornecedor}:AgendamentoProps) => {
         descricao: formData.descricao
       };
 
-      console.log('Enviando dados do agendamento:', agendamentoData);
       const response = await axios.post(`${URLAPI}/servicos`, agendamentoData);
-      console.log('Resposta do servidor:', response.data);
-      
+
+      // Se houver imagens, envia-as separadamente
+      if (imagens.length > 0) {
+        await enviarImagens(response.data.id);
+      }
+
       // Emite o evento de novo agendamento
       if (socketRef.current) {
-        console.log('Emitindo evento de novo agendamento');
         socketRef.current.emit('novo_agendamento', {
           ...response.data,
           id_fornecedor: idFornecedor
         });
-      } else {
-        console.error('Socket não está conectado');
       }
-      
-      // Salvar o agendamento confirmado e redirecionar
-      navigate('/confirmacao-agendamento', { 
-        state: { 
+
+      navigate('/confirmacao-agendamento', {
+        state: {
           agendamento: response.data,
           valor: formData.valor
-        } 
+        }
       });
-      
+
     } catch (error) {
       console.error('Erro ao agendar serviço:', error);
       toast.error('Erro ao agendar serviço. Tente novamente.');
     } finally {
-        setIsLoading(false);
+      setIsLoading(false);
     }
   };
 
   if (isLoading) {
     return <Loading />;
-}
+  }
 
   return (
     <div className='flex items-center justify-center w-full min-h-screen bg-white'>
@@ -119,12 +187,11 @@ export const Agendamento = ({idFornecedor}:AgendamentoProps) => {
               required
             >
               <option value="">Selecione uma categoria</option>
-              <option value="Limpeza">Limpeza</option>
-              <option value="Elétrica">Elétrica</option>
-              <option value="Encanamento">Encanamento</option>
-              <option value="Carpintaria">Carpintaria</option>
-              <option value="Jardinagem">Jardinagem</option>
-              <option value="Mudança">Mudança</option>
+              {categoriasServico?.map((categoria, index) => (
+                <option key={index} value={categoria}>
+                  {categoria}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -164,6 +231,48 @@ export const Agendamento = ({idFornecedor}:AgendamentoProps) => {
               className="w-full p-2 border border-[#A75C00]/20 rounded-md focus:outline-none focus:border-[#A75C00] resize-none"
               required
             />
+          </div>
+
+          <div>
+            <label className="block text-sm text-[#A75C00] mb-1">Imagens do Serviço</label>
+            <div className="flex items-center justify-center w-full">
+              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-[#A75C00]/20 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  <svg className="w-8 h-8 mb-4 text-[#A75C00]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                  </svg>
+                  <p className="mb-2 text-sm text-[#A75C00]"><span className="font-semibold">Clique para fazer upload</span></p>
+                  <p className="text-xs text-[#A75C00]">PNG, JPG ou GIF (MAX. 5MB)</p>
+                </div>
+                <input 
+                  type="file" 
+                  className="hidden" 
+                  accept="image/png, image/jpeg, image/jpg, image/gif"
+                  multiple
+                  onChange={handleImageChange}
+                />
+              </label>
+            </div>
+            
+            {/* Preview das imagens */}
+            <div className="mt-4 grid grid-cols-3 gap-4">
+              {previewUrls.map((url, index) => (
+                <div key={index} className="relative">
+                  <img
+                    src={url}
+                    alt={`Preview ${index + 1}`}
+                    className="w-full h-24 object-cover rounded-md"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeImage(index)}
+                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
 
           <button

@@ -15,6 +15,7 @@ interface Fornecedor {
     endereco: enderecoFornecedor;
     descricao: string;
     valor: number;
+    sobre:string;
     sub_descricao: string;
 }
 
@@ -60,6 +61,7 @@ export const CadastroFornecedor = () => {
         rua: "",
         descricao: "",
         subDescricao: "",
+        sobre:"",
         categoria_servico: [] as string[],
     });
 
@@ -86,6 +88,7 @@ export const CadastroFornecedor = () => {
         senha: form.senha,
         categoria_servico: form.categoria_servico,
         descricao: form.descricao,
+        sobre:form.sobre,
         valor: Number(valorFormatado.replace(/\./g, '').replace(',', '.')),
         sub_descricao: form.subDescricao,
         endereco: {
@@ -240,6 +243,7 @@ export const CadastroFornecedor = () => {
                             </div>
                             <h3 className="text-white text-lg font-semibold mb-2">Descrição do serviço</h3>
                             <Input label="Descrição" id="descricao" value={form.descricao} onChange={onChange} />
+                            <Input label="Sobre-min" id="sobre" value={form.sobre} onChange={onChange} />
                             <Input label='subDescrição' id='subDescricao' value={form.subDescricao} onChange={onChange} />
                             <div>
                                 <label className="block text-sm text-white mb-1">Valor do Serviço (R$)</label>
