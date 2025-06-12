@@ -1,9 +1,17 @@
 import { HistoricoServico } from "../../types/historicoServico"
 import fotoPerfil from '../../assets/perfil.png'
 import { useState, useMemo } from 'react'
+import { Modal } from "../Modal";
+import Chat from "../Chat";
+import axios from "axios";
+import { URLAPI } from "../../constants/ApiUrl";
+import { useGetToken } from "../../hooks/useGetToken";
+import { useStatusNotifications } from '../../hooks/useStatusNotifications';
+import { toast } from 'react-toastify';
 
 interface AgendaProps{
     historicoServico:HistoricoServico[] | null
+    setHistorico: React.Dispatch<React.SetStateAction<HistoricoServico[] | null>>
 }
 
 const getStatusConfig = (status: string) => {
@@ -43,9 +51,76 @@ const dataOptions = [
     { value: 'ano', label: 'Último Ano' }
 ];
 
-export const Agenda = ({historicoServico}:AgendaProps) =>{
+export const Agenda = ({historicoServico, setHistorico}:AgendaProps) =>{
     const [filtroStatus, setFiltroStatus] = useState('todos');
     const [filtroData, setFiltroData] = useState('todos');
+    const [isChatOpen, setIsChatOpen] = useState(false);
+    const [isAvaliacaoOpen, setIsAvaliacaoOpen] = useState(false);
+    const [id_servico, setIdServico] = useState("");
+    const [servicoSelecionado, setServicoSelecionado] = useState<HistoricoServico | null>(null);
+    const [avaliacao, setAvaliacao] = useState({
+        nota: 5,
+        comentario: "",
+        id_servico: "",
+        id_usuario: "",
+        id_fornecedor: "",
+        data: ""
+    });
+
+    const token = useGetToken();
+
+    const handleStatusUpdate = (update: { id_servico: string; novo_status: string }) => {
+        if (historicoServico) {
+            const novoHistorico = historicoServico.map(servico => 
+                servico.id_servico === update.id_servico
+                    ? { ...servico, status: update.novo_status }
+                    : servico
+            );
+            setHistorico(novoHistorico);
+        }
+
+        toast.info(`Status do serviço atualizado para: ${update.novo_status}`, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+        });
+    };
+
+    const { emitirMudancaStatus } = useStatusNotifications(handleStatusUpdate, token?.id);
+
+    const handleOpenChat = (idServico: string) => {
+        setIdServico(idServico);
+        setIsChatOpen(true);
+    }
+
+    const handleAvaliarServico = (servico: HistoricoServico) => {
+        setServicoSelecionado(servico);
+        setIsAvaliacaoOpen(true);
+    };
+
+    const handleSubmitAvaliacao = async () => {
+        if (!servicoSelecionado) return;
+        
+        try {
+            const dataAvaliacao = {
+                id_servico: servicoSelecionado.id_servico,
+                id_usuario: token?.id,
+                id_fornecedor: servicoSelecionado.id_fornecedor,
+                data: servicoSelecionado.data,
+                nota: avaliacao.nota,
+                comentario: avaliacao.comentario
+            };
+            
+            await axios.post(`${URLAPI}/avaliacao/`, dataAvaliacao);
+            setIsAvaliacaoOpen(false);
+            setAvaliacao({ nota: 5, comentario: "", data:"",id_fornecedor:"",id_servico:"",id_usuario:"" });
+        } catch (error) {
+            console.error("Erro ao enviar avaliação:", error);
+        }
+    };
 
     const servicosFiltrados = useMemo(() => {
         if (!historicoServico) return [];
@@ -206,7 +281,10 @@ export const Agenda = ({historicoServico}:AgendaProps) =>{
                                     {/* Ações do Card */}
                                     <div className="mt-6 space-y-3">
                                         {servico.status === 'concluido' && (
-                                            <button className="w-full bg-[#AC5906] text-white py-2.5 rounded-lg font-medium hover:bg-[#8B4705] transition-colors flex items-center justify-center">
+                                            <button 
+                                                onClick={() => handleAvaliarServico(servico)}
+                                                className="w-full bg-[#AC5906] text-white py-2.5 rounded-lg font-medium hover:bg-[#8B4705] transition-colors flex items-center justify-center"
+                                            >
                                                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
                                                 </svg>
@@ -222,7 +300,10 @@ export const Agenda = ({historicoServico}:AgendaProps) =>{
                                                     </svg>
                                                     Pagar pelo App
                                                 </button>
-                                                <button className="bg-[#2196F3] text-white py-2.5 rounded-lg font-medium hover:bg-[#1976D2] transition-colors flex items-center justify-center">
+                                                <button 
+                                                    onClick={() => emitirMudancaStatus(servico.id_servico,'concluido',servico.id_fornecedor )}
+                                                    className="bg-[#2196F3] text-white py-2.5 rounded-lg font-medium hover:bg-[#1976D2] transition-colors flex items-center justify-center"
+                                                >
                                                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
                                                     </svg>
@@ -232,7 +313,10 @@ export const Agenda = ({historicoServico}:AgendaProps) =>{
                                         )}
 
                                         {servico.status === 'Em Andamento' && (
-                                            <button className="w-full bg-[#AC5906] text-white py-2.5 rounded-lg font-medium hover:bg-[#8B4705] transition-colors flex items-center justify-center">
+                                            <button 
+                                                onClick={() => handleOpenChat(servico.id_fornecedor)}
+                                                className="w-full bg-[#AC5906] text-white py-2.5 rounded-lg font-medium hover:bg-[#8B4705] transition-colors flex items-center justify-center"
+                                            >
                                                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                                 </svg>
@@ -249,7 +333,10 @@ export const Agenda = ({historicoServico}:AgendaProps) =>{
                                         )}
 
                                         {['pendente', 'confirmado', 'em andamento'].includes(servico.status.toLowerCase()) && (
-                                            <button className="w-full border border-red-500 text-red-500 py-2.5 rounded-lg font-medium hover:bg-red-50 transition-colors flex items-center justify-center">
+                                            <button 
+                                                onClick={() => emitirMudancaStatus(servico.id_servico,'cancelado',servico.id_fornecedor )}
+                                                className="w-full border border-red-500 text-red-500 py-2.5 rounded-lg font-medium hover:bg-red-50 transition-colors flex items-center justify-center"
+                                            >
                                                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                                                 </svg>
@@ -267,6 +354,81 @@ export const Agenda = ({historicoServico}:AgendaProps) =>{
                     </div>
                 )}
             </div>
+
+            {/* Modal de Chat */}
+            <Modal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)}>
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div onClick={() => setIsChatOpen(false)} className="fixed inset-0 bg-black opacity-40"></div>
+                    <div className="relative bg-white rounded-lg shadow-lg p-4 max-w-[1000px] w-[90vw] h-[80vh] max-h-[600px] flex flex-col">
+                        <Chat idFornecedor={id_servico} />
+                    </div>
+                </div>
+            </Modal>
+
+            {/* Modal de Avaliação */}
+            <Modal isOpen={isAvaliacaoOpen} onClose={() => setIsAvaliacaoOpen(false)}>
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div onClick={() => setIsAvaliacaoOpen(false)} className="fixed inset-0 bg-black opacity-40"></div>
+                    <div className="relative bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
+                        <h2 className="text-xl font-semibold mb-4">Avaliar Serviço</h2>
+
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Nota
+                            </label>
+                            <div className="flex space-x-2">
+                                {[1, 2, 3, 4, 5].map((nota) => (
+                                    <button
+                                        key={nota}
+                                        onClick={() => setAvaliacao(prev => ({ ...prev, nota }))}
+                                        className="focus:outline-none"
+                                    >
+                                        <svg
+                                            className={`w-8 h-8 ${avaliacao.nota >= nota
+                                                    ? 'text-yellow-400'
+                                                    : 'text-gray-300'
+                                                }`}
+                                            fill="currentColor"
+                                            viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                Comentário
+                            </label>
+                            <textarea
+                                value={avaliacao.comentario}
+                                onChange={(e) => setAvaliacao(prev => ({ ...prev, comentario: e.target.value }))}
+                                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                rows={4}
+                                placeholder="Conte-nos sua experiência com o serviço..."
+                            />
+                        </div>
+
+                        <div className="flex justify-end space-x-3">
+                            <button
+                                onClick={() => setIsAvaliacaoOpen(false)}
+                                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                onClick={handleSubmitAvaliacao}
+                                className="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600"
+                            >
+                                Enviar Avaliação
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </Modal>
         </div>
     )
 }

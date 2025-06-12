@@ -122,7 +122,10 @@ export const PerfilUsuario = ({ id }: PerfilProps) => {
             )}
             
             {mudarPagina === 3 && (
-                <Agenda historicoServico={historicoServico}/>
+                <Agenda 
+                    historicoServico={historicoServico} 
+                    setHistorico={sethistoricoServico} 
+                />
             )}
         </div>
     );
