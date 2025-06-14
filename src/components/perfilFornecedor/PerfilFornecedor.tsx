@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Solicitacoes } from "./Solicitacoens";
 import { DadosFornecedor } from "./DadosFornecedor";
 import { URLAPI } from "../../constants/ApiUrl";
-import MapaGoogle from "./MapaBusca";
+
 
 export type typeEndereco = {
     rua: string;

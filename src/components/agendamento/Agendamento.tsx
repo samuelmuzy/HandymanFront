@@ -42,6 +42,7 @@ export const Agendamento = ({ idFornecedor }: AgendamentoProps) => {
       const response = await axios.get(`${URLAPI}/fornecedor/${idFornecedor}`)
       setCategoriasServico(response.data.categoria_servico);
     } catch (error: unknown) {
+      console.error(error)
       toast.error("Erro ao buscar Categorias")
     }
   }

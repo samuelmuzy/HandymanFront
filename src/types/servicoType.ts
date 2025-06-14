@@ -17,5 +17,15 @@ export interface ServicoComUsuario {
         nome: string;
         email: string;
         telefone: string;
+        endereco:typeEndereco
     } | null;
 } 
+
+export type typeEndereco = {
+    rua: string;
+    cidade: string;
+    estado: string;
+    cep: string;
+    numero:string;
+    tipoMoradia:string;
+}

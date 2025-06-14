@@ -13,12 +13,17 @@ function ChangeView({ center }: { center: LatLngExpression }) {
   return null;
 }
 
-const MapaBusca = () => {
-  const [address, setAddress] = useState('');
+interface MapaBuscaProps{
+    cidade:string;
+    rua:string;
+}
+
+const MapaBusca = ({cidade,rua}:MapaBuscaProps) => {
+  
   const [position, setPosition] = useState<LatLngExpression>([-21.1307, -42.3697]); // Muriaé - default
 
   const handleSearch = async () => {
-    const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json`);
+    const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(cidade + ","+ rua)}&format=json`);
     const data = await response.json();
 
     if (data.length > 0) {
@@ -30,18 +35,12 @@ const MapaBusca = () => {
     }
   };
 
+  useEffect(()=>{
+      handleSearch()
+  },[])
+
   return (
     <div>
-      <div style={{ marginBottom: 10 }}>
-        <input
-          type="text"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-          placeholder="Digite o endereço (ex: Rua São Pedro, Muriaé)"
-        />
-        <button onClick={handleSearch}>Buscar</button>
-      </div>
-
       <MapContainer center={position} zoom={15} style={{ height: '400px', width: '100%' }}>
         <ChangeView center={position} />
         <TileLayer

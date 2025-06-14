@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { useStatusNotifications } from '../../hooks/useStatusNotifications';
 import { useNavigate } from 'react-router-dom';
 import { ServicoComUsuario } from "../../types/servicoType";
+import MapaBusca from "./MapaBusca";
 
 interface ExibirAgendamentoFornecedorProps {
     idServico: string;
@@ -198,8 +199,8 @@ export const ExibirAgendamentoFornecedor = ({ idServico }: ExibirAgendamentoForn
                                     <h4 className="text-lg font-medium text-gray-700 mb-4">Imagens do Serviço</h4>
                                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                                         {agendamento.imagems.map((imagem, index) => (
-                                            <div 
-                                                key={index} 
+                                            <div
+                                                key={index}
                                                 className="relative aspect-square cursor-pointer group"
                                                 onClick={() => setImagemExpandida(imagem)}
                                             >
@@ -214,6 +215,28 @@ export const ExibirAgendamentoFornecedor = ({ idServico }: ExibirAgendamentoForn
                                     </div>
                                 </div>
                             )}
+                            {agendamento.usuario?.endereco && (
+                                <>
+                                    <div className="bg-gray-50 p-4 rounded-lg">
+                                        <h4 className="text-lg font-medium text-gray-700 mb-2">Endereço</h4>
+                                        <div className="space-y-2">
+                                            <p className="text-gray-600">
+                                                <span className="font-medium">Rua:</span> {agendamento.usuario.endereco.rua}
+                                            </p>
+                                            <p className="text-gray-600">
+                                                <span className="font-medium">Cidade:</span> {agendamento.usuario.endereco.cidade}
+                                            </p>
+                                            <p className="text-gray-600">
+                                                <span className="font-medium">Estado:</span> {agendamento.usuario.endereco.estado}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <MapaBusca cidade={agendamento.usuario.endereco.cidade} rua={agendamento.usuario.endereco.rua} />
+                                </>
+                            )}
+
+
 
                             {/* Informações de Contato */}
                             {agendamento.usuario && (
@@ -229,6 +252,7 @@ export const ExibirAgendamentoFornecedor = ({ idServico }: ExibirAgendamentoForn
                                     </div>
                                 </div>
                             )}
+
 
                             {/* Ações */}
                             <div className="mt-6 space-y-3">
@@ -285,7 +309,7 @@ export const ExibirAgendamentoFornecedor = ({ idServico }: ExibirAgendamentoForn
 
             {/* Modal de Imagem Expandida */}
             {imagemExpandida && (
-                <div 
+                <div
                     className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4"
                     onClick={() => setImagemExpandida(null)}
                 >
