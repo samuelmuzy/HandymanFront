@@ -259,15 +259,6 @@ export const Agenda = ({historicoServico, setHistorico}:AgendaProps) =>{
                                                 <p className="text-sm text-gray-500">{servico.categoria}</p>
                                             </div>
                                         </div>
-                                        <div 
-                                            className="px-3 py-1 rounded-full text-sm font-medium"
-                                            style={{ 
-                                                backgroundColor: statusConfig.bgColor,
-                                                color: statusConfig.color
-                                            }}
-                                        >
-                                            {statusConfig.text}
-                                        </div>
                                     </div>
                                 </div>
 
@@ -287,6 +278,15 @@ export const Agenda = ({historicoServico, setHistorico}:AgendaProps) =>{
                                             <span>{new Date(servico.horario).toLocaleTimeString()}</span>
                                         </div>
                                         <p className="text-gray-600 line-clamp-2">{servico.descricao}</p>
+                                        <div 
+                                            className="px-3 py-1 w-32 text-center rounded-full text-sm font-medium"
+                                            style={{ 
+                                                backgroundColor: statusConfig.bgColor,
+                                                color: statusConfig.color
+                                            }}
+                                        >
+                                            {statusConfig.text}
+                                        </div>
                                     </div>
 
                                     {/* Ações do Card */}

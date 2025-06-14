@@ -65,10 +65,10 @@ const Header = () => {
     setIsLoggedIn(isUserLoggedIn());
   
     if (token?.id && !imagem) {
-      if(token.role === 'usuario'){
-        procurarImagemPerfil();
-      }else{
+      if(token.role === 'Fornecedor'){
         procurarImagemPerfilFornecedor()
+      }else{
+        procurarImagemPerfil();
       }
     }
   }, [token]);
@@ -121,15 +121,6 @@ const Header = () => {
 
           {isLoggedIn ? (
             <div className='flex items-center gap-4'>
-              <button 
-                onClick={() => setIsChatOpen(true)}
-                className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-[#A75C00]"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clipRule="evenodd" />
-                </svg>
-                Chat
-              </button>
               <div className="relative inline-block">
                 <div>
                   <img
