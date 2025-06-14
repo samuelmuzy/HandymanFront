@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Solicitacoes } from "./Solicitacoens";
 import { DadosFornecedor } from "./DadosFornecedor";
 import { URLAPI } from "../../constants/ApiUrl";
+import MapaGoogle from "./MapaBusca";
 
 export type typeEndereco = {
     rua: string;
@@ -60,41 +61,52 @@ export const PerfilFornecedor = ({ idFornecedor }: PerfilProps) => {
     }, []);
 
     return (
-        <div className="space-y-6 pt-8 px-8">
-            <div className="flex space-x-4 mb-6">
-                <button
-                    onClick={() => setMudarPagina(1)}
-                    className={`px-4 py-2 rounded-md transition-colors ${
-                        mudarPagina === 1
-                            ? 'bg-[#A75C00] text-white'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
-                >
-                    Solicitações
-                </button>
-                <button
-                    onClick={() => setMudarPagina(2)}
-                    className={`px-4 py-2 rounded-md transition-colors ${
-                        mudarPagina === 2
-                            ? 'bg-[#A75C00] text-white'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
-                >
-                    Dados do Perfil
-                </button>
+        <div className="pt-8 px-8">
+            <div className="flex gap-8">
+                {/* Coluna dos botões */}
+                <div className="w-64 flex-shrink-0">
+                    <div className="sticky top-8">
+                        <div className="flex flex-col space-y-4">
+                            <button
+                                onClick={() => setMudarPagina(1)}
+                                className={`px-4 py-2 rounded-md transition-colors ${
+                                    mudarPagina === 1
+                                        ? 'bg-[#A75C00] text-white'
+                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                }`}
+                            >
+                                Solicitações
+                            </button>
+                            <button
+                                onClick={() => setMudarPagina(2)}
+                                className={`px-4 py-2 rounded-md transition-colors ${
+                                    mudarPagina === 2
+                                        ? 'bg-[#A75C00] text-white'
+                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                }`}
+                            >
+                                Dados do Perfil
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+
+                {/* Coluna do conteúdo */}
+                <div className="flex-1">
+                    {mudarPagina === 1 && (
+                        <Solicitacoes idFornecedor={idFornecedor}/>
+                    )}
+
+                    {mudarPagina === 2 && (
+                        <DadosFornecedor 
+                            idFornecedor={idFornecedor}
+                            usuario={usuario}
+                            onUpdate={procurarUsuario}
+                        />
+                    )}
+                </div>
             </div>
-
-            {mudarPagina === 1 && (
-                <Solicitacoes idFornecedor={idFornecedor}/>
-            )}
-
-            {mudarPagina === 2 && (
-                <DadosFornecedor 
-                    idFornecedor={idFornecedor}
-                    usuario={usuario}
-                    onUpdate={procurarUsuario}
-                />
-            )}
         </div>
     );
 };

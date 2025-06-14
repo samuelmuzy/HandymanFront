@@ -8,6 +8,7 @@ import { URLAPI } from "../../constants/ApiUrl";
 import { useGetToken } from "../../hooks/useGetToken";
 import { useStatusNotifications } from '../../hooks/useStatusNotifications';
 import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 
 interface AgendaProps{
     historicoServico:HistoricoServico[] | null
@@ -69,7 +70,9 @@ export const Agenda = ({historicoServico, setHistorico}:AgendaProps) =>{
 
     const token = useGetToken();
 
-    const handleStatusUpdate = (update: { id_servico: string; novo_status: string }) => {
+    const navigate = useNavigate();
+
+    const handleStatusUpdate = async (update: { id_servico: string; novo_status: string }) => {
         if (historicoServico) {
             const novoHistorico = historicoServico.map(servico => 
                 servico.id_servico === update.id_servico
@@ -78,6 +81,14 @@ export const Agenda = ({historicoServico, setHistorico}:AgendaProps) =>{
             );
             setHistorico(novoHistorico);
         }
+
+        const data = {
+            id_servico: update.id_servico,
+            status: update.novo_status
+        }
+
+        await axios.put(`${URLAPI}/servicos`, data);
+
 
         toast.info(`Status do serviço atualizado para: ${update.novo_status}`, {
             position: "top-right",
@@ -294,7 +305,7 @@ export const Agenda = ({historicoServico, setHistorico}:AgendaProps) =>{
 
                                         {servico.status === 'Aguardando pagamento' && (
                                             <div className="grid grid-cols-2 gap-3">
-                                                <button className="bg-[#4CAF50] text-white py-2.5 rounded-lg font-medium hover:bg-[#3d8b40] transition-colors flex items-center justify-center">
+                                                <button onClick={() => navigate(`/detalhes-servico-confirmado/${servico.id_servico}`)} className="bg-[#4CAF50] text-white py-2.5 rounded-lg font-medium hover:bg-[#3d8b40] transition-colors flex items-center justify-center">
                                                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                                                     </svg>

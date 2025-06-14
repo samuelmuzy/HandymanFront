@@ -100,18 +100,22 @@ export const Agendamento = ({ idFornecedor }: AgendamentoProps) => {
 
   const enviarImagens = async (idServico: string) => {
     try {
-      const formData = new FormData();
-      imagens.forEach((imagem) => {
-        formData.append('imagens', imagem);
+      // Cria um array de promessas para enviar cada imagem
+      const promessasEnvio = imagens.map(async (imagem) => {
+        const formData = new FormData();
+        formData.append('imagem', imagem);
+
+        return axios.post(`${URLAPI}/servicos/inserir-imagems/${idServico}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
       });
 
-      await axios.post(`${URLAPI}/servicos/${idServico}/imagens`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      // Aguarda todas as imagens serem enviadas
+      await Promise.all(promessasEnvio);
 
-      toast.success('Imagens enviadas com sucesso!');
+      toast.success(`${imagens.length} imagens enviadas com sucesso!`);
     } catch (error) {
       console.error('Erro ao enviar imagens:', error);
       toast.error('Erro ao enviar imagens. Tente novamente.');
@@ -141,7 +145,7 @@ export const Agendamento = ({ idFornecedor }: AgendamentoProps) => {
 
       // Se houver imagens, envia-as separadamente
       if (imagens.length > 0) {
-        await enviarImagens(response.data.id);
+        await enviarImagens(response.data.id_servico);
       }
 
       // Emite o evento de novo agendamento

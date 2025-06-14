@@ -21,6 +21,7 @@ import { PagamentoScreen } from "./screens/pagamento/PagamentoScreen";
 import { ConfirmacaoPagamento } from "./screens/pagamento/ConfirmacaoPagamento";
 import { AgendamentoScreen } from "./screens/agendamento/AgendamentoScreen";
 import { ConfirmacaoAgendamento } from "./screens/agendamento/ConfirmacaoAgendamento";
+import { ExibirAgenda } from "./screens/ExibirAgenda";
 
 
 export const Router = () =>{
@@ -42,6 +43,7 @@ export const Router = () =>{
                 <Route path="/pagamento/:id" element={<AgendamentoScreen/>}/>
                 <Route path="/confirmaco-pagamento/:idServico" element={<ConfirmacaoPagamento/>}/>
                 <Route path="/confirmacao-agendamento" element={<ConfirmacaoAgendamento />} />
+                <Route path="/exibirAgenda/:id" element={<ExibirAgenda/>}/>
                 <Route path="*" element={<PaginaErro/>}/>
             </Routes>
     )

@@ -47,12 +47,29 @@ const Header = () => {
     }
   };
   
+  const procurarImagemPerfilFornecedor = async () => {
+    try {
+      const response = await axios.get(`${URLAPI}/fornecedor/${token?.id}`);
+      const imagem = response.data.imagemPerfil;
+  
+      setImagemPerfil({ picture: imagem });
+      localStorage.setItem("imagemPerfil", imagem);
+    } catch (error) {
+      console.log(error);
+      setImagemPerfil({ picture: imagemPerfilProvisoria });
+    }
+  };
+  
 
   useEffect(() => {
     setIsLoggedIn(isUserLoggedIn());
   
     if (token?.id && !imagem) {
-      procurarImagemPerfil();
+      if(token.role === 'usuario'){
+        procurarImagemPerfil();
+      }else{
+        procurarImagemPerfilFornecedor()
+      }
     }
   }, [token]);
 
