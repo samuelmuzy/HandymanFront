@@ -41,7 +41,7 @@ const MapaBusca = ({cidade,rua}:MapaBuscaProps) => {
 
   return (
     <div>
-      <MapContainer center={position} zoom={15} style={{ height: '400px', width: '100%' }}>
+      <MapContainer center={position} zoom={15} style={{ height: '400px', width: '100%',zIndex: "1px" }}>
         <ChangeView center={position} />
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

@@ -16,17 +16,18 @@ export interface Solicitacao {
       categoria: string;
       data: Date;
       horario: Date;
-      data_submisao: Date
+      data_submisao: Date;
       status: string;
       descricao: string;
+      valor?: number;
       id_pagamento?: string;
       id_avaliacao?: string;
   };
   usuario: {
       id_usuario: string;
       nome: string;
+      picture: string;
       email: string;
       telefone: string;
-      picture: string;
-  } | null;
+  };
 }

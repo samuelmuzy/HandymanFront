@@ -10,6 +10,7 @@ export type HistoricoServico  = {
     id_pagamento?: string;
     id_avaliacao?: string;
     descricao: string;
+    valor:number;
     fornecedor: {
         nome: string;
         email: string;

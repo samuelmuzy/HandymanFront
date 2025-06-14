@@ -1,6 +1,6 @@
 import { HistoricoServico } from "../../types/historicoServico"
 import fotoPerfil from '../../assets/perfil.png'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useRef, useEffect } from 'react'
 import { Modal } from "../Modal";
 import Chat from "../Chat";
 import axios from "axios";
@@ -9,9 +9,11 @@ import { useGetToken } from "../../hooks/useGetToken";
 import { useStatusNotifications } from '../../hooks/useStatusNotifications';
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
+import { Socket } from 'socket.io-client';
+import io from 'socket.io-client';
 
-interface AgendaProps{
-    historicoServico:HistoricoServico[] | null
+interface AgendaProps {
+    historicoServico: HistoricoServico[] | null
     setHistorico: React.Dispatch<React.SetStateAction<HistoricoServico[] | null>>
 }
 
@@ -29,6 +31,8 @@ const getStatusConfig = (status: string) => {
             return { color: '#F44336', bgColor: '#FFEBEE', text: 'Cancelado' };
         case 'aguardando pagamento':
             return { color: '#FFC107', bgColor: '#FFF8E1', text: 'Aguardando Pagamento' };
+        case 'confirmar valor':
+            return { color: '#2196F3', bgColor: '#E3F2FD', text: 'Confirmação de valor' }
         default:
             return { color: '#757575', bgColor: '#F5F5F5', text: status };
     }
@@ -39,7 +43,7 @@ const statusOptions = [
     { value: 'pendente', label: 'Pendente' },
     { value: 'confirmado', label: 'Confirmado' },
     { value: 'em andamento', label: 'Em Andamento' },
-    { value: 'concluido', label: 'Concluído' },
+    { value: 'concluido', label: 'Concluido' },
     { value: 'cancelado', label: 'Cancelado' },
     { value: 'aguardando pagamento', label: 'Aguardando Pagamento' }
 ];
@@ -52,7 +56,7 @@ const dataOptions = [
     { value: 'ano', label: 'Último Ano' }
 ];
 
-export const Agenda = ({historicoServico, setHistorico}:AgendaProps) =>{
+export const Agenda = ({ historicoServico, setHistorico }: AgendaProps) => {
     const [filtroStatus, setFiltroStatus] = useState('todos');
     const [filtroData, setFiltroData] = useState('todos');
     const [isChatOpen, setIsChatOpen] = useState(false);
@@ -67,37 +71,108 @@ export const Agenda = ({historicoServico, setHistorico}:AgendaProps) =>{
         id_fornecedor: "",
         data: ""
     });
-
+    const socketRef = useRef<Socket | null>(null);
     const token = useGetToken();
 
     const navigate = useNavigate();
 
-    const handleStatusUpdate = async (update: { id_servico: string; novo_status: string }) => {
-        if (historicoServico) {
-            const novoHistorico = historicoServico.map(servico => 
-                servico.id_servico === update.id_servico
-                    ? { ...servico, status: update.novo_status }
-                    : servico
-            );
-            setHistorico(novoHistorico);
-        }
+    useEffect(() => {
+        if (!token?.id) return;
 
+        // Inicializa o socket
+        const socket = io(URLAPI, {
+            reconnection: true,
+            reconnectionAttempts: 5,
+            reconnectionDelay: 1000
+        });
+
+        socketRef.current = socket;
+
+        // Eventos de conexão do socket
+        socket.on('connect', () => {
+            console.log('Socket conectado');
+            socket.emit('join', token.id);
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Socket desconectado');
+        });
+
+        socket.on('connect_error', (error) => {
+            console.error('Erro na conexão do socket:', error);
+        });
+
+        // Escuta o evento de valor atualizado
+        socket.on('valor_atualizado', (update) => {
+            console.log('Recebido evento valor_atualizado no Agenda.tsx:', update);
+            console.log('Tipo de update.novo_valor:', typeof update.novo_valor, 'Valor:', update.novo_valor);
+            if (update && typeof update.novo_valor === 'number') {
+                setHistorico(prevHistorico => {
+                    if (!prevHistorico) return prevHistorico;
+
+                    return prevHistorico.map(servico => {
+                        if (servico.id_servico === update.id_servico) {
+                            return {
+                                ...servico,
+                                valor: update.novo_valor,
+                                status: update.novo_status
+                            };
+                        }
+                        return servico;
+                    });
+                });
+
+                toast.info('Valor do serviço atualizado!', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                });
+            }
+        });
+
+        // Escuta o evento de atualização de status
+        socket.on('atualizacao_status', (update) => {
+            console.log('Recebido evento atualizacao_status:', update);
+            setHistorico(prevHistorico => {
+                if (!prevHistorico) return prevHistorico;
+
+                return prevHistorico.map(servico => {
+                    if (servico.id_servico === update.id_servico) {
+                        return {
+                            ...servico,
+                            status: update.novo_status
+                        };
+                    }
+                    return servico;
+                });
+            });
+
+            toast.info(`Status do serviço atualizado para: ${update.novo_status}`, {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+            });
+        });
+
+        return () => {
+            console.log('Desconectando socket');
+            socket.disconnect();
+        };
+    }, [token?.id, setHistorico]);
+
+    const handleStatusUpdate = async (update: { id_servico: string; novo_status: string }) => {
         const data = {
             id_servico: update.id_servico,
             status: update.novo_status
         }
 
         await axios.put(`${URLAPI}/servicos`, data);
-
-
-        toast.info(`Status do serviço atualizado para: ${update.novo_status}`, {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-        });
     };
 
     const { emitirMudancaStatus } = useStatusNotifications(handleStatusUpdate, token?.id);
@@ -114,7 +189,7 @@ export const Agenda = ({historicoServico, setHistorico}:AgendaProps) =>{
 
     const handleSubmitAvaliacao = async () => {
         if (!servicoSelecionado) return;
-        
+
         try {
             const dataAvaliacao = {
                 id_servico: servicoSelecionado.id_servico,
@@ -124,10 +199,10 @@ export const Agenda = ({historicoServico, setHistorico}:AgendaProps) =>{
                 nota: avaliacao.nota,
                 comentario: avaliacao.comentario
             };
-            
+
             await axios.post(`${URLAPI}/avaliacao/`, dataAvaliacao);
             setIsAvaliacaoOpen(false);
-            setAvaliacao({ nota: 5, comentario: "", data:"",id_fornecedor:"",id_servico:"",id_usuario:"" });
+            setAvaliacao({ nota: 5, comentario: "", data: "", id_fornecedor: "", id_servico: "", id_usuario: "" });
         } catch (error) {
             console.error("Erro ao enviar avaliação:", error);
         }
@@ -180,7 +255,7 @@ export const Agenda = ({historicoServico, setHistorico}:AgendaProps) =>{
         return servicosFiltrados;
     }, [historicoServico, filtroStatus, filtroData]);
 
-    return(
+    return (
         <div className="max-w-6xl mx-auto">
             {/* Filtros */}
             <div className="mb-8 bg-white p-6 rounded-xl shadow-md">
@@ -196,8 +271,8 @@ export const Agenda = ({historicoServico, setHistorico}:AgendaProps) =>{
                                     key={status.value}
                                     onClick={() => setFiltroStatus(status.value)}
                                     className={`px-4 py-2 rounded-full text-sm font-medium transition-colors
-                                        ${filtroStatus === status.value 
-                                            ? 'bg-[#AC5906] text-white' 
+                                        ${filtroStatus === status.value
+                                            ? 'bg-[#AC5906] text-white'
                                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
                                 >
                                     {status.label}
@@ -217,8 +292,8 @@ export const Agenda = ({historicoServico, setHistorico}:AgendaProps) =>{
                                     key={data.value}
                                     onClick={() => setFiltroData(data.value)}
                                     className={`px-4 py-2 rounded-full text-sm font-medium transition-colors
-                                        ${filtroData === data.value 
-                                            ? 'bg-[#AC5906] text-white' 
+                                        ${filtroData === data.value
+                                            ? 'bg-[#AC5906] text-white'
                                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
                                 >
                                     {data.label}
@@ -234,7 +309,7 @@ export const Agenda = ({historicoServico, setHistorico}:AgendaProps) =>{
                 {servicosFiltrados.length > 0 ? (
                     servicosFiltrados.map((servico, index) => {
                         const statusConfig = getStatusConfig(servico.status);
-                        
+
                         return (
                             <div key={index} className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
                                 {/* Cabeçalho do Card */}
@@ -242,12 +317,12 @@ export const Agenda = ({historicoServico, setHistorico}:AgendaProps) =>{
                                     <div className="flex items-center justify-between mb-4">
                                         <div className="flex items-center space-x-4">
                                             <div className="relative">
-                                                <img 
-                                                    src={servico.fornecedor?.imagemPerfil || fotoPerfil} 
-                                                    alt="Fornecedor" 
+                                                <img
+                                                    src={servico.fornecedor?.imagemPerfil || fotoPerfil}
+                                                    alt="Fornecedor"
                                                     className="w-14 h-14 rounded-full object-cover border-2 border-[#AC5906]"
                                                 />
-                                                <div 
+                                                <div
                                                     className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-white"
                                                     style={{ backgroundColor: statusConfig.color }}
                                                 />
@@ -278,21 +353,54 @@ export const Agenda = ({historicoServico, setHistorico}:AgendaProps) =>{
                                             <span>{new Date(servico.horario).toLocaleTimeString()}</span>
                                         </div>
                                         <p className="text-gray-600 line-clamp-2">{servico.descricao}</p>
-                                        <div 
+                                        <div
                                             className="px-3 py-1 w-32 text-center rounded-full text-sm font-medium"
-                                            style={{ 
+                                            style={{
                                                 backgroundColor: statusConfig.bgColor,
                                                 color: statusConfig.color
                                             }}
                                         >
                                             {statusConfig.text}
                                         </div>
+                                        {servico.status === "confirmar valor" && (
+                                            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                                                <div className="flex items-center justify-between mb-3">
+                                                    <span className="text-gray-600 font-medium">Valor Proposto:</span>
+                                                    <span className="text-2xl font-bold text-[#AC5906]">
+                                                        {servico.valor !== undefined && servico.valor !== null ? new Intl.NumberFormat('pt-BR', {
+                                                            style: 'currency',
+                                                            currency: 'BRL'
+                                                        }).format(servico.valor) : 'R$ --,--'}
+                                                    </span>
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-3">
+                                                    <button
+                                                        onClick={() => emitirMudancaStatus(servico.id_servico, 'confirmado', servico.id_fornecedor)}
+                                                        className="bg-[#4CAF50] text-white py-2.5 rounded-lg font-medium hover:bg-[#3d8b40] transition-colors flex items-center justify-center"
+                                                    >
+                                                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                                        </svg>
+                                                        Aceitar Valor
+                                                    </button>
+                                                    <button
+                                                        onClick={() => emitirMudancaStatus(servico.id_servico, 'cancelado', servico.id_fornecedor)}
+                                                        className="bg-red-500 text-white py-2.5 rounded-lg font-medium hover:bg-red-600 transition-colors flex items-center justify-center"
+                                                    >
+                                                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                                        </svg>
+                                                        Recusar Valor
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
 
                                     {/* Ações do Card */}
                                     <div className="mt-6 space-y-3">
                                         {servico.status === 'concluido' && (
-                                            <button 
+                                            <button
                                                 onClick={() => handleAvaliarServico(servico)}
                                                 className="w-full bg-[#AC5906] text-white py-2.5 rounded-lg font-medium hover:bg-[#8B4705] transition-colors flex items-center justify-center"
                                             >
@@ -311,8 +419,8 @@ export const Agenda = ({historicoServico, setHistorico}:AgendaProps) =>{
                                                     </svg>
                                                     Pagar pelo App
                                                 </button>
-                                                <button 
-                                                    onClick={() => emitirMudancaStatus(servico.id_servico,'concluido',servico.id_fornecedor )}
+                                                <button
+                                                    onClick={() => emitirMudancaStatus(servico.id_servico, 'concluido', servico.id_fornecedor)}
                                                     className="bg-[#2196F3] text-white py-2.5 rounded-lg font-medium hover:bg-[#1976D2] transition-colors flex items-center justify-center"
                                                 >
                                                     <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -324,7 +432,7 @@ export const Agenda = ({historicoServico, setHistorico}:AgendaProps) =>{
                                         )}
 
                                         {servico.status === 'Em Andamento' && (
-                                            <button 
+                                            <button
                                                 onClick={() => handleOpenChat(servico.id_fornecedor)}
                                                 className="w-full bg-[#AC5906] text-white py-2.5 rounded-lg font-medium hover:bg-[#8B4705] transition-colors flex items-center justify-center"
                                             >
@@ -344,8 +452,8 @@ export const Agenda = ({historicoServico, setHistorico}:AgendaProps) =>{
                                         )}
 
                                         {['pendente', 'confirmado', 'em andamento'].includes(servico.status.toLowerCase()) && (
-                                            <button 
-                                                onClick={() => emitirMudancaStatus(servico.id_servico,'cancelado',servico.id_fornecedor )}
+                                            <button
+                                                onClick={() => emitirMudancaStatus(servico.id_servico, 'cancelado', servico.id_fornecedor)}
                                                 className="w-full border border-red-500 text-red-500 py-2.5 rounded-lg font-medium hover:bg-red-50 transition-colors flex items-center justify-center"
                                             >
                                                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -396,8 +504,8 @@ export const Agenda = ({historicoServico, setHistorico}:AgendaProps) =>{
                                     >
                                         <svg
                                             className={`w-8 h-8 ${avaliacao.nota >= nota
-                                                    ? 'text-yellow-400'
-                                                    : 'text-gray-300'
+                                                ? 'text-yellow-400'
+                                                : 'text-gray-300'
                                                 }`}
                                             fill="currentColor"
                                             viewBox="0 0 20 20"

@@ -7,6 +7,8 @@ import { io, Socket } from 'socket.io-client';
 import fotoPerfil from '../../assets/perfil.png';
 import { useNavigate } from "react-router-dom";
 import { Solicitacao } from "../../types/agendamento";
+import { Modal } from "../Modal";
+import Chat from "../Chat";
 
 
 interface PerfilProps {
@@ -29,6 +31,8 @@ const getStatusConfig = (status: string) => {
             return { color: '#FFC107', bgColor: '#FFF8E1', text: 'Aguardando Pagamento' };
         case 'recusado':
             return { color: '#F44336', bgColor: '#FFEBEE', text: 'Recusado' };
+        case 'confirmar valor':
+            return { color: '#2196F3', bgColor: '#E3F2FD', text: 'Confirmação de valor' }
         default:
             return { color: '#757575', bgColor: '#F5F5F5', text: status };
     }
@@ -58,6 +62,9 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
     const [verificarStatus, setVerificarStatus] = useState(false);
     const [filtroStatus, setFiltroStatus] = useState('todos');
     const [filtroData, setFiltroData] = useState('todos');
+    const [isChatOpen, setIsChatOpen] = useState(false);
+    const [id_servico, setIdServico] = useState("");
+
     const socketRef = useRef<Socket | null>(null);
 
     const navigate = useNavigate();
@@ -73,6 +80,11 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
 
         }
     };
+
+    const handleOpenChat = (idServico: string) => {
+        setIdServico(idServico);
+        setIsChatOpen(true);
+    }
 
     // Efeito para carregar solicitações iniciais e quando verificarStatus mudar
     useEffect(() => {
@@ -296,9 +308,9 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
                             const statusConfig = getStatusConfig(solicitacao.servico.status);
 
                             return (
-                                <div onClick={() => navigate(`/exibirAgenda/${solicitacao.servico.id_servico}`)} key={index} className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer">
+                                <div key={index} className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer">
                                     {/* Cabeçalho do Card */}
-                                    <div className="p-6 border-b border-gray-100">
+                                    <div onClick={() => navigate(`/exibirAgenda/${solicitacao.servico.id_servico}`)} className="p-6 border-b border-gray-100">
                                         <div className="flex items-center justify-between mb-4">
                                             <div className="flex items-center space-x-4">
                                                 <div className="relative">
@@ -325,7 +337,7 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
 
                                     {/* Corpo do Card */}
                                     <div className="p-6">
-                                        <div className="space-y-4">
+                                        <div onClick={() => navigate(`/exibirAgenda/${solicitacao.servico.id_servico}`)} className="space-y-4">
                                             <div className="flex items-center text-gray-600">
                                                 <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -363,7 +375,7 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
                                             {solicitacao.servico.status === 'pendente' && (
                                                 <div className="grid grid-cols-2 gap-3">
                                                     <button
-                                                        onClick={() => atualizarStatus(solicitacao.servico.id_servico, 'Em Andamento')}
+                                                        onClick={() => atualizarStatus(solicitacao.servico.id_servico, 'negociar valor')}
                                                         className="bg-[#4CAF50] text-white py-2.5 rounded-lg font-medium hover:bg-[#3d8b40] transition-colors flex items-center justify-center"
                                                     >
                                                         <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -382,8 +394,80 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
                                                     </button>
                                                 </div>
                                             )}
+                                            {solicitacao.servico.status === 'negociar valor' && (
+                                                <div className="mt-6 space-y-3">
+                                                    <div className="grid grid-cols-2 gap-3">
+                                                        <button
+                                                            onClick={() => navigate(`/exibirAgenda/${solicitacao.servico.id_servico}`)}
+                                                            className="bg-[#4CAF50] text-white py-2.5 rounded-lg font-medium hover:bg-[#3d8b40] transition-colors flex items-center justify-center"
+                                                        >
+                                                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                            </svg>
+                                                            Negociar Preço
+                                                        </button>
+                                                        <button
+                                                            onClick={() => atualizarStatus(solicitacao.servico.id_servico, 'Recusado')}
+                                                            className="bg-red-500 text-white py-2.5 rounded-lg font-medium hover:bg-red-600 transition-colors flex items-center justify-center"
+                                                        >
+                                                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                                            </svg>
+                                                            Recusar
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {solicitacao.servico.status === 'confirmado' && (
+                                                <button
+                                                    onClick={() => handleOpenChat(solicitacao.usuario.id_usuario)}
+                                                    className="w-full bg-[#AC5906] text-white py-2.5 rounded-lg font-medium hover:bg-[#8B4705] transition-colors flex items-center justify-center"
+                                                >
+                                                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                                    </svg>
+                                                    Entrar em contato
+                                                </button>
+                                            )}
+                                            {solicitacao.servico.status === 'confirmado' && (
+                                                
+                                                <div className="grid grid-cols-2 gap-3">
+                                                    <button
+                                                        onClick={() => atualizarStatus(solicitacao.servico.id_servico, 'Em Andamento')}
+                                                        className="bg-[#4CAF50] text-white py-2.5 rounded-lg font-medium hover:bg-[#3d8b40] transition-colors flex items-center justify-center"
+                                                    >
+                                                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                                        </svg>
+                                                        Iniciar serviço
+                                                    </button>
+                                                    <button
+                                                        onClick={() => atualizarStatus(solicitacao.servico.id_servico, 'cancelado')}
+                                                        className="bg-red-500 text-white py-2.5 rounded-lg font-medium hover:bg-red-600 transition-colors flex items-center justify-center"
+                                                    >
+                                                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                                        </svg>
+                                                        Cancelar
+                                                    </button>
+                                                </div>
+                                                
+                                            )}
+                                            {solicitacao.servico.status === 'Em Andamento' && (
+                                                <button
+                                                    onClick={() => handleOpenChat(solicitacao.usuario.id_usuario)}
+                                                    className="w-full bg-[#AC5906] text-white py-2.5 rounded-lg font-medium hover:bg-[#8B4705] transition-colors flex items-center justify-center"
+                                                >
+                                                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                                    </svg>
+                                                    Entrar em contato
+                                                </button>
+                                            )}
+
 
                                             {solicitacao.servico.status === 'Em Andamento' && (
+                                                
                                                 <div className="grid grid-cols-2 gap-3">
                                                     <button
                                                         onClick={() => atualizarStatus(solicitacao.servico.id_servico, 'Aguardando pagamento')}
@@ -403,9 +487,10 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
                                                         </svg>
                                                         Cancelar
                                                     </button>
-
                                                 </div>
+                                                
                                             )}
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -418,6 +503,15 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
                     </div>
                 )}
             </div>
+            <Modal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)}>
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                    <div onClick={() => setIsChatOpen(false)} className="fixed inset-0 bg-black opacity-40"></div>
+                    <div className="relative bg-white rounded-lg shadow-lg p-4 max-w-[1000px] w-[90vw] h-[80vh] max-h-[600px] flex flex-col">
+                        <Chat idFornecedor={id_servico} />
+                    </div>
+                </div>
+            </Modal>
         </div>
+        
     );
 };

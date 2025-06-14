@@ -1,6 +1,6 @@
 import axios from "axios";
 import { URLAPI } from "../../constants/ApiUrl";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Loading } from "../Loading";
 import fotoPerfil from '../../assets/perfil.png';
 import { toast } from 'react-toastify';
@@ -8,6 +8,8 @@ import { useStatusNotifications } from '../../hooks/useStatusNotifications';
 import { useNavigate } from 'react-router-dom';
 import { ServicoComUsuario } from "../../types/servicoType";
 import MapaBusca from "./MapaBusca";
+import io from 'socket.io-client';
+import { Socket } from 'socket.io-client';
 
 interface ExibirAgendamentoFornecedorProps {
     idServico: string;
@@ -29,6 +31,8 @@ const getStatusConfig = (status: string) => {
             return { color: '#FFC107', bgColor: '#FFF8E1', text: 'Aguardando Pagamento' };
         case 'recusado':
             return { color: '#F44336', bgColor: '#FFEBEE', text: 'Recusado' };
+        case 'confirmar valor':
+            return {color: '#2196F3' , bgColor:'#E3F2FD' , text: 'Confirmação de valor'}
         default:
             return { color: '#757575', bgColor: '#F5F5F5', text: status };
     }
@@ -38,7 +42,10 @@ export const ExibirAgendamentoFornecedor = ({ idServico }: ExibirAgendamentoForn
     const [agendamento, setAgendamento] = useState<ServicoComUsuario | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [imagemExpandida, setImagemExpandida] = useState<string | null>(null);
+    const [showNegociacaoModal, setShowNegociacaoModal] = useState(false);
+    const [novoValor, setNovoValor] = useState<string>('');
     const navigate = useNavigate();
+    const socketRef = useRef<Socket | null>(null);
 
     const fetchAgendamento = async () => {
         setLoading(true);
@@ -56,6 +63,64 @@ export const ExibirAgendamentoFornecedor = ({ idServico }: ExibirAgendamentoForn
     useEffect(() => {
         fetchAgendamento();
     }, [idServico]);
+
+    useEffect(() => {
+        if (!agendamento?.id_fornecedor) return;
+
+        console.log('Iniciando conexão socket para fornecedor:', agendamento.id_fornecedor);
+
+        // Inicializa o socket
+        const socket = io(URLAPI, {
+            reconnection: true,
+            reconnectionAttempts: 5,
+            reconnectionDelay: 1000
+        });
+
+        socketRef.current = socket;
+
+        // Eventos de conexão do socket
+        socket.on('connect', () => {
+            console.log('Socket conectado');
+            socket.emit('join', agendamento.id_fornecedor);
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Socket desconectado');
+        });
+
+        socket.on('connect_error', (error) => {
+            console.error('Erro na conexão do socket:', error);
+        });
+
+        // Escuta o evento de valor atualizado
+        socket.on('valor_atualizado', (update) => {
+            if (update.id_servico === idServico) {
+                setAgendamento(prev => {
+                    if (prev) {
+                        return {
+                            ...prev,
+                            valor: update.novo_valor,
+                            status: update.novo_status
+                        };
+                    }
+                    return prev;
+                });
+                toast.info('Valor do serviço atualizado!', {
+                    position: "top-right",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                });
+            }
+        });
+
+        return () => {
+            console.log('Desconectando socket');
+            socket.disconnect();
+        };
+    }, [agendamento?.id_fornecedor, idServico]);
 
     const handleStatusUpdate = (update: { id_servico: string; novo_status: string }) => {
         if (agendamento) {
@@ -98,6 +163,32 @@ export const ExibirAgendamentoFornecedor = ({ idServico }: ExibirAgendamentoForn
             style: 'currency',
             currency: 'BRL'
         }).format(valor);
+    };
+
+    const handleNegociarPreco = async () => {
+        try {
+            if (!novoValor || isNaN(Number(novoValor)) || Number(novoValor) <= 0) {
+                toast.error('Por favor, insira um valor válido');
+                return;
+            }
+
+            const data = {
+                id_servico: idServico,
+                valor: Number(novoValor)
+            };
+
+            await axios.put(`${URLAPI}/servicos/valor`, data);
+            atualizarStatus('confirmar valor');
+
+            toast.success('Valor atualizado com sucesso!');
+
+            setShowNegociacaoModal(false);
+            setNovoValor('');
+            fetchAgendamento();
+        } catch (error) {
+            console.error('Erro ao atualizar valor:', error);
+            toast.error('Erro ao atualizar valor');
+        }
     };
 
     if (loading) {
@@ -166,8 +257,21 @@ export const ExibirAgendamentoFornecedor = ({ idServico }: ExibirAgendamentoForn
                                 >
                                     {statusConfig.text}
                                 </div>
-                                <div className="text-2xl font-bold text-[#AC5906]">
-                                    {formatarValor(agendamento.valor)}
+                                <div className="flex items-center space-x-4">
+                                    <div className="text-2xl font-bold text-[#AC5906]">
+                                        {formatarValor(agendamento.valor)}
+                                    </div>
+                                    {agendamento.status === 'negociar valor' && (
+                                        <button
+                                            onClick={() => setShowNegociacaoModal(true)}
+                                            className="px-4 py-2 bg-[#AC5906] text-white rounded-lg hover:bg-[#8B4705] flex items-center"
+                                        >
+                                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            Negociar Preço
+                                        </button>
+                                    )}
                                 </div>
                             </div>
 
@@ -259,7 +363,7 @@ export const ExibirAgendamentoFornecedor = ({ idServico }: ExibirAgendamentoForn
                                 {agendamento.status === 'pendente' && (
                                     <div className="grid grid-cols-2 gap-4">
                                         <button
-                                            onClick={() => atualizarStatus('Em Andamento')}
+                                            onClick={() => atualizarStatus('negociar valor')}
                                             className="bg-[#4CAF50] text-white py-3 rounded-lg font-medium hover:bg-[#3d8b40] transition-colors flex items-center justify-center text-lg"
                                         >
                                             <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -326,6 +430,41 @@ export const ExibirAgendamentoFornecedor = ({ idServico }: ExibirAgendamentoForn
                         alt="Imagem expandida"
                         className="max-w-full max-h-[90vh] object-contain"
                     />
+                </div>
+            )}
+
+            {/* Modal de Negociação */}
+            {showNegociacaoModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                    <div className="bg-white rounded-lg p-6 w-full max-w-md">
+                        <h3 className="text-xl font-semibold mb-4">Negociar Preço</h3>
+                        <div className="mb-4">
+                            <label className="block text-gray-700 mb-2">Novo Valor (R$)</label>
+                            <input
+                                type="number"
+                                value={novoValor}
+                                onChange={(e) => setNovoValor(e.target.value)}
+                                className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#AC5906]"
+                                placeholder="Digite o novo valor"
+                                min="0"
+                                step="0.01"
+                            />
+                        </div>
+                        <div className="flex justify-end space-x-3">
+                            <button
+                                onClick={() => setShowNegociacaoModal(false)}
+                                className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                onClick={handleNegociarPreco}
+                                className="px-4 py-2 bg-[#AC5906] text-white rounded-lg hover:bg-[#8B4705]"
+                            >
+                                Confirmar
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
