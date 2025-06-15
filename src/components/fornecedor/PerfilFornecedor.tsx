@@ -1,9 +1,9 @@
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
-import Chat from "../Chat";
-import { Modal } from "../Modal";
-import { useState } from "react";
+import imagemPefilDefault from '../../assets/perfil.png';
 import { useNavigate } from "react-router-dom";
+import { useGetToken } from "../../hooks/useGetToken";
+import { toast } from "react-toastify";
 
 interface FornecedorProps {
   id: string
@@ -15,15 +15,23 @@ interface FornecedorProps {
   local: string;
   imagensServicos: string[];
   categoria_servico: string[];
-  sobre:string;
+  sobre: string;
 }
-export const PerfilFornecedor = ({ id, local, nome, media_avaliacoes, descricao, valor, imagemPerfil, imagensServicos, categoria_servico,sobre }: FornecedorProps) => {
+export const PerfilFornecedor = ({ id, local, nome, media_avaliacoes, descricao, valor, imagemPerfil, imagensServicos, categoria_servico, sobre }: FornecedorProps) => {
 
   const images = imagensServicos.map((imagem) => ({
     original: imagem,
     thumbnail: imagem,
   }));
-  const [isChatOpen, setIsChatOpen] = useState(false);
+
+  const token = useGetToken()
+
+  const navegarAgendamento = () =>{
+    if(!token){
+        return toast.error("Crie um conta para fazer um serviço")
+    }
+    navigate(`/pagamento/${id}`)
+  }
 
   const categorias = categoria_servico.map((fornecedor) => (
     <button className="border border-orange-400 rounded px-3 py-1 text-sm hover:bg-orange-100" key={fornecedor}>
@@ -39,7 +47,7 @@ export const PerfilFornecedor = ({ id, local, nome, media_avaliacoes, descricao,
         <div className="flex items-center gap-4">
           <img
             className="w-32 h-32 rounded-full object-cover"
-            src={imagemPerfil}
+            src={imagemPerfil || imagemPefilDefault}
             alt="Imagem do Fornecedor"
           />
           <div>
@@ -60,7 +68,7 @@ export const PerfilFornecedor = ({ id, local, nome, media_avaliacoes, descricao,
           <div className="flex items-center gap-2 mb-2">
             <img
               className="w-10 h-10 rounded-full object-cover"
-              src={imagemPerfil}
+              src={imagemPerfil || imagemPefilDefault}
               alt="Imagem Ilustrativa"
             />
             <h2 className="font-semibold text-orange-600">{nome}</h2>
@@ -68,11 +76,8 @@ export const PerfilFornecedor = ({ id, local, nome, media_avaliacoes, descricao,
           <p className="text-xl font-bold text-gray-900 mb-1">R$ {valor},00</p>
           <p className="text-xs text-gray-500 mb-2">* Valor cobrado por hora</p>
           <p className="text-xs text-gray-500 mb-4">Finalização em 2 dias</p>
-       
-          <button onClick={() => setIsChatOpen(true)} className="bg-green-500 mb-3 text-white text-sm px-4 py-2 rounded hover:bg-green-600 transition-colors">
-            Me contate
-          </button>
-          <button onClick={() => navigate(`/pagamento/${id}`)} className="bg-orange-500 text-white text-sm px-4 pt-2 rounded hover:bg-orange-500-600 transition-colors">
+
+          <button onClick={navegarAgendamento} className="bg-orange-500 text-white text-sm px-4 pt-2 rounded hover:bg-orange-500-600 transition-colors">
             Fazer chamado
           </button>
         </div>
@@ -88,33 +93,26 @@ export const PerfilFornecedor = ({ id, local, nome, media_avaliacoes, descricao,
         </div>
       </div>
       {/*imagem ilustrativa */}
-      <div className="mt-6 w-full max-w-4xl rounded-lg p-4">
-        <h2 className="text-orange-700 font-semibold mb-5">Imagens do serviço:</h2>
-        <ImageGallery
-          items={images}
-          showPlayButton={false}
-          showFullscreenButton={false}
-          showNav={false}
-          showThumbnails={true}
-          thumbnailPosition="bottom" // top, bottom, left, right
-        />
-
-      </div>
+      {images.length !== 0 && (
+        <div className="mt-6 w-full max-w-4xl rounded-lg p-4">
+          <h2 className="text-orange-700 font-semibold mb-5">Imagens do serviço:</h2>
+          <ImageGallery
+            items={images}
+            showPlayButton={false}
+            showFullscreenButton={false}
+            showNav={false}
+            showThumbnails={true}
+            thumbnailPosition="bottom" // top, bottom, left, right
+          />
+        </div>
+      )}
 
       {/* Sobre o profissional */}
       <div className="mt-6 w-full max-w-5xl rounded-lg p-4">
         <p className="text-orange-700 font-semibold mb-2">sobre-min:</p>
         <p>{sobre}</p>
       </div>
-      
-      <Modal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)}>
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div onClick={() => setIsChatOpen(false)} className="fixed inset-0 bg-black opacity-40"></div>
-          <div className="relative bg-white rounded-lg shadow-lg p-4 max-w-[1000px] w-[90vw] h-[80vh] max-h-[600px] flex flex-col">
-            <Chat idFornecedor={id} />
-          </div>
-        </div>
-      </Modal>
+
     </div>
 
   )

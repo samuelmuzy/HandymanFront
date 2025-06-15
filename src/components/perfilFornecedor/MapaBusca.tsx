@@ -23,7 +23,7 @@ const MapaBusca = ({cidade,rua}:MapaBuscaProps) => {
   const [position, setPosition] = useState<LatLngExpression>([-21.1307, -42.3697]); // Muriaé - default
 
   const handleSearch = async () => {
-    const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(cidade + ","+ rua)}&format=json`);
+    const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(cidade + ",Rua "+ rua)}&format=json`);
     const data = await response.json();
 
     if (data.length > 0) {

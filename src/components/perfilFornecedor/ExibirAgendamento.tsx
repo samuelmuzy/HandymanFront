@@ -159,6 +159,9 @@ export const ExibirAgendamentoFornecedor = ({ idServico }: ExibirAgendamentoForn
     };
 
     const formatarValor = (valor: number) => {
+        if (valor === undefined || valor === null || isNaN(valor)) {
+            return "Combinar Valor";
+        }
         return new Intl.NumberFormat('pt-BR', {
             style: 'currency',
             currency: 'BRL'

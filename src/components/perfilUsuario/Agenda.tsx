@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import { Socket } from 'socket.io-client';
 import io from 'socket.io-client';
+import { Loading } from "../Loading";
 
 interface AgendaProps {
     historicoServico: HistoricoServico[] | null
@@ -62,6 +63,7 @@ export const Agenda = ({ historicoServico, setHistorico }: AgendaProps) => {
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [isAvaliacaoOpen, setIsAvaliacaoOpen] = useState(false);
     const [id_servico, setIdServico] = useState("");
+    const [isLoading,setIsLoading] = useState(false);
     const [servicoSelecionado, setServicoSelecionado] = useState<HistoricoServico | null>(null);
     const [avaliacao, setAvaliacao] = useState({
         nota: 5,
@@ -254,6 +256,10 @@ export const Agenda = ({ historicoServico, setHistorico }: AgendaProps) => {
 
         return servicosFiltrados;
     }, [historicoServico, filtroStatus, filtroData]);
+
+    if (isLoading) {
+        return <Loading />;
+    }
 
     return (
         <div className="max-w-6xl mx-auto">

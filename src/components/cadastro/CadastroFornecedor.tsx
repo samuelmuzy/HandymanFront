@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Loading } from '../Loading';
 import { Input } from '../Inputs/Input';
 import { URLAPI } from '../../constants/ApiUrl';
+import { toast } from 'react-toastify';
 
 interface Fornecedor {
     nome: string;
@@ -29,6 +30,7 @@ interface enderecoFornecedor {
 
 export const CadastroFornecedor = () => {
     const [valorFormatado, setValorFormatado] = useState("");
+    const [senhaCorreta,setSenhaCorreta] = useState('');
 
     const formatarValor = (valor: string) => {
         // Remove tudo que não é número
@@ -102,7 +104,7 @@ export const CadastroFornecedor = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log(valorFormatado)
+        
 
         if (step === 3) {
             setIsLoading(true);
@@ -113,11 +115,15 @@ export const CadastroFornecedor = () => {
                 })
                 .catch((err) => {
                     setError(err.response?.data?.error || "Erro ao cadastrar");
-                    console.error(err);
+                    toast.error(err.response?.data?.error || "Erro ao cadastrar")
                 })
                 .finally(() => setIsLoading(false));
         } else if (step === 1) {
             setIsLoading(true);
+            if(form.senha !== senhaCorreta){
+                setIsLoading(false)
+                return toast.error("Senhas não estão iguais")
+            }
             axios.get(`${URLAPI}/fornecedor/verificar-email/fornecedor?query=${form.email}`)
                 .then(() => {
                     setError("");
@@ -125,6 +131,7 @@ export const CadastroFornecedor = () => {
                 })
                 .catch((err) => {
                     setError(err.response?.data?.error || "Erro ao verificar email");
+                    toast.error(err.response?.data?.error || "Erro ao cadastrar")
                 })
                 .finally(() => setIsLoading(false));
         } else {
@@ -184,9 +191,9 @@ export const CadastroFornecedor = () => {
                                     <input
                                         id="confirmarSenha"
                                         type={showPassword ? "text" : "password"}
-                                        name="senha"
-                                        value={form.senha}
-                                        onChange={onChange}
+                                        name="confirmar"
+                                        value={senhaCorreta}
+                                        onChange={(e) => setSenhaCorreta(e.target.value)}
                                         className="w-full p-2 rounded-lg bg-[#AD5700]/50 text-sm text-white"
                                         required
                                     />

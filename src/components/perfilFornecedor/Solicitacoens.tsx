@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { Solicitacao } from "../../types/agendamento";
 import { Modal } from "../Modal";
 import Chat from "../Chat";
+import { Loading } from "../Loading";
 
 
 interface PerfilProps {
@@ -64,20 +65,23 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
     const [filtroData, setFiltroData] = useState('todos');
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [id_servico, setIdServico] = useState("");
+    const [isLoading,setIsLoading] = useState(false);
 
     const socketRef = useRef<Socket | null>(null);
 
     const navigate = useNavigate();
 
     const buscarSolicitacoes = async () => {
+        setIsLoading(true)
         try {
-            console.log('Buscando solicitações para o fornecedor:', idFornecedor);
-            const response = await axios.get(`${URLAPI}/fornecedor/${idFornecedor}/solicitacoes`);
-            console.log('Solicitações recebidas:', response.data);
+          
+            const response = await axios.get(`${URLAPI}/fornecedor/${idFornecedor}/solicitacoes`);    
             setSolicitacoes(response.data);
         } catch (error: unknown) {
             console.error('Erro ao buscar solicitações:', error);
 
+        }finally{
+            setIsLoading(false);
         }
     };
 
@@ -249,6 +253,10 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
 
         return servicosFiltrados;
     }, [solicitacoes, filtroStatus, filtroData]);
+
+    if (isLoading) {
+        return <Loading />;
+    }
 
     return (
         <div className="max-w-6xl mx-auto">
