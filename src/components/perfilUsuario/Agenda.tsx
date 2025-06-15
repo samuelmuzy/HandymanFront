@@ -35,6 +35,8 @@ const getStatusConfig = (status: string) => {
             return { color: '#FFC107', bgColor: '#FFF8E1', text: 'Aguardando Pagamento' };
         case 'confirmar valor':
             return { color: '#2196F3', bgColor: '#E3F2FD', text: 'Confirmação de valor' }
+        case 'negociar valor':
+            return { color: '#2196F3', bgColor: '#E3F2FD', text: 'Negociar Valor' }
         default:
             return { color: '#757575', bgColor: '#F5F5F5', text: status };
     }
@@ -153,14 +155,7 @@ export const Agenda = ({ historicoServico, setHistorico,isLoading }: AgendaProps
                 });
             });
 
-            toast.info(`Status do serviço atualizado para: ${update.novo_status}`, {
-                position: "top-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-            });
+          
         });
 
         return () => {
@@ -176,6 +171,15 @@ export const Agenda = ({ historicoServico, setHistorico,isLoading }: AgendaProps
         }
 
         await axios.put(`${URLAPI}/servicos`, data);
+        
+        toast.info(`Status do serviço atualizado para: ${update.novo_status}`, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+        });
     };
 
     const { emitirMudancaStatus } = useStatusNotifications(handleStatusUpdate, token?.id);
@@ -204,6 +208,9 @@ export const Agenda = ({ historicoServico, setHistorico,isLoading }: AgendaProps
             };
 
             await axios.post(`${URLAPI}/avaliacao/`, dataAvaliacao);
+
+            servicoSelecionado.avaliado = true;
+            toast.success("Serviço avaliado com sucesso")
             setIsAvaliacaoOpen(false);
             setAvaliacao({ nota: 5, comentario: "", data: "", id_fornecedor: "", id_servico: "", id_usuario: "" });
         } catch (error) {
@@ -406,7 +413,7 @@ export const Agenda = ({ historicoServico, setHistorico,isLoading }: AgendaProps
 
                                     {/* Ações do Card */}
                                     <div className="mt-6 space-y-3">
-                                        {servico.status === 'concluido' && (
+                                        {servico.status === 'concluido' && !servico.avaliado && (
                                             <button
                                                 onClick={() => handleAvaliarServico(servico)}
                                                 className="w-full bg-[#AC5906] text-white py-2.5 rounded-lg font-medium hover:bg-[#8B4705] transition-colors flex items-center justify-center"
@@ -416,6 +423,7 @@ export const Agenda = ({ historicoServico, setHistorico,isLoading }: AgendaProps
                                                 </svg>
                                                 Avaliar Serviço
                                             </button>
+                                            
                                         )}
 
                                         {servico.status === 'Aguardando pagamento' && (
@@ -449,6 +457,17 @@ export const Agenda = ({ historicoServico, setHistorico,isLoading }: AgendaProps
                                                 Entrar em contato
                                             </button>
                                         )}
+                                        {servico.status === 'confirmado' && (
+                                            <button
+                                                onClick={() => handleOpenChat(servico.id_fornecedor)}
+                                                className="w-full bg-[#AC5906] text-white py-2.5 rounded-lg font-medium hover:bg-[#8B4705] transition-colors flex items-center justify-center"
+                                            >
+                                                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                                </svg>
+                                                Entrar em contato
+                                            </button>
+                                        )}
 
                                         {servico.status.toLowerCase() === 'pendente' && (
                                             <div className="text-center">
@@ -469,6 +488,8 @@ export const Agenda = ({ historicoServico, setHistorico,isLoading }: AgendaProps
                                                 Cancelar Serviço
                                             </button>
                                         )}
+
+                                        
                                     </div>
                                 </div>
                             </div>

@@ -21,41 +21,65 @@ export const PaginaPrincipal = () => {
         valor: string;
         imagemPerfil: string;
         imagemIlustrativa: string;
+        categoria: string;
     }
 
-    const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [termoPesquisa, setTermoPesquisa] = useState("");
+    const [fornecedoresFiltrados, setFornecedoresFiltrados] = useState<Fornecedor[]>([]);
 
     const [categoriaSelecionada, setCategoriaSelecionada] = useState<string | null>("Controle");
 
     const mudarCategorias = (categoria: string) => {
         setCategoriaSelecionada(categoria);
     };
+
     const buscarFornecedores = async () => {
         setLoading(true);
-        axios.get(`${URLAPI}/fornecedor/categorias/${categoriaSelecionada}`)
-            .then((response) => {
-                setFornecedores(response.data);
-                setError(null); // Limpa o erro se a requisição for bem-sucedida
-            })
-            .catch((error) => {
-                console.error('Erro ao buscar fornecedores:', error)
-                setError('Erro ao buscar fornecedores')
-                setFornecedores([])
-            })
-            .finally(() => {
-                setLoading(false);
+        try {
+            const response = await axios.get(`${URLAPI}/fornecedor/categorias/${categoriaSelecionada}`);
+
+            setFornecedoresFiltrados(response.data);
+            setError(null);
+        } catch (error) {
+            console.error('Erro ao buscar fornecedores:', error);
+            setError('Erro ao buscar fornecedores');
+
+            setFornecedoresFiltrados([]);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handlePesquisa = async () => {
+        if (!termoPesquisa.trim()) {
+            await buscarFornecedores();
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const response = await axios.get(`${URLAPI}/fornecedor/categorias/${categoriaSelecionada}/busca`, {
+                params: { termo: termoPesquisa }
             });
-    }
-
-
+            setFornecedoresFiltrados(response.data);
+            setError('');
+        } catch (error) {
+            console.error('Erro ao buscar fornecedores:', error);
+            setError('Erro ao buscar fornecedores');
+            setFornecedoresFiltrados([]);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
         buscarFornecedores();
     }, [categoriaSelecionada]);
 
-    const listarFornecedores = fornecedores.map((fornecedor) => (
+    const listarFornecedores = fornecedoresFiltrados.map((fornecedor) => (
         <CardFornecedor
             id={fornecedor.id_fornecedor}
             key={fornecedor.id_fornecedor} // ideal incluir uma key
@@ -83,8 +107,18 @@ export const PaginaPrincipal = () => {
                             type="text"
                             placeholder="O que procura?"
                             className="px-4 py-3 w-full focus:outline-none"
+                            value={termoPesquisa}
+                            onChange={(e) => setTermoPesquisa(e.target.value)}
+                            onKeyPress={(e) => {
+                                if (e.key === 'Enter') {
+                                    handlePesquisa();
+                                }
+                            }}
                         />
-                        <button className="bg-[#AD5700] p-3 rounded-full hover:bg-orange-800 transition">
+                        <button
+                            className="bg-[#AD5700] p-3 rounded-full hover:bg-orange-800 transition"
+                            onClick={handlePesquisa}
+                        >
                             <svg
                                 className="w-5 h-5 text-white"
                                 fill="none"

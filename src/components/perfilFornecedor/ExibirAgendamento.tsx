@@ -10,6 +10,8 @@ import { ServicoComUsuario } from "../../types/servicoType";
 import MapaBusca from "./MapaBusca";
 import io from 'socket.io-client';
 import { Socket } from 'socket.io-client';
+import { Modal } from "../Modal";
+import Chat from "../Chat";
 
 interface ExibirAgendamentoFornecedorProps {
     idServico: string;
@@ -32,7 +34,7 @@ const getStatusConfig = (status: string) => {
         case 'recusado':
             return { color: '#F44336', bgColor: '#FFEBEE', text: 'Recusado' };
         case 'confirmar valor':
-            return {color: '#2196F3' , bgColor:'#E3F2FD' , text: 'Confirmação de valor'}
+            return { color: '#2196F3', bgColor: '#E3F2FD', text: 'Confirmação de valor' }
         default:
             return { color: '#757575', bgColor: '#F5F5F5', text: status };
     }
@@ -44,8 +46,15 @@ export const ExibirAgendamentoFornecedor = ({ idServico }: ExibirAgendamentoForn
     const [imagemExpandida, setImagemExpandida] = useState<string | null>(null);
     const [showNegociacaoModal, setShowNegociacaoModal] = useState(false);
     const [novoValor, setNovoValor] = useState<string>('');
+    const [isChatOpen, setIsChatOpen] = useState(false);
+    const [id_servico, setIdServico] = useState("");
     const navigate = useNavigate();
     const socketRef = useRef<Socket | null>(null);
+
+    const handleOpenChat = (idServico: string) => {
+        setIdServico(idServico);
+        setIsChatOpen(true);
+    }
 
     const fetchAgendamento = async () => {
         setLoading(true);
@@ -343,24 +352,6 @@ export const ExibirAgendamentoFornecedor = ({ idServico }: ExibirAgendamentoForn
                                 </>
                             )}
 
-
-
-                            {/* Informações de Contato */}
-                            {agendamento.usuario && (
-                                <div className="bg-gray-50 p-4 rounded-lg">
-                                    <h4 className="text-lg font-medium text-gray-700 mb-2">Contato do Cliente</h4>
-                                    <div className="space-y-2">
-                                        <p className="text-gray-600">
-                                            <span className="font-medium">Email:</span> {agendamento.usuario.email}
-                                        </p>
-                                        <p className="text-gray-600">
-                                            <span className="font-medium">Telefone:</span> {agendamento.usuario.telefone}
-                                        </p>
-                                    </div>
-                                </div>
-                            )}
-
-
                             {/* Ações */}
                             <div className="mt-6 space-y-3">
                                 {agendamento.status === 'pendente' && (
@@ -408,6 +399,52 @@ export const ExibirAgendamentoFornecedor = ({ idServico }: ExibirAgendamentoForn
                                         </button>
                                     </div>
                                 )}
+                                {agendamento.status === 'confirmado' && (
+                                    <button
+                                        onClick={() => handleOpenChat(agendamento.id_usuario)}
+                                        className="w-full bg-[#AC5906] text-white py-2.5 rounded-lg font-medium hover:bg-[#8B4705] transition-colors flex items-center justify-center"
+                                    >
+                                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                        </svg>
+                                        Entrar em contato
+                                    </button>
+                                )}
+                                {agendamento.status === 'Em Andamento' && (
+                                    <button
+                                        onClick={() => handleOpenChat(agendamento.id_usuario)}
+                                        className="w-full bg-[#AC5906] text-white py-2.5 rounded-lg font-medium hover:bg-[#8B4705] transition-colors flex items-center justify-center"
+                                    >
+                                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                        </svg>
+                                        Entrar em contato
+                                    </button>
+                                )}
+                                {agendamento.status === 'confirmado' && (
+
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <button
+                                            onClick={() => atualizarStatus('Em Andamento')}
+                                            className="bg-[#4CAF50] text-white py-2.5 rounded-lg font-medium hover:bg-[#3d8b40] transition-colors flex items-center justify-center"
+                                        >
+                                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                            Iniciar serviço
+                                        </button>
+                                        <button
+                                            onClick={() => atualizarStatus('cancelado')}
+                                            className="bg-red-500 text-white py-2.5 rounded-lg font-medium hover:bg-red-600 transition-colors flex items-center justify-center"
+                                        >
+                                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
+                                            Cancelar
+                                        </button>
+                                    </div>
+
+                                )}
                             </div>
                         </div>
                     </div>
@@ -417,7 +454,7 @@ export const ExibirAgendamentoFornecedor = ({ idServico }: ExibirAgendamentoForn
             {/* Modal de Imagem Expandida */}
             {imagemExpandida && (
                 <div
-                    className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4"
+                    className="fixed inset-0 bg-black bg-opacity-90 z-[1000] flex items-center justify-center p-4"
                     onClick={() => setImagemExpandida(null)}
                 >
                     <button
@@ -438,7 +475,7 @@ export const ExibirAgendamentoFornecedor = ({ idServico }: ExibirAgendamentoForn
 
             {/* Modal de Negociação */}
             {showNegociacaoModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-[1000] flex items-center justify-center p-4">
                     <div className="bg-white rounded-lg p-6 w-full max-w-md">
                         <h3 className="text-xl font-semibold mb-4">Negociar Preço</h3>
                         <div className="mb-4">
@@ -470,6 +507,15 @@ export const ExibirAgendamentoFornecedor = ({ idServico }: ExibirAgendamentoForn
                     </div>
                 </div>
             )}
+            <Modal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)}>
+                <div className="fixed inset-0 flex items-center justify-center z-[1000]">
+                    <div onClick={() => setIsChatOpen(false)} className="fixed inset-0 bg-black opacity-40"></div>
+                    <div className="relative bg-white rounded-lg shadow-lg p-4 max-w-[1000px] w-[90vw] h-[80vh] max-h-[600px] flex flex-col">
+                        <Chat idFornecedor={id_servico} />
+                    </div>
+                </div>
+            </Modal>
         </div>
+        
     );
 };

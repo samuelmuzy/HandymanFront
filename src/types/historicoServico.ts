@@ -11,6 +11,7 @@ export type HistoricoServico  = {
     id_avaliacao?: string;
     descricao: string;
     valor:number;
+    avaliado:boolean;
     fornecedor: {
         nome: string;
         email: string;
