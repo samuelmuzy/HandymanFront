@@ -16,6 +16,7 @@ import { Loading } from "../Loading";
 interface AgendaProps {
     historicoServico: HistoricoServico[] | null
     setHistorico: React.Dispatch<React.SetStateAction<HistoricoServico[] | null>>
+    isLoading:boolean
 }
 
 const getStatusConfig = (status: string) => {
@@ -57,13 +58,13 @@ const dataOptions = [
     { value: 'ano', label: 'Último Ano' }
 ];
 
-export const Agenda = ({ historicoServico, setHistorico }: AgendaProps) => {
+export const Agenda = ({ historicoServico, setHistorico,isLoading }: AgendaProps) => {
     const [filtroStatus, setFiltroStatus] = useState('todos');
     const [filtroData, setFiltroData] = useState('todos');
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [isAvaliacaoOpen, setIsAvaliacaoOpen] = useState(false);
     const [id_servico, setIdServico] = useState("");
-    const [isLoading,setIsLoading] = useState(false);
+
     const [servicoSelecionado, setServicoSelecionado] = useState<HistoricoServico | null>(null);
     const [avaliacao, setAvaliacao] = useState({
         nota: 5,

@@ -27,26 +27,33 @@ export const PerfilUsuario = ({ id }: PerfilProps) => {
     const [mudarPagina, setMudarPagina] = useState(1);
     const [itemSelecionado, setItemSelecionado] = useState(1);
 
-    const [usuario, setUsuario] = useState<typeUsuario | null>(null)
+    const [usuario, setUsuario] = useState<typeUsuario | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const [historicoServico,sethistoricoServico] = useState<HistoricoServico[] | null>(null)
+    const [historicoServico, sethistoricoServico] = useState<HistoricoServico[] | null>(null);
 
     const procurarUsuario = async () => {
+        setIsLoading(true);
         try {
             const response = await axios.get(`${URLAPI}/usuarios/buscar-id/${id}`)
 
             setUsuario(response.data);
         } catch (error: unknown) {
             console.log(error)
+        } finally{
+            setIsLoading(false);
         }
     }
 
-    const procurarHistoricoServico = async () =>{
-        try{
+    const procurarHistoricoServico = async () => {
+        setIsLoading(true)
+        try {
             const response = await axios.get(`${URLAPI}/usuarios/historico/${id}`)
             sethistoricoServico(response.data);
-        }catch (error :unknown){
+        } catch (error: unknown) {
             console.log(error)
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -66,43 +73,39 @@ export const PerfilUsuario = ({ id }: PerfilProps) => {
             <div className="w-64 bg-gray-100 border-r px-6 py-8">
                 <h2 className="text-lg font-semibold mb-6">Conta</h2>
                 <ul className="space-y-4 text-gray-800">
-                    <li 
-                        onClick={() => handleItemClick(1)} 
-                        className={`cursor-pointer transition-colors  ${
-                            itemSelecionado === 1 
-                            ? 'text-black font-medium' 
-                            : 'text-gray-600 hover:text-orange-500'
-                        }`}
+                    <li
+                        onClick={() => handleItemClick(1)}
+                        className={`cursor-pointer transition-colors  ${itemSelecionado === 1
+                                ? 'text-black font-medium'
+                                : 'text-gray-600 hover:text-orange-500'
+                            }`}
                     >
                         Página inicial
                     </li>
-                    <li 
-                        onClick={() => handleItemClick(3)} 
-                        className={`cursor-pointer transition-colors  ${
-                            itemSelecionado === 3 
-                            ? 'text-black font-medium' 
-                            : 'text-gray-600 hover:text-orange-500'
-                        }`}
+                    <li
+                        onClick={() => handleItemClick(3)}
+                        className={`cursor-pointer transition-colors  ${itemSelecionado === 3
+                                ? 'text-black font-medium'
+                                : 'text-gray-600 hover:text-orange-500'
+                            }`}
                     >
                         Serviços Agendados
                     </li>
-                    <li 
-                        onClick={() => handleItemClick(2)} 
-                        className={`cursor-pointer transition-colors  ${
-                            itemSelecionado === 2 
-                            ? 'text-black font-medium' 
-                            : 'text-gray-600 hover:text-orange-500'
-                        }`}
+                    <li
+                        onClick={() => handleItemClick(2)}
+                        className={`cursor-pointer transition-colors  ${itemSelecionado === 2
+                                ? 'text-black font-medium'
+                                : 'text-gray-600 hover:text-orange-500'
+                            }`}
                     >
                         Dados pessoais
                     </li>
-                    <li 
-                        onClick={() => handleItemClick(4)} 
-                        className={`cursor-pointer transition-colors  ${
-                            itemSelecionado === 4 
-                            ? 'text-black font-medium' 
-                            : 'text-gray-600 hover:text-orange-500'
-                        }`}
+                    <li
+                        onClick={() => handleItemClick(4)}
+                        className={`cursor-pointer transition-colors  ${itemSelecionado === 4
+                                ? 'text-black font-medium'
+                                : 'text-gray-600 hover:text-orange-500'
+                            }`}
                     >
                         Privacidade e dados
                     </li>
@@ -120,11 +123,12 @@ export const PerfilUsuario = ({ id }: PerfilProps) => {
                     picture={usuario?.picture}
                 />
             )}
-            
+
             {mudarPagina === 3 && (
-                <Agenda 
-                    historicoServico={historicoServico} 
-                    setHistorico={sethistoricoServico} 
+                <Agenda
+                    isLoading={isLoading}
+                    historicoServico={historicoServico}
+                    setHistorico={sethistoricoServico}
                 />
             )}
         </div>
