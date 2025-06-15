@@ -84,7 +84,7 @@ export const PaginaPrincipal = () => {
                             placeholder="O que procura?"
                             className="px-4 py-3 w-full focus:outline-none"
                         />
-                        <button className="bg-orange-700 p-3 rounded-full hover:bg-orange-800 transition">
+                        <button className="bg-[#AD5700] p-3 rounded-full hover:bg-orange-800 transition">
                             <svg
                                 className="w-5 h-5 text-white"
                                 fill="none"
@@ -200,16 +200,16 @@ export const PaginaPrincipal = () => {
 
 
                     <div className="flex flex-col items-center gap-3 ml-10 mb-5">
-                        <button className="bg-white text-orange-400 border-[#A75C00] px-4 py-2 rounded hover:bg-orange-600 hover:text-white transition duration-300 w-56 " >
+                        <button className="bg-white text-[#AD5700] border-[#A75C00] px-4 py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 w-56 " >
                             Serviços de Montagem
                         </button>
-                        <button className="bg-white text-orange-400 border-[#A75C00] px-4 py-2 rounded hover:bg-orange-600 hover:text-white transition duration-300 w-56" >
+                        <button className="bg-white text-[#AD5700] border-[#A75C00] px-4 py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 w-56" >
                             Pintura Residencial
                         </button>
-                        <button className="bg-white text-orange-400 border-[#A75C00] px-4 py-2 rounded hover:bg-orange-600 hover:text-white transition duration-300 w-56" >
+                        <button className="bg-white text-[#AD5700] border-[#A75C00] px-4 py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 w-56" >
                             Manutenção Geral
                         </button>
-                        <button className="bg-white text-orange-400 border-[#A75C00] px-4 py-2 rounded hover:bg-orange-600 hover:text-white transition duration-300 w-56" >
+                        <button className="bg-white text-[#AD5700] border-[#A75C00] px-4 py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 w-56" >
                             Reformas e Reparos
                         </button>
                     </div>

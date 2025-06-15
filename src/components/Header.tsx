@@ -4,7 +4,6 @@ import { isUserLoggedIn } from '../services/isUserLoggedIn';
 import { useGetToken } from '../hooks/useGetToken';
 import { Modal } from './Modal';
 import imagemPerfilProvisoria from '../assets/perfil.png';
-import Chat from './Chat';
 import axios from 'axios';
 import { URLAPI } from '../constants/ApiUrl';
 
@@ -17,9 +16,9 @@ const Header = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
 
-  const [imagemPerfil,setImagemPerfil] = useState<typeUsuario | null>(null);
+
+  const [imagemPerfil, setImagemPerfil] = useState<typeUsuario | null>(null);
 
   console.log(imagemPerfil);
 
@@ -38,7 +37,7 @@ const Header = () => {
     try {
       const response = await axios.get(`${URLAPI}/usuarios/buscar-id/${token?.id}`);
       const imagem = response.data.picture;
-  
+
       setImagemPerfil({ picture: imagem });
       localStorage.setItem("imagemPerfil", imagem);
     } catch (error) {
@@ -46,12 +45,12 @@ const Header = () => {
       setImagemPerfil({ picture: imagemPerfilProvisoria });
     }
   };
-  
+
   const procurarImagemPerfilFornecedor = async () => {
     try {
       const response = await axios.get(`${URLAPI}/fornecedor/${token?.id}`);
       const imagem = response.data.imagemPerfil;
-  
+
       setImagemPerfil({ picture: imagem });
       localStorage.setItem("imagemPerfil", imagem);
     } catch (error) {
@@ -59,15 +58,15 @@ const Header = () => {
       setImagemPerfil({ picture: imagemPerfilProvisoria });
     }
   };
-  
+
 
   useEffect(() => {
     setIsLoggedIn(isUserLoggedIn());
-  
+
     if (token?.id && !imagem) {
-      if(token.role === 'Fornecedor'){
+      if (token.role === 'Fornecedor') {
         procurarImagemPerfilFornecedor()
-      }else{
+      } else {
         procurarImagemPerfil();
       }
     }
@@ -81,6 +80,10 @@ const Header = () => {
   const navegarCadastro = () => {
     navigate('/cadastro');
   }
+  const navegarCadastroFornecedor = () => {
+    navigate('/cadastro-fornecedor');
+  }
+  
 
   const navegarServicos = () => {
     navigate('/servicos');
@@ -121,7 +124,18 @@ const Header = () => {
 
           {isLoggedIn ? (
             <div className='flex items-center gap-4'>
+              {token?.role !== 'Fornecedor' && (
+                <div
+                  onClick={navegarCadastroFornecedor}
+                  className='mr-4 border-[#AC5906] text-[#AC5906] border-2 p-2 rounded-md cursor-pointer transition-colors duration-200
+                             hover:bg-[#AC5906] hover:text-white'
+                 
+                >
+                  <p className='text-sm font-medium'>Seja um Profissional</p>
+                </div>
+              )}
               <div className="relative inline-block">
+
                 <div>
                   <img
                     onClick={toggleModal}
@@ -133,35 +147,32 @@ const Header = () => {
 
                 <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
                   <div className="flex flex-col gap-2 p-4 text-sm">
-                    <p className="cursor-pointer hover:text-orange-500">Conta</p>
+
                     <p onClick={navegarPerfilUsuario} className="cursor-pointer hover:text-orange-500">Perfil</p>
-                    <p className="cursor-pointer hover:text-orange-500">Suporte</p>
+
                     <p onClick={deslogar} className="cursor-pointer hover:text-orange-500">Sair</p>
                   </div>
                 </Modal>
               </div>
             </div>
           ) : (
-            <div className="flex items-center space-x-4">
-              <button onClick={navegarLogin} className="px-4 py-2 border border-[#A75C00] text-[#A75C00] rounded-md hover:bg-[#A75C00] hover:text-white">
-                Entrar
-              </button>
-              <button onClick={navegarCadastro} className="px-4 py-2 bg-[#A75C00] text-white rounded-md hover:bg-[#8B4D00]">
-                Cadastrar-se
-              </button>
+            <div className="flex items-center">
+              <div className="flex items-center space-x-4">
+                <button onClick={navegarLogin} className="px-4 py-2 border border-[#A75C00] text-[#A75C00] rounded-md hover:bg-[#A75C00] hover:text-white">
+                  Entrar
+                </button>
+                <button onClick={navegarCadastro} className="px-4 py-2 bg-[#A75C00] text-white rounded-md hover:bg-[#8B4D00]">
+                  Cadastrar-se
+                </button>
+              </div>
+
             </div>
+
           )}
         </div>
       </div>
 
-      <Modal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)}>
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div onClick={() => setIsChatOpen(false)} className="fixed inset-0 bg-black opacity-40"></div>
-          <div className="relative bg-white rounded-lg shadow-lg p-4 max-w-[1000px] w-[90vw] h-[80vh] max-h-[600px] flex flex-col">
-            <Chat idFornecedor="" />
-          </div>
-        </div>
-      </Modal>
+
     </header>
   );
 };

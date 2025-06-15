@@ -76,7 +76,7 @@ export const CadastroFornecedor = () => {
     
 
     const onNavigateCadastroUsuario = () =>{navigate('/cadastro')};
-    const onNavigateloginUsuario = () => {navigate('/login')};
+    const onNavigateloginUsuario = () => {navigate('/login-fornecedor')};
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;

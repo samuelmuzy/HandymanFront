@@ -36,7 +36,7 @@ export const DetalhesServicoConfirmadoScreen = () => {
                     title: 'Agendamento de Serviço',
                     servicoId: id,
                     quantity: 1,
-                    unit_price: /*service?.valor*/  1,
+                    unit_price: /*service?.valor*/  service?.valor || 1,
                     payer: {
                         name: service?.fornecedor?.nome || '',
                         email: service?.fornecedor?.email || '',
@@ -117,6 +117,9 @@ export const DetalhesServicoConfirmadoScreen = () => {
                                 </p>
                                 <p className="text-gray-700">
                                     <span className="font-semibold">Telefone:</span> {service.fornecedor?.telefone}
+                                </p>
+                                <p className="text-gray-700">
+                                    <span className="font-semibold">valor</span> {service.valor}
                                 </p>
                                 <p className="text-gray-700">
                                     <span className="font-semibold">Categorias:</span>
