@@ -1,7 +1,7 @@
 import { CardFornecedor } from "./CardFornecedor";
 import imagem from '../../assets/trabalhador.png'
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Loading } from "../Loading";
 import imagemCategoriaMudanca from '../../assets/moving-truck_6832074 1 (1).png';
 import imagemCategoriaCarpintaria from '../../assets/carpentry_939584 1.png';
@@ -24,16 +24,18 @@ export const PaginaPrincipal = () => {
         categoria: string;
     }
 
-
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [termoPesquisa, setTermoPesquisa] = useState("");
     const [fornecedoresFiltrados, setFornecedoresFiltrados] = useState<Fornecedor[]>([]);
+    const [paginaAtual, setPaginaAtual] = useState(1);
+    const itensPorPagina = 8;
 
     const [categoriaSelecionada, setCategoriaSelecionada] = useState<string | null>("Controle");
 
     const mudarCategorias = (categoria: string) => {
         setCategoriaSelecionada(categoria);
+        setPaginaAtual(1); // Resetar página ao mudar categoria
     };
 
     const buscarFornecedores = async () => {
@@ -66,6 +68,7 @@ export const PaginaPrincipal = () => {
             });
             setFornecedoresFiltrados(response.data);
             setError('');
+            setPaginaAtual(1); // Resetar página ao fazer nova pesquisa
         } catch (error) {
             console.error('Erro ao buscar fornecedores:', error);
             setError('Erro ao buscar fornecedores');
@@ -79,10 +82,19 @@ export const PaginaPrincipal = () => {
         buscarFornecedores();
     }, [categoriaSelecionada]);
 
-    const listarFornecedores = fornecedoresFiltrados.map((fornecedor) => (
+    // Lógica de paginação
+    const totalPaginas = Math.ceil(fornecedoresFiltrados.length / itensPorPagina);
+    const fornecedoresPaginados = useMemo(() => {
+        return fornecedoresFiltrados.slice(
+            (paginaAtual - 1) * itensPorPagina,
+            paginaAtual * itensPorPagina
+        );
+    }, [fornecedoresFiltrados, paginaAtual]);
+
+    const listarFornecedores = fornecedoresPaginados.map((fornecedor) => (
         <CardFornecedor
             id={fornecedor.id_fornecedor}
-            key={fornecedor.id_fornecedor} // ideal incluir uma key
+            key={fornecedor.id_fornecedor}
             imagemFornecedor={fornecedor.imagemIlustrativa || imagem}
             nome={fornecedor.nome}
             avaliacao={fornecedor.media_avaliacoes}
@@ -95,9 +107,7 @@ export const PaginaPrincipal = () => {
 
     return (
         <>
-
             <div className="flex flex-col items-center justify-center min-h-screen bg-white p-4">
-
                 {loading && <Loading />}
 
                 <div className="flex flex-col items-center justify-center mt-6 mb-6 gap-9">
@@ -231,8 +241,6 @@ export const PaginaPrincipal = () => {
                         </div>
                     </div>
 
-
-
                     <div className="flex flex-col items-center gap-3 ml-10 mb-5">
                         <button className="bg-white text-[#AD5700] border-[#A75C00] px-4 py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 w-56 " >
                             Serviços de Montagem
@@ -247,18 +255,55 @@ export const PaginaPrincipal = () => {
                             Reformas e Reparos
                         </button>
                     </div>
-
                 </div>
 
                 <div className="flex flex-wrap justify-start max-w-8xl mx-auto gap-4">
-
                     {error && <div className="text-red-500 text-center">{error}</div>}
-
                     {listarFornecedores}
-
                 </div>
-            </div >
 
+                {/* Controles de Paginação */}
+                {totalPaginas > 1 && (
+                    <div className="mt-8 flex justify-center items-center space-x-2">
+                        <button
+                            onClick={() => setPaginaAtual(prev => Math.max(prev - 1, 1))}
+                            disabled={paginaAtual === 1}
+                            className={`px-4 py-2 rounded-md ${paginaAtual === 1
+                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                : 'bg-[#AC5906] text-white hover:bg-[#8B4705]'
+                                }`}
+                        >
+                            Anterior
+                        </button>
+
+                        <div className="flex items-center justify-center text-center space-x-2">
+                            {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((pagina) => (
+                                <button
+                                    key={pagina}
+                                    onClick={() => setPaginaAtual(pagina)}
+                                    className={`w-8 h-8 flex items-center justify-center rounded-md ${paginaAtual === pagina
+                                        ? 'bg-[#AC5906] text-white'
+                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                        }`}
+                                >
+                                    {pagina}
+                                </button>
+                            ))}
+                        </div>
+
+                        <button
+                            onClick={() => setPaginaAtual(prev => Math.min(prev + 1, totalPaginas))}
+                            disabled={paginaAtual === totalPaginas}
+                            className={`px-4 py-2 rounded-md ${paginaAtual === totalPaginas
+                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                : 'bg-[#AC5906] text-white hover:bg-[#8B4705]'
+                                }`}
+                        >
+                            Próxima
+                        </button>
+                    </div>
+                )}
+            </div>
         </>
     );
 }
