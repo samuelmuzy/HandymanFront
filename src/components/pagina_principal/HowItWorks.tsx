@@ -9,19 +9,19 @@ export const HowItWorks = () => {
         {/* Lista */}
         <ul className="space-y-4 text-gray-700 text-lg md:text-xl w-full md:w-1/2">
           <li className="flex items-start gap-2">
-            ✅ <span>Trabalho de qualidade - eficiente e confiável</span>
+            <span>Trabalho de qualidade - eficiente e confiável</span>
           </li>
           <li className="flex items-start gap-2">
-            ✅ <span>Receba orçamentos gratuitos e de alta qualidade</span>
+            <span>Receba orçamentos gratuitos e de alta qualidade</span>
           </li>
           <li className="flex items-start gap-2">
-            ✅ <span>Segurança em cada pedido</span>
+            <span>Segurança em cada pedido</span>
           </li>
           <li className="flex items-start gap-2">
-            ✅ <span>Trabalhe com especialistas que falam português</span>
+            <span>Trabalhe com especialistas que falam português</span>
           </li>
           <li className="flex items-start gap-2">
-            ✅ <span>24 horas por dia - suporte ininterrupto</span>
+            <span>24 horas por dia - suporte ininterrupto</span>
           </li>
         </ul>
 
