@@ -10,6 +10,7 @@ import { Solicitacao } from "../../types/agendamento";
 import { Modal } from "../Modal";
 import Chat from "../Chat";
 import { Loading } from "../Loading";
+import { useUser } from "../../contexts/UserContext";
 
 
 interface PerfilProps {
@@ -65,9 +66,11 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
     const [filtroData, setFiltroData] = useState('todos');
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [id_servico, setIdServico] = useState("");
-    const [isLoading,setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [paginaAtual, setPaginaAtual] = useState(1);
     const itensPorPagina = 6;
+
+    const { setStatus } = useUser();
 
     const socketRef = useRef<Socket | null>(null);
 
@@ -76,13 +79,13 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
     const buscarSolicitacoes = async () => {
         setIsLoading(true)
         try {
-          
-            const response = await axios.get(`${URLAPI}/fornecedor/${idFornecedor}/solicitacoes`);    
+
+            const response = await axios.get(`${URLAPI}/fornecedor/${idFornecedor}/solicitacoes`);
             setSolicitacoes(response.data);
         } catch (error: unknown) {
             console.error('Erro ao buscar solicitações:', error);
 
-        }finally{
+        } finally {
             setIsLoading(false);
         }
     };
@@ -135,15 +138,8 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
             // Busca as solicitações atualizadas
             buscarSolicitacoes();
 
-            // Mostra uma notificação toast
-            toast.info('Nova solicitação recebida!', {
-                position: "top-right",
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-            });
+            setStatus(novoAgendamento);
+         
         });
 
         return () => {
@@ -168,15 +164,7 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
             )
         );
 
-        // Mostra uma notificação toast
-        toast.info(`Status atualizado para: ${update.novo_status}`, {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-        });
+      
     };
 
     const { emitirMudancaStatus } = useStatusNotifications(handleStatusUpdate, idFornecedor);
@@ -448,7 +436,7 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
                                                 </button>
                                             )}
                                             {solicitacao.servico.status === 'confirmado' && (
-                                                
+
                                                 <div className="grid grid-cols-2 gap-3">
                                                     <button
                                                         onClick={() => atualizarStatus(solicitacao.servico.id_servico, 'Em Andamento')}
@@ -469,7 +457,7 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
                                                         Cancelar
                                                     </button>
                                                 </div>
-                                                
+
                                             )}
                                             {solicitacao.servico.status === 'Em Andamento' && (
                                                 <button
@@ -485,7 +473,7 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
 
 
                                             {solicitacao.servico.status === 'Em Andamento' && (
-                                                
+
                                                 <div className="grid grid-cols-2 gap-3">
                                                     <button
                                                         onClick={() => atualizarStatus(solicitacao.servico.id_servico, 'Aguardando pagamento')}
@@ -506,9 +494,9 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
                                                         Cancelar
                                                     </button>
                                                 </div>
-                                                
+
                                             )}
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -527,25 +515,23 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
                         <button
                             onClick={() => setPaginaAtual(prev => Math.max(prev - 1, 1))}
                             disabled={paginaAtual === 1}
-                            className={`px-4 py-2 rounded-md ${
-                                paginaAtual === 1
+                            className={`px-4 py-2 rounded-md ${paginaAtual === 1
                                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                                     : 'bg-[#AC5906] text-white hover:bg-[#8B4705]'
-                            }`}
+                                }`}
                         >
                             Anterior
                         </button>
-                        
+
                         <div className="flex items-center justify-center text-center space-x-2">
                             {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((pagina) => (
                                 <button
                                     key={pagina}
                                     onClick={() => setPaginaAtual(pagina)}
-                                    className={`w-8 h-8 flex items-center justify-center rounded-md ${
-                                        paginaAtual === pagina
+                                    className={`w-8 h-8 flex items-center justify-center rounded-md ${paginaAtual === pagina
                                             ? 'bg-[#AC5906] text-white'
                                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                    }`}
+                                        }`}
                                 >
                                     {pagina}
                                 </button>
@@ -555,11 +541,10 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
                         <button
                             onClick={() => setPaginaAtual(prev => Math.min(prev + 1, totalPaginas))}
                             disabled={paginaAtual === totalPaginas}
-                            className={`px-4 py-2 rounded-md ${
-                                paginaAtual === totalPaginas
+                            className={`px-4 py-2 rounded-md ${paginaAtual === totalPaginas
                                     ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                                     : 'bg-[#AC5906] text-white hover:bg-[#8B4705]'
-                            }`}
+                                }`}
                         >
                             Próxima
                         </button>
@@ -575,6 +560,6 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
                 </div>
             </Modal>
         </div>
-        
+
     );
 };

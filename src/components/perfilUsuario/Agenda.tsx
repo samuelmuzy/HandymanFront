@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { Socket } from 'socket.io-client';
 import io from 'socket.io-client';
 import { Loading } from "../Loading";
+import { useUser } from "../../contexts/UserContext";
 
 interface AgendaProps {
     historicoServico: HistoricoServico[] | null
@@ -68,6 +69,8 @@ export const Agenda = ({ historicoServico, setHistorico,isLoading }: AgendaProps
     const [id_servico, setIdServico] = useState("");
     const [paginaAtual, setPaginaAtual] = useState(1);
     const itensPorPagina = 6;
+
+    const {setStatus} = useUser();
 
     const [servicoSelecionado, setServicoSelecionado] = useState<HistoricoServico | null>(null);
     const [avaliacao, setAvaliacao] = useState({
@@ -143,6 +146,7 @@ export const Agenda = ({ historicoServico, setHistorico,isLoading }: AgendaProps
         // Escuta o evento de atualização de status
         socket.on('atualizacao_status', (update) => {
             console.log('Recebido evento atualizacao_status:', update);
+            setStatus(update)
             setHistorico(prevHistorico => {
                 if (!prevHistorico) return prevHistorico;
 
@@ -174,14 +178,6 @@ export const Agenda = ({ historicoServico, setHistorico,isLoading }: AgendaProps
 
         await axios.put(`${URLAPI}/servicos`, data);
         
-        toast.info(`Status do serviço atualizado para: ${update.novo_status}`, {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-        });
     };
 
     const { emitirMudancaStatus } = useStatusNotifications(handleStatusUpdate, token?.id);
