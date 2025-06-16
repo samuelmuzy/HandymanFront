@@ -192,22 +192,6 @@ export const Login = () => {
               />
             </GoogleOAuthProvider>
 
-
-            <button
-              type="button"
-              className="w-full p-1.5 bg-button-facebook text-white rounded-lg flex items-center justify-center space-x-2 hover:opacity-90 transition-opacity"
-            >
-              <FaFacebook className="text-sm" />
-              <span className="text-xs">Entrar com o Facebook</span>
-            </button>
-
-            <button
-              type="button"
-              className="w-full p-1.5 bg-button-apple text-white rounded-lg flex items-center justify-center space-x-2 hover:opacity-90 transition-opacity"
-            >
-              <FaApple className="text-sm" />
-              <span className="text-xs">Entrar com Apple</span>
-            </button>
           </div>
         </form>
       </div>

@@ -66,6 +66,8 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [id_servico, setIdServico] = useState("");
     const [isLoading,setIsLoading] = useState(false);
+    const [paginaAtual, setPaginaAtual] = useState(1);
+    const itensPorPagina = 6;
 
     const socketRef = useRef<Socket | null>(null);
 
@@ -242,17 +244,25 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
             }
         });
 
-        // Se não houver filtro de data ativo, ordena por data
-        if (filtroData === 'todos') {
-            return servicosFiltrados.sort((a, b) => {
-                const dataA = new Date(a.servico.data_submisao).getTime();
-                const dataB = new Date(b.servico.data_submisao).getTime();
-                return dataB - dataA; // Ordem decrescente (mais recente primeiro)
-            });
-        }
-
-        return servicosFiltrados;
+        // Ordena por data_submisao
+        return servicosFiltrados.sort((a, b) => {
+            const dataA = new Date(a.servico.data_submisao).getTime();
+            const dataB = new Date(b.servico.data_submisao).getTime();
+            return dataB - dataA; // Ordem decrescente (mais recente primeiro)
+        });
     }, [solicitacoes, filtroStatus, filtroData]);
+
+    // Lógica de paginação
+    const totalPaginas = Math.ceil(solicitacoesFiltradas.length / itensPorPagina);
+    const solicitacoesPaginadas = solicitacoesFiltradas.slice(
+        (paginaAtual - 1) * itensPorPagina,
+        paginaAtual * itensPorPagina
+    );
+
+    // Resetar página quando mudar os filtros
+    useEffect(() => {
+        setPaginaAtual(1);
+    }, [filtroStatus, filtroData]);
 
     if (isLoading) {
         return <Loading />;
@@ -310,9 +320,9 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
             <div className="mb-8">
                 <h2 className="text-2xl font-semibold text-[#A75C00] mb-4">Solicitações de Serviço:</h2>
 
-                {solicitacoesFiltradas.length > 0 ? (
+                {solicitacoesPaginadas.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {solicitacoesFiltradas.map((solicitacao, index) => {
+                        {solicitacoesPaginadas.map((solicitacao, index) => {
                             const statusConfig = getStatusConfig(solicitacao.servico.status);
 
                             return (
@@ -508,6 +518,51 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
                 ) : (
                     <div className="text-center py-12">
                         <p className="text-gray-500 text-lg">Nenhuma solicitação encontrada com os filtros selecionados.</p>
+                    </div>
+                )}
+
+                {/* Controles de Paginação */}
+                {totalPaginas > 1 && (
+                    <div className="mt-8 flex justify-center items-center space-x-2">
+                        <button
+                            onClick={() => setPaginaAtual(prev => Math.max(prev - 1, 1))}
+                            disabled={paginaAtual === 1}
+                            className={`px-4 py-2 rounded-md ${
+                                paginaAtual === 1
+                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                    : 'bg-[#AC5906] text-white hover:bg-[#8B4705]'
+                            }`}
+                        >
+                            Anterior
+                        </button>
+                        
+                        <div className="flex items-center justify-center text-center space-x-2">
+                            {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((pagina) => (
+                                <button
+                                    key={pagina}
+                                    onClick={() => setPaginaAtual(pagina)}
+                                    className={`w-8 h-8 flex items-center justify-center rounded-md ${
+                                        paginaAtual === pagina
+                                            ? 'bg-[#AC5906] text-white'
+                                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                    }`}
+                                >
+                                    {pagina}
+                                </button>
+                            ))}
+                        </div>
+
+                        <button
+                            onClick={() => setPaginaAtual(prev => Math.min(prev + 1, totalPaginas))}
+                            disabled={paginaAtual === totalPaginas}
+                            className={`px-4 py-2 rounded-md ${
+                                paginaAtual === totalPaginas
+                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                    : 'bg-[#AC5906] text-white hover:bg-[#8B4705]'
+                            }`}
+                        >
+                            Próxima
+                        </button>
                     </div>
                 )}
             </div>

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { typeUsuario } from "./PerfilUsuario"
 import imagemPerfilProvisoria from '../../assets/perfil.png';
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState, useMemo } from "react";
 import { HistoricoServico } from "../../types/historicoServico";
 import { Modal } from "../Modal";
 import Chat from "../Chat";
@@ -20,7 +20,8 @@ interface Pagina_inicialProps {
 
 export const Pagina_inicial = ({ usuario, setMudarPagina, historico, setHistorico }: Pagina_inicialProps) => {
     const navigate = useNavigate();
-    
+    const [mostrarTodos, setMostrarTodos] = useState(false);
+    const LIMITE_VISUALIZACAO = 5;
 
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [isAvaliacaoOpen, setIsAvaliacaoOpen] = useState(false);
@@ -130,6 +131,11 @@ export const Pagina_inicial = ({ usuario, setMudarPagina, historico, setHistoric
         }
     };
 
+    const servicosExibidos = useMemo(() => {
+        if (!historico) return [];
+        return mostrarTodos ? historico : historico.slice(0, LIMITE_VISUALIZACAO);
+    }, [historico, mostrarTodos]);
+
     return (
         <div>
             <div className="flex-1 px-10 py-8">
@@ -167,7 +173,9 @@ export const Pagina_inicial = ({ usuario, setMudarPagina, historico, setHistoric
                         <h3 className="text-lg font-semibold mb-4">Histórico de Serviços</h3>
                         {historico && historico.length > 0 ? (
                             <div className="space-y-4">
-                                {historico.map((servico, i) => (
+                                {servicosExibidos
+                                    .sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())
+                                    .map((servico, i) => (
                                     <div key={i} className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
                                         <div className="flex justify-between items-start mb-2">
                                             <div>
@@ -209,6 +217,17 @@ export const Pagina_inicial = ({ usuario, setMudarPagina, historico, setHistoric
                                     </div>
 
                                 ))}
+                                
+                                {historico.length > LIMITE_VISUALIZACAO && (
+                                    <div className="flex justify-center mt-4">
+                                        <button
+                                            onClick={() => setMostrarTodos(!mostrarTodos)}
+                                            className="px-4 py-2 bg-[#AC5906] text-white rounded-md hover:bg-[#8B4705] transition-colors"
+                                        >
+                                            {mostrarTodos ? 'Mostrar Menos' : 'Ver Mais Serviços'}
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         ) : (
                             <p className="text-gray-500 italic">Nenhum serviço encontrado no histórico.</p>

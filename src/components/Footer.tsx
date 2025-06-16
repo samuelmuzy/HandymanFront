@@ -4,7 +4,7 @@ import { SiAppstore, SiGoogleplay } from 'react-icons/si';// Garante que o CSS g
 
 const Footer = () => {
   return (
-    <footer className="bg-[#F9F6F2] mt-12">
+    <footer className="bg-[#F9F6F2] ">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
               <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                 <div className="flex items-center gap-2 mb-4 md:mb-0">

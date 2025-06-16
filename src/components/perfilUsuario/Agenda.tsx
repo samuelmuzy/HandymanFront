@@ -66,6 +66,8 @@ export const Agenda = ({ historicoServico, setHistorico,isLoading }: AgendaProps
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [isAvaliacaoOpen, setIsAvaliacaoOpen] = useState(false);
     const [id_servico, setIdServico] = useState("");
+    const [paginaAtual, setPaginaAtual] = useState(1);
+    const itensPorPagina = 6;
 
     const [servicoSelecionado, setServicoSelecionado] = useState<HistoricoServico | null>(null);
     const [avaliacao, setAvaliacao] = useState({
@@ -265,6 +267,18 @@ export const Agenda = ({ historicoServico, setHistorico,isLoading }: AgendaProps
         return servicosFiltrados;
     }, [historicoServico, filtroStatus, filtroData]);
 
+    // Lógica de paginação
+    const totalPaginas = Math.ceil(servicosFiltrados.length / itensPorPagina);
+    const servicosPaginados = servicosFiltrados.slice(
+        (paginaAtual - 1) * itensPorPagina,
+        paginaAtual * itensPorPagina
+    );
+
+    // Resetar página quando mudar os filtros
+    useEffect(() => {
+        setPaginaAtual(1);
+    }, [filtroStatus, filtroData]);
+
     if (isLoading) {
         return <Loading />;
     }
@@ -320,8 +334,8 @@ export const Agenda = ({ historicoServico, setHistorico,isLoading }: AgendaProps
 
             {/* Lista de Serviços */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {servicosFiltrados.length > 0 ? (
-                    servicosFiltrados.map((servico, index) => {
+                {servicosPaginados.length > 0 ? (
+                    servicosPaginados.map((servico, index) => {
                         const statusConfig = getStatusConfig(servico.status);
 
                         return (
@@ -501,6 +515,51 @@ export const Agenda = ({ historicoServico, setHistorico,isLoading }: AgendaProps
                     </div>
                 )}
             </div>
+
+            {/* Controles de Paginação */}
+            {totalPaginas > 1 && (
+                <div className="mt-8 mb-6 flex justify-center items-center space-x-2">
+                    <button
+                        onClick={() => setPaginaAtual(prev => Math.max(prev - 1, 1))}
+                        disabled={paginaAtual === 1}
+                        className={`px-4 py-2 rounded-md ${
+                            paginaAtual === 1
+                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                : 'bg-[#AC5906] text-white hover:bg-[#8B4705]'
+                        }`}
+                    >
+                        Anterior
+                    </button>
+                    
+                    <div className="flex items-center justify-center text-center space-x-2">
+                        {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((pagina) => (
+                            <button
+                                key={pagina}
+                                onClick={() => setPaginaAtual(pagina)}
+                                className={`w-8 h-8 flex items-center justify-center rounded-md ${
+                                    paginaAtual === pagina
+                                        ? 'bg-[#AC5906] text-white'
+                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                }`}
+                            >
+                                {pagina}
+                            </button>
+                        ))}
+                    </div>
+
+                    <button
+                        onClick={() => setPaginaAtual(prev => Math.min(prev + 1, totalPaginas))}
+                        disabled={paginaAtual === totalPaginas}
+                        className={`px-4 py-2 rounded-md ${
+                            paginaAtual === totalPaginas
+                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                : 'bg-[#AC5906] text-white hover:bg-[#8B4705]'
+                        }`}
+                    >
+                        Próxima
+                    </button>
+                </div>
+            )}
 
             {/* Modal de Chat */}
             <Modal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)}>
