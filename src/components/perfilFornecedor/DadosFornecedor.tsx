@@ -4,6 +4,7 @@ import { typeFornecedor } from "./PerfilFornecedor";
 import { URLAPI } from "../../constants/ApiUrl";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
+import { toast } from "react-toastify";
 
 interface DadosFornecedorProps {
     idFornecedor: string | undefined;
@@ -82,10 +83,10 @@ export const DadosFornecedor = ({ idFornecedor, usuario, onUpdate }: DadosFornec
             await axios.put(`${URLAPI}/fornecedor/${idFornecedor}`, formData);
             onUpdate();
             setIsEditing(false);
-            alert('Dados atualizados com sucesso!');
+            toast.success('Dados atualizados com sucesso!');
         } catch (error) {
             console.error('Erro ao atualizar dados:', error);
-            alert('Erro ao atualizar dados. Tente novamente.');
+            toast.error('Erro ao atualizar dados. Tente novamente.');
         }
     };
 
@@ -104,10 +105,10 @@ export const DadosFornecedor = ({ idFornecedor, usuario, onUpdate }: DadosFornec
             onUpdate();
             setSelectedImage(null);
             setPreviewImage("");
-            alert('Imagem de perfil atualizada com sucesso!');
+            toast.success('Imagem de perfil atualizada com sucesso!');
         } catch (error) {
             console.error('Erro ao atualizar imagem de perfil:', error);
-            alert('Erro ao atualizar imagem de perfil. Tente novamente.');
+            toast.error('Erro ao atualizar imagem de perfil. Tente novamente.');
         }
     };
 
@@ -126,10 +127,10 @@ export const DadosFornecedor = ({ idFornecedor, usuario, onUpdate }: DadosFornec
             onUpdate();
             setSelectedIllustrativeImage(null);
             setPreviewIllustrativeImage("");
-            alert('Imagem ilustrativa atualizada com sucesso!');
+            toast.success('Imagem ilustrativa atualizada com sucesso!');
         } catch (error) {
             console.error('Erro ao atualizar imagem ilustrativa:', error);
-            alert('Erro ao atualizar imagem ilustrativa. Tente novamente.');
+            toast.error('Erro ao atualizar imagem ilustrativa. Tente novamente.');
         }
     };
 
@@ -148,14 +149,14 @@ export const DadosFornecedor = ({ idFornecedor, usuario, onUpdate }: DadosFornec
                 });
             } catch (error) {
                 console.error(`Erro ao atualizar imagem de serviço ${imageFile.name}:`, error);
-                alert(`Erro ao atualizar imagem de serviço ${imageFile.name}. Tente novamente.`);
+                toast.error(`Erro ao atualizar imagem de serviço ${imageFile.name}. Tente novamente.`);
             }
         }
 
         onUpdate();
         setSelectedServiceImages([]);
         setPreviewServiceImages([]);
-        alert('Imagens de serviço atualizadas com sucesso!');
+        toast.success('Imagens de serviço atualizadas com sucesso!');
     };
 
     const imagesForGallery = currentServiceImages.map(url => ({
