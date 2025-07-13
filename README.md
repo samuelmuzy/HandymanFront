@@ -26,32 +26,32 @@ Este projeto foi construído utilizando:
 ## 📁 Estrutura do projeto
 
 handyman/
-├── public/
-├── src/
-│ ├── assets/
-│ ├── components/
-│ ├── pages/
-│ ├── services/
-│ ├── hooks/
-│ └── App.tsx
-├── index.html
-└── vite.config.ts
+ ├── public/
+ ├── src/
+ │ ├── assets/
+ │ ├── components/
+ │ ├── pages/
+ │ ├── services/
+ │ ├── hooks/
+ │ └── App.tsx
+ ├── index.html
+ └── vite.config.ts
 ## 🧪 Como rodar localmente
 
 1. Clone o repositório:
 
 git clone https://github.com/samuelmuzy/HandymanFront.git
 cd handyman
-Instale as dependências:
+2. Instale as dependências:
 
 npm install
-Inicie o projeto:
+3. Inicie o projeto:
 
 npm run dev
-Acesse no navegador:
+4. Acesse no navegador:
 http://localhost:5173
 
-📚 Sobre o projeto
+## 📚 Sobre o projeto
 Este projeto foi desenvolvido como parte de uma iniciativa acadêmica, com o intuito de aplicar conhecimentos de desenvolvimento web moderno e criar uma solução que possa simular um ambiente real de contratação de serviços.
 
 ## Autores
@@ -63,5 +63,5 @@ Este projeto foi desenvolvido como parte de uma iniciativa acadêmica, com o int
 - Victor Ribeiro Amorim
 - João Antônio de Souza Neto
 
-👨‍💻 Contribuição
+## 👨‍💻 Contribuição
 Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull requests com melhorias ou sugestões. 
