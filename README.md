@@ -55,13 +55,13 @@ http://localhost:5173
 Este projeto foi desenvolvido como parte de uma iniciativa acadêmica, com o intuito de aplicar conhecimentos de desenvolvimento web moderno e criar uma solução que possa simular um ambiente real de contratação de serviços.
 
 ## Autores
-Samuel Muzy Fernandes
-Gabriel Setta
-Gabriel bianquine
-Blendow Mendes
-João Paulo
-Victor Ribeiro Amorim
-João Antônio de Souza Neto
+- Samuel Muzy Fernandes
+- Gabriel Setta
+- Gabriel bianquine
+- Blendow Mendes
+- João Paulo
+- Victor Ribeiro Amorim
+- João Antônio de Souza Neto
 
 👨‍💻 Contribuição
 Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull requests com melhorias ou sugestões. 
