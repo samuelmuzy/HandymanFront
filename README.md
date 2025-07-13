@@ -23,29 +23,6 @@ Este projeto foi construído utilizando:
 - Perfil de prestadores de serviço
 - Agendamento de serviços
 
-## 📁 Estrutura do projeto
-
-handyman/
-
- ├── public/
- 
- ├── src/
- 
- │ ├── assets/
- 
- │ ├── components/
- 
- │ ├── pages/
- 
- │ ├── services/
- 
- │ ├── hooks/
- 
- │ └── App.tsx
- 
- ├── index.html
- 
- └── vite.config.ts
 ## 🧪 Como rodar localmente
 
 1. Clone o repositório:
