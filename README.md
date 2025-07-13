@@ -1,54 +1,67 @@
-# React + TypeScript + Vite
+# 🛠️ Handyman
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Handyman** é um projeto acadêmico desenvolvido com o objetivo de criar uma plataforma online que facilite a conexão entre **prestadores de serviços manuais** (como eletricistas, encanadores, pintores, etc.) e **clientes** que buscam esses serviços de forma prática e rápida.
 
-Currently, two official plugins are available:
+## 🌐 Acesse o projeto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Você pode testar a aplicação diretamente no link abaixo:
 
-## Expanding the ESLint configuration
+🔗 [https://handymanssfront.vercel.app/](https://handymanssfront.vercel.app/)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 Tecnologias utilizadas
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+Este projeto foi construído utilizando:
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- ⚛️ [React](https://react.dev/)
+- 🟦 [TypeScript](https://www.typescriptlang.org/)
+- ⚡ [Vite](https://vitejs.dev/)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 📌 Funcionalidades
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- Cadastro e login de usuários (clientes e prestadores de serviço)
+- Listagem de serviços disponíveis
+- Perfil de prestadores de serviço
+- Agendamento de serviços
+
+## 📁 Estrutura do projeto
+
+handyman/
+├── public/
+├── src/
+│ ├── assets/
+│ ├── components/
+│ ├── pages/
+│ ├── services/
+│ ├── hooks/
+│ └── App.tsx
+├── index.html
+└── vite.config.ts
+## 🧪 Como rodar localmente
+
+1. Clone o repositório:
+
+git clone https://github.com/samuelmuzy/HandymanFront.git
+cd handyman
+Instale as dependências:
+
+npm install
+Inicie o projeto:
+
+npm run dev
+Acesse no navegador:
+http://localhost:5173
+
+📚 Sobre o projeto
+Este projeto foi desenvolvido como parte de uma iniciativa acadêmica, com o intuito de aplicar conhecimentos de desenvolvimento web moderno e criar uma solução que possa simular um ambiente real de contratação de serviços.
+
+## Autores
+Samuel Muzy Fernandes
+Gabriel Setta
+Gabriel bianquine
+Blendow Mendes
+João Paulo
+Victor Ribeiro Amorim
+João Antônio de Souza Neto
+
+👨‍💻 Contribuição
+Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull requests com melhorias ou sugestões. 
