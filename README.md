@@ -25,21 +25,21 @@ Este projeto foi construído utilizando:
 
 ## 🧪 Como rodar localmente
 
-1. Clone o repositório:
+Clone o repositório:
 
 git clone https://github.com/samuelmuzy/HandymanFront.git
 
 cd handyman
 
-2. Instale as dependências:
+Instale as dependências:
  
 npm install
 
-3. Inicie o projeto:
+Inicie o projeto:
 
 npm run dev
 
-4. Acesse no navegador:
+Acesse no navegador:
 
 http://localhost:5173
 
