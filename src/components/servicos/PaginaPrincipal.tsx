@@ -107,16 +107,16 @@ export const PaginaPrincipal = () => {
 
     return (
         <>
-            <div className="flex flex-col items-center justify-center min-h-screen bg-white p-2 md:p-4">
+            <div className="flex flex-col items-center justify-center min-h-screen bg-white p-4">
                 {loading && <Loading />}
 
-                <div className="flex flex-col items-center justify-center mt-4 md:mt-6 mb-4 md:mb-6 gap-4 md:gap-9 w-full">
-                    <h1 className="text-center text-[#A75C00] mt-4 md:mt-9 text-xl md:text-3xl px-2 md:px-4">Não faça você mesmo,<br></br> encontre um profissional</h1>
-                    <div className="flex items-center border-2 border-[#A75C00] rounded-full w-full max-w-md mt-2 md:mt-4 overflow-hidden px-2">
+                <div className="flex flex-col items-center justify-center mt-6 mb-6 gap-9">
+                    <h1 className="w-13 text-center text-[#A75C00] mt-9">Não faça você mesmo,<br></br> encontre um profissional</h1>
+                    <div className="flex items-center border-2 border-[#A75C00] rounded-full w-full max-w-md mt-4 overflow-hidden">
                         <input
                             type="text"
                             placeholder="O que procura?"
-                            className="px-3 md:px-4 py-2 md:py-3 w-full focus:outline-none text-sm md:text-base"
+                            className="px-4 py-3 w-full focus:outline-none"
                             value={termoPesquisa}
                             onChange={(e) => setTermoPesquisa(e.target.value)}
                             onKeyPress={(e) => {
@@ -126,11 +126,11 @@ export const PaginaPrincipal = () => {
                             }}
                         />
                         <button
-                            className="bg-[#AD5700] p-2 md:p-3 rounded-full hover:bg-orange-800 transition"
+                            className="bg-[#AD5700] p-3 rounded-full hover:bg-orange-800 transition"
                             onClick={handlePesquisa}
                         >
                             <svg
-                                className="w-4 h-4 md:w-5 md:h-5 text-white"
+                                className="w-5 h-5 text-white"
                                 fill="none"
                                 stroke="currentColor"
                                 strokeWidth="2"
@@ -142,19 +142,19 @@ export const PaginaPrincipal = () => {
                     </div>
                 </div>
 
-                <div className="flex flex-col md:flex-row items-center justify-center mt-4 md:mt-6 mb-4 md:mb-6 w-full">
-                    <div className="flex flex-col items-center gap-4 md:gap-8 mb-4 md:mb-6 w-full">
+                <div className="flex items-center justify-center mt-6 mb-6">
+                    <div className="flex flex-col items-center gap-8 mb-6">
                         {/* Linha de cima */}
-                        <div className="flex flex-wrap justify-center gap-2 md:gap-8 px-2 md:px-4">
+                        <div className="flex justify-center pr-6 gap-8">
                             {/* Mudança */}
                             <div
                                 className={`flex items-center flex-col cursor-pointer transition-all duration-300 ${categoriaSelecionada === "Mudança" ? "-translate-y-2 scale-105 text-orange-700" : ""
                                     }`}
                                 onClick={() => mudarCategorias("Mudança")}
                             >
-                                <img className="w-10 h-10 md:w-16 md:h-16" src={imagemCategoriaMudanca} alt="imagem caminhão" />
+                                <img className="w-16 h-16" src={imagemCategoriaMudanca} alt="imagem caminhão" />
                                 <p
-                                    className={`mt-1 md:mt-2 text-xs md:text-base ${categoriaSelecionada === "Mudança" ? "border-b-2 border-orange-700 font-semibold" : ""
+                                    className={`mt-2 ${categoriaSelecionada === "Mudança" ? "border-b-2 border-orange-700 font-semibold" : ""
                                         }`}
                                 >
                                     Mudança Residencial
@@ -167,9 +167,9 @@ export const PaginaPrincipal = () => {
                                     }`}
                                 onClick={() => mudarCategorias("Carpintaria")}
                             >
-                                <img className="w-10 h-10 md:w-16 md:h-16" src={imagemCategoriaCarpintaria} alt="imagem carpintaria" />
+                                <img className="w-16 h-16" src={imagemCategoriaCarpintaria} alt="imagem carpintaria" />
                                 <p
-                                    className={`mt-1 md:mt-2 text-xs md:text-base ${categoriaSelecionada === "Carpintaria" ? "border-b-2 border-orange-700 font-semibold" : ""
+                                    className={`mt-2 ${categoriaSelecionada === "Carpintaria" ? "border-b-2 border-orange-700 font-semibold" : ""
                                         }`}
                                 >
                                     Serviços de Carpintaria
@@ -182,9 +182,9 @@ export const PaginaPrincipal = () => {
                                     }`}
                                 onClick={() => mudarCategorias("Elétricista")}
                             >
-                                <img className="w-10 h-10 md:w-16 md:h-16" src={imagemCategoriaEletrica} alt="imagem eletricista" />
+                                <img className="w-16 h-16" src={imagemCategoriaEletrica} alt="imagem eletricista" />
                                 <p
-                                    className={`mt-1 md:mt-2 text-xs md:text-base ${categoriaSelecionada === "Elétricista" ? "border-b-2 border-orange-700 font-semibold" : ""
+                                    className={`mt-2 ${categoriaSelecionada === "Elétricista" ? "border-b-2 border-orange-700 font-semibold" : ""
                                         }`}
                                 >
                                     Instalações Elétricas
@@ -193,16 +193,16 @@ export const PaginaPrincipal = () => {
                         </div>
 
                         {/* Linha de baixo */}
-                        <div className="flex flex-wrap justify-center gap-2 md:gap-8 px-2 md:px-4">
+                        <div className="flex justify-center pr-6 gap-8">
                             {/* Limpeza */}
                             <div
                                 className={`flex items-center flex-col cursor-pointer transition-all duration-300 ${categoriaSelecionada === "Limpeza" ? "-translate-y-2 scale-105 text-orange-700" : ""
                                     }`}
                                 onClick={() => mudarCategorias("Limpeza")}
                             >
-                                <img className="w-10 h-10 md:w-16 md:h-16" src={imagemCategoriaLimpeza} alt="imagem limpeza" />
+                                <img className="w-16 h-16" src={imagemCategoriaLimpeza} alt="imagem limpeza" />
                                 <p
-                                    className={`mt-1 md:mt-2 text-xs md:text-base ${categoriaSelecionada === "Limpeza" ? "border-b-2 border-orange-700 font-semibold" : ""
+                                    className={`mt-2 ${categoriaSelecionada === "Limpeza" ? "border-b-2 border-orange-700 font-semibold" : ""
                                         }`}
                                 >
                                     Limpeza Residencial
@@ -215,9 +215,9 @@ export const PaginaPrincipal = () => {
                                     }`}
                                 onClick={() => mudarCategorias("Jardinagem")}
                             >
-                                <img className="w-10 h-10 md:w-16 md:h-16" src={imagemCategoriaJardinagem} alt="imagem jardinagem" />
+                                <img className="w-16 h-16" src={imagemCategoriaJardinagem} alt="imagem jardinagem" />
                                 <p
-                                    className={`mt-1 md:mt-2 text-xs md:text-base ${categoriaSelecionada === "Jardinagem" ? "border-b-2 border-orange-700 font-semibold" : ""
+                                    className={`mt-2 ${categoriaSelecionada === "Jardinagem" ? "border-b-2 border-orange-700 font-semibold" : ""
                                         }`}
                                 >
                                     Serviços de Jardinagem
@@ -230,9 +230,9 @@ export const PaginaPrincipal = () => {
                                     }`}
                                 onClick={() => mudarCategorias("Encanamento")}
                             >
-                                <img className="w-10 h-10 md:w-16 md:h-16" src={imagemCategoriaEncanador} alt="imagem encanador" />
+                                <img className="w-16 h-16" src={imagemCategoriaEncanador} alt="imagem encanador" />
                                 <p
-                                    className={`mt-1 md:mt-2 text-xs md:text-base ${categoriaSelecionada === "Encanamento" ? "border-b-2 border-orange-700 font-semibold" : ""
+                                    className={`mt-2 ${categoriaSelecionada === "Encanamento" ? "border-b-2 border-orange-700 font-semibold" : ""
                                         }`}
                                 >
                                     Serviços de Encanamento
@@ -241,34 +241,34 @@ export const PaginaPrincipal = () => {
                         </div>
                     </div>
 
-                    <div className="flex flex-col items-center gap-2 md:gap-3 md:ml-10 mb-4 md:mb-5 w-full md:w-auto px-2 md:px-4">
-                        <button className="bg-white text-[#AD5700] border-[#A75C00] px-3 md:px-4 py-1.5 md:py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 w-full md:w-56 text-sm md:text-base" >
+                    <div className="flex flex-col items-center gap-3 ml-10 mb-5">
+                        <button className="bg-white text-[#AD5700] border-[#A75C00] px-4 py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 w-56 " >
                             Serviços de Montagem
                         </button>
-                        <button className="bg-white text-[#AD5700] border-[#A75C00] px-3 md:px-4 py-1.5 md:py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 w-full md:w-56 text-sm md:text-base" >
+                        <button className="bg-white text-[#AD5700] border-[#A75C00] px-4 py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 w-56" >
                             Pintura Residencial
                         </button>
-                        <button className="bg-white text-[#AD5700] border-[#A75C00] px-3 md:px-4 py-1.5 md:py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 w-full md:w-56 text-sm md:text-base" >
+                        <button className="bg-white text-[#AD5700] border-[#A75C00] px-4 py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 w-56" >
                             Manutenção Geral
                         </button>
-                        <button className="bg-white text-[#AD5700] border-[#A75C00] px-3 md:px-4 py-1.5 md:py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 w-full md:w-56 text-sm md:text-base" >
+                        <button className="bg-white text-[#AD5700] border-[#A75C00] px-4 py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 w-56" >
                             Reformas e Reparos
                         </button>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4 w-full max-w-8xl mx-auto px-2 md:px-4">
-                    {error && <div className="text-red-500 text-center col-span-full">{error}</div>}
+                <div className="flex flex-wrap justify-start max-w-8xl mx-auto gap-4">
+                    {error && <div className="text-red-500 text-center">{error}</div>}
                     {listarFornecedores}
                 </div>
 
                 {/* Controles de Paginação */}
                 {totalPaginas > 1 && (
-                    <div className="mt-6 md:mt-8 flex flex-wrap justify-center items-center gap-2 px-2 md:px-4">
+                    <div className="mt-8 flex justify-center items-center space-x-2">
                         <button
                             onClick={() => setPaginaAtual(prev => Math.max(prev - 1, 1))}
                             disabled={paginaAtual === 1}
-                            className={`px-2 py-1 md:px-4 md:py-2 rounded-md text-xs md:text-base ${paginaAtual === 1
+                            className={`px-4 py-2 rounded-md ${paginaAtual === 1
                                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                                 : 'bg-[#AC5906] text-white hover:bg-[#8B4705]'
                                 }`}
@@ -276,12 +276,12 @@ export const PaginaPrincipal = () => {
                             Anterior
                         </button>
 
-                        <div className="flex items-center justify-center text-center gap-1 md:gap-2">
+                        <div className="flex items-center justify-center text-center space-x-2">
                             {Array.from({ length: totalPaginas }, (_, i) => i + 1).map((pagina) => (
                                 <button
                                     key={pagina}
                                     onClick={() => setPaginaAtual(pagina)}
-                                    className={`w-6 h-6 md:w-8 md:h-8 flex items-center justify-center rounded-md text-xs md:text-base ${paginaAtual === pagina
+                                    className={`w-8 h-8 flex items-center justify-center rounded-md ${paginaAtual === pagina
                                         ? 'bg-[#AC5906] text-white'
                                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                         }`}
@@ -294,7 +294,7 @@ export const PaginaPrincipal = () => {
                         <button
                             onClick={() => setPaginaAtual(prev => Math.min(prev + 1, totalPaginas))}
                             disabled={paginaAtual === totalPaginas}
-                            className={`px-2 py-1 md:px-4 md:py-2 rounded-md text-xs md:text-base ${paginaAtual === totalPaginas
+                            className={`px-4 py-2 rounded-md ${paginaAtual === totalPaginas
                                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
                                 : 'bg-[#AC5906] text-white hover:bg-[#8B4705]'
                                 }`}
