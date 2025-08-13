@@ -280,7 +280,7 @@ export const Agenda = ({ historicoServico, setHistorico,isLoading }: AgendaProps
     }
 
     return (
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl md:mx-auto px-4 py-4">
             {/* Filtros */}
             <div className="mb-8 bg-white p-6 rounded-xl shadow-md">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -569,9 +569,9 @@ export const Agenda = ({ historicoServico, setHistorico,isLoading }: AgendaProps
 
             {/* Modal de Avaliação */}
             <Modal isOpen={isAvaliacaoOpen} onClose={() => setIsAvaliacaoOpen(false)}>
-                <div className="fixed inset-0 flex items-center justify-center z-50">
+                <div className="fixed inset-0 flex items-center justify-center z-50 w-[100%]">
                     <div onClick={() => setIsAvaliacaoOpen(false)} className="fixed inset-0 bg-black opacity-40"></div>
-                    <div className="relative bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
+                    <div className="relative bg-white rounded-lg shadow-lg p-6 max-w-md w[90%]">
                         <h2 className="text-xl font-semibold mb-4">Avaliar Serviço</h2>
 
                         <div className="mb-4">
@@ -586,7 +586,7 @@ export const Agenda = ({ historicoServico, setHistorico,isLoading }: AgendaProps
                                         className="focus:outline-none"
                                     >
                                         <svg
-                                            className={`w-8 h-8 ${avaliacao.nota >= nota
+                                            className={`w-6 h-6 md:w-8 md:h-8 ${avaliacao.nota >= nota
                                                 ? 'text-yellow-400'
                                                 : 'text-gray-300'
                                                 }`}

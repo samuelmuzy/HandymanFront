@@ -259,7 +259,7 @@ export const Solicitacoes = ({ idFornecedor }: PerfilProps) => {
     return (
         <div className="max-w-6xl mx-auto">
             {/* Filtros */}
-            <div className="mb-8 bg-white p-6 rounded-xl shadow-md">
+            <div className="mb-8 bg-white p-4 md:p-6 rounded-xl shadow-md">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Filtro de Status */}
                     <div>

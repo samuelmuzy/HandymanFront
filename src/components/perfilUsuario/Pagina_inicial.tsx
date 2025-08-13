@@ -139,13 +139,13 @@ export const Pagina_inicial = ({ usuario, setMudarPagina, historico, setHistoric
     return (
         <div>
             <div className="flex-1 px-10 py-8">
-                <div className="flex items-center space-x-6 mb-6">
+                <div className="flex md:flex-row flex-col items-center space-x-6 mb-6">
                     <img
                         src={usuario?.picture || imagemPerfilProvisoria}
                         alt="Foto de perfil"
                         className="w-16 h-16 rounded-full border border-gray-300"
                     />
-                    <div>
+                    <div className="md:text-start text-center">
                         <h1 className="text-xl font-semibold">{usuario?.nome}</h1>
                         <p className="text-gray-600">{usuario?.email}</p>
                     </div>
@@ -247,7 +247,7 @@ export const Pagina_inicial = ({ usuario, setMudarPagina, historico, setHistoric
             <Modal isOpen={isAvaliacaoOpen} onClose={() => setIsAvaliacaoOpen(false)}>
                 <div className="fixed inset-0 flex items-center justify-center z-50">
                     <div onClick={() => setIsAvaliacaoOpen(false)} className="fixed inset-0 bg-black opacity-40"></div>
-                    <div className="relative bg-white rounded-lg shadow-lg p-6 max-w-md w-full">
+                    <div className="relative bg-white rounded-lg shadow-lg p-6 max-w-md w[90%]">
                         <h2 className="text-xl font-semibold mb-4">Avaliar Serviço</h2>
 
                         <div className="mb-4">
@@ -262,7 +262,7 @@ export const Pagina_inicial = ({ usuario, setMudarPagina, historico, setHistoric
                                         className="focus:outline-none"
                                     >
                                         <svg
-                                            className={`w-8 h-8 ${avaliacao.nota >= nota
+                                            className={`w-6 h-6 md:w-8 md:h-8 ${avaliacao.nota >= nota
                                                     ? 'text-yellow-400'
                                                     : 'text-gray-300'
                                                 }`}

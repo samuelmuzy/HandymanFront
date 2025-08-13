@@ -68,11 +68,11 @@ export const PerfilUsuario = ({ id }: PerfilProps) => {
     };
 
     return (
-        <div className="bg-white min-h-screen flex font-sans">
+        <div className="bg-white min-h-screen flex flex-col md:flex-row font-sans">
             {/* Menu lateral */}
-            <div className="w-64 bg-gray-100 border-r px-6 py-8">
+            <div className="md:w-64 md:flex md:flex-col  bg-gray-100 border-r px-6 py-8">
                 <h2 className="text-lg font-semibold mb-6">Conta</h2>
-                <ul className="space-y-4 text-gray-800">
+                <ul className="md:space-y-4 text-gray-800 md:flex md:flex-col flex md:justify-start md:items-start gap-6 items-center justify-center text-center">
                     <li
                         onClick={() => handleItemClick(1)}
                         className={`cursor-pointer transition-colors  ${itemSelecionado === 1
@@ -99,15 +99,6 @@ export const PerfilUsuario = ({ id }: PerfilProps) => {
                             }`}
                     >
                         Dados pessoais
-                    </li>
-                    <li
-                        onClick={() => handleItemClick(4)}
-                        className={`cursor-pointer transition-colors  ${itemSelecionado === 4
-                                ? 'text-black font-medium'
-                                : 'text-gray-600 hover:text-orange-500'
-                            }`}
-                    >
-                        Privacidade e dados
                     </li>
                 </ul>
             </div>

@@ -30,7 +30,7 @@ export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
   return (
     <div
       ref={modalRef}
-      className="absolute right-0 mt-2 w-60 bg-white shadow-xl rounded-xl z-50 border border-gray-200"
+      className="absolute right-0 mt-2 md:w-60 bg-white shadow-xl rounded-xl z-50 border border-gray-200"
     >
       {children}
     </div>

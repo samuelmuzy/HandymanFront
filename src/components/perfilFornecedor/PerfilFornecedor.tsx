@@ -61,15 +61,15 @@ export const PerfilFornecedor = ({ idFornecedor }: PerfilProps) => {
     }, []);
 
     return (
-        <div className="pt-8 px-8">
-            <div className="flex gap-8">
+        <div className="pt-8 px-5 md:px-8">
+            <div className="flex md:flex-row flex-col gap-8">
                 {/* Coluna dos botões */}
-                <div className="w-64 flex-shrink-0">
+                <div className="md:w-64 md:justify-start justify-center flex-shrink-0">
                     <div className="sticky top-8">
-                        <div className="flex flex-col space-y-4">
+                        <div className="flex md:gap-0 gap-6 md:flex-col  md:w-full md:justify-start items-center justify-center  md:space-y-4">
                             <button
                                 onClick={() => setMudarPagina(1)}
-                                className={`px-4 py-2 rounded-md transition-colors ${
+                                className={`px-4 py-2 md:w-full rounded-md transition-colors ${
                                     mudarPagina === 1
                                         ? 'bg-[#A75C00] text-white'
                                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -79,7 +79,7 @@ export const PerfilFornecedor = ({ idFornecedor }: PerfilProps) => {
                             </button>
                             <button
                                 onClick={() => setMudarPagina(2)}
-                                className={`px-4 py-2 rounded-md transition-colors ${
+                                className={`px-4 py-2  md:w-full rounded-md transition-colors ${
                                     mudarPagina === 2
                                         ? 'bg-[#A75C00] text-white'
                                         : 'bg-gray-100 text-gray-600 hover:bg-gray-200'

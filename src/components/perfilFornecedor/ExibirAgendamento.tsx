@@ -261,7 +261,7 @@ export const ExibirAgendamentoFornecedor = ({ idServico }: ExibirAgendamentoForn
                             {/* Status e Valor */}
                             <div className="flex justify-between items-center">
                                 <div
-                                    className="px-4 py-2 rounded-full text-lg font-medium"
+                                    className="px-4 py-2 rounded-full text-lg font-medium text-center"
                                     style={{
                                         backgroundColor: statusConfig.bgColor,
                                         color: statusConfig.color
@@ -269,8 +269,8 @@ export const ExibirAgendamentoFornecedor = ({ idServico }: ExibirAgendamentoForn
                                 >
                                     {statusConfig.text}
                                 </div>
-                                <div className="flex items-center space-x-4">
-                                    <div className="text-2xl font-bold text-[#AC5906]">
+                                <div className="flex flex-col md:flex-row items-center space-x-4">
+                                    <div className="text-2xl text-center font-bold text-[#AC5906]">
                                         {formatarValor(agendamento.valor)}
                                     </div>
                                     {agendamento.status === 'negociar valor' && (

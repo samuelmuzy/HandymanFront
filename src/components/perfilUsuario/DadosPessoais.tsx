@@ -79,7 +79,7 @@ export const DadosPessoais = ({ id_usuario, email, nome, telefone, picture }: Da
 
                     <hr />
 
-                    <div className="my-4">
+                    <div className="my-4 ">
                         <p className="text-sm text-gray-500">Email:</p>
                         <p className="text-lg text-gray-800 font-medium">{email || "-"}</p>
                     </div>

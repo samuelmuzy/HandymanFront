@@ -142,13 +142,13 @@ export const PaginaPrincipal = () => {
                     </div>
                 </div>
 
-                <div className="flex items-center justify-center mt-6 mb-6">
+                <div className="md:flex-row md:flex flex-col items-center justify-center mt-6 mb-6">
                     <div className="flex flex-col items-center gap-8 mb-6">
                         {/* Linha de cima */}
-                        <div className="flex justify-center pr-6 gap-8">
+                        <div className="flex justify-center md:pr-6 gap-8">
                             {/* Mudança */}
                             <div
-                                className={`flex items-center flex-col cursor-pointer transition-all duration-300 ${categoriaSelecionada === "Mudança" ? "-translate-y-2 scale-105 text-orange-700" : ""
+                                className={`flex items-center flex-col cursor-pointer text-center transition-all duration-300 ${categoriaSelecionada === "Mudança" ? "-translate-y-2 scale-105 text-orange-700" : ""
                                     }`}
                                 onClick={() => mudarCategorias("Mudança")}
                             >
@@ -163,7 +163,7 @@ export const PaginaPrincipal = () => {
 
                             {/* Carpintaria */}
                             <div
-                                className={`flex items-center flex-col cursor-pointer transition-all duration-300 ${categoriaSelecionada === "Carpintaria" ? "-translate-y-2 scale-105 text-orange-700" : ""
+                                className={`flex items-center flex-col text-center cursor-pointer transition-all duration-300 ${categoriaSelecionada === "Carpintaria" ? "-translate-y-2 scale-105 text-orange-700" : ""
                                     }`}
                                 onClick={() => mudarCategorias("Carpintaria")}
                             >
@@ -178,13 +178,13 @@ export const PaginaPrincipal = () => {
 
                             {/* Elétrica */}
                             <div
-                                className={`flex items-center flex-col cursor-pointer transition-all duration-300 ${categoriaSelecionada === "Elétricista" ? "-translate-y-2 scale-105 text-orange-700" : ""
+                                className={`flex items-center flex-col text-center cursor-pointer transition-all duration-300 ${categoriaSelecionada === "Elétricista" ? "-translate-y-2 scale-105 text-orange-700" : ""
                                     }`}
                                 onClick={() => mudarCategorias("Elétricista")}
                             >
                                 <img className="w-16 h-16" src={imagemCategoriaEletrica} alt="imagem eletricista" />
                                 <p
-                                    className={`mt-2 ${categoriaSelecionada === "Elétricista" ? "border-b-2 border-orange-700 font-semibold" : ""
+                                    className={`mt-2 ${categoriaSelecionada === "Elétricista" ? "border-b-2 border-orange-700 font-semibold " : ""
                                         }`}
                                 >
                                     Instalações Elétricas
@@ -193,10 +193,10 @@ export const PaginaPrincipal = () => {
                         </div>
 
                         {/* Linha de baixo */}
-                        <div className="flex justify-center pr-6 gap-8">
+                        <div className="flex justify-center md:pr-6 gap-8">
                             {/* Limpeza */}
                             <div
-                                className={`flex items-center flex-col cursor-pointer transition-all duration-300 ${categoriaSelecionada === "Limpeza" ? "-translate-y-2 scale-105 text-orange-700" : ""
+                                className={`flex items-center flex-col cursor-pointer text-center transition-all duration-300 ${categoriaSelecionada === "Limpeza" ? "-translate-y-2 scale-105 text-orange-700" : ""
                                     }`}
                                 onClick={() => mudarCategorias("Limpeza")}
                             >
@@ -211,7 +211,7 @@ export const PaginaPrincipal = () => {
 
                             {/* Jardinagem */}
                             <div
-                                className={`flex items-center flex-col cursor-pointer transition-all duration-300 ${categoriaSelecionada === "Jardinagem" ? "-translate-y-2 scale-105 text-orange-700" : ""
+                                className={`flex items-center flex-col cursor-pointer text-center transition-all duration-300 ${categoriaSelecionada === "Jardinagem" ? "-translate-y-2 scale-105 text-orange-700" : ""
                                     }`}
                                 onClick={() => mudarCategorias("Jardinagem")}
                             >
@@ -226,10 +226,11 @@ export const PaginaPrincipal = () => {
 
                             {/* Encanamento */}
                             <div
-                                className={`flex items-center flex-col cursor-pointer transition-all duration-300 ${categoriaSelecionada === "Encanamento" ? "-translate-y-2 scale-105 text-orange-700" : ""
+                                className={`flex items-center flex-col cursor-pointer text-center transition-all duration-300 ${categoriaSelecionada === "Encanamento" ? "-translate-y-2 scale-105 text-orange-700" : ""
                                     }`}
                                 onClick={() => mudarCategorias("Encanamento")}
                             >
+                                
                                 <img className="w-16 h-16" src={imagemCategoriaEncanador} alt="imagem encanador" />
                                 <p
                                     className={`mt-2 ${categoriaSelecionada === "Encanamento" ? "border-b-2 border-orange-700 font-semibold" : ""
@@ -241,23 +242,23 @@ export const PaginaPrincipal = () => {
                         </div>
                     </div>
 
-                    <div className="flex flex-col items-center gap-3 ml-10 mb-5">
-                        <button className="bg-white text-[#AD5700] border-[#A75C00] px-4 py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 w-56 " >
+                    <div className="flex flex-col items-center gap-3 md:ml-10 mb-5">
+                        <button className="bg-white text-[#AD5700] border-[#A75C00] md:px-4 py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 md:w-56 w-full " >
                             Serviços de Montagem
                         </button>
-                        <button className="bg-white text-[#AD5700] border-[#A75C00] px-4 py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 w-56" >
+                        <button className="bg-white text-[#AD5700] border-[#A75C00] md:px-4 py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 md:w-56 w-full" >
                             Pintura Residencial
                         </button>
-                        <button className="bg-white text-[#AD5700] border-[#A75C00] px-4 py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 w-56" >
+                        <button className="bg-white text-[#AD5700] border-[#A75C00] md:px-4 py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 md:w-56 w-full" >
                             Manutenção Geral
                         </button>
-                        <button className="bg-white text-[#AD5700] border-[#A75C00] px-4 py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 w-56" >
+                        <button className="bg-white text-[#AD5700] border-[#A75C00] md:px-4 py-2 rounded hover:bg-[#AD5700] hover:text-white transition duration-300 md:w-56 w-full" >
                             Reformas e Reparos
                         </button>
                     </div>
                 </div>
 
-                <div className="flex flex-wrap justify-start max-w-8xl mx-auto gap-4">
+                <div className="flex flex-wrap justify-center md:justify-start md:max-w-8xl max-w-full mx-auto gap-4">
                     {error && <div className="text-red-500 text-center">{error}</div>}
                     {listarFornecedores}
                 </div>

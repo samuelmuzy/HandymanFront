@@ -60,8 +60,10 @@ const Chat = ({ idFornecedor }: ChatProps) => {
   }
 
   useEffect(() => {
-    buscarConversas()
-  }, [usuarios])
+    if (token?.id) {
+      buscarConversas();
+    }
+  }, [token?.id])
 
 
   useEffect(() => {
@@ -135,12 +137,15 @@ const Chat = ({ idFornecedor }: ChatProps) => {
     });
   };
 
+  const [isConversationsOpen, setIsConversationsOpen] = useState(false);
+
   const listarUsuariosConversa = usuarios.map((usu) => (
     <div
       key={usu.id}
       onClick={() => {
         setDestinatarioId(usu.id);
         setMensagens([]); // Limpa as mensagens antes de carregar as novas
+        setIsConversationsOpen(false);
       }}
       className={`flex items-center p-2 cursor-pointer hover:bg-gray-100 ${destinatarioId === usu.id ? 'bg-gray-200' : ''
         }`}
@@ -155,9 +160,9 @@ const Chat = ({ idFornecedor }: ChatProps) => {
   ));
 
   return (
-    <div className='flex h-full overflow-hidden'>
+    <div className='flex h-full overflow-hidden flex-col md:flex-row'>
       {token?.role === 'Fornecedor' && (
-        <div className='w-1/4 border-r pr-4 overflow-y-auto flex flex-col'>
+        <div className='hidden md:flex md:w-1/4 border-r pr-4 overflow-y-auto flex-col'>
           <h2 className='text-xl font-bold mb-4 sticky top-0 bg-white py-2'>Conversas</h2>
           <div className='flex-1 overflow-y-auto'>
             {listarUsuariosConversa}
@@ -166,10 +171,26 @@ const Chat = ({ idFornecedor }: ChatProps) => {
 
       )}
 
-      <div className='w-3/4 pl-4 flex flex-col h-full'>
-        <h2 className='text-xl font-bold mb-4 sticky top-0 bg-white py-2'>Chat</h2>
+      <div className='w-full md:w-3/4 md:pl-4 flex flex-col h-full'>
+        <div className='flex items-center justify-between mb-4 sticky top-0 bg-white py-2 z-10'>
+          <h2 className='text-xl font-bold'>Chat</h2>
+          {token?.role === 'Fornecedor' && (
+            <button
+              className='md:hidden px-3 py-2 text-sm rounded-md border text-gray-700'
+              onClick={() => setIsConversationsOpen((prev) => !prev)}
+            >
+              {isConversationsOpen ? 'Fechar conversas' : 'Abrir conversas'}
+            </button>
+          )}
+        </div>
 
-        <div 
+        {token?.role === 'Fornecedor' && isConversationsOpen && (
+          <div className='md:hidden border rounded-lg mb-4 max-h-60 overflow-y-auto'>
+            {listarUsuariosConversa}
+          </div>
+        )}
+
+        <div
           ref={mensagensRef}
           className='flex-1 overflow-y-auto mb-4 border rounded-lg p-4'
         >
@@ -231,7 +252,7 @@ const Chat = ({ idFornecedor }: ChatProps) => {
             placeholder="Digite sua mensagem..."
             value={mensagem}
             onChange={(e) => setMensagem(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && enviarMensagem()}
+            onKeyDown={(e) => e.key === 'Enter' && enviarMensagem()}
             className='flex-1 p-2 border rounded-lg'
           />
           <button
